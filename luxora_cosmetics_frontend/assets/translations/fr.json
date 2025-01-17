@@ -1,0 +1,105 @@
+{
+  "global": {
+    "appName": "Luxora Cosmetics",
+    "showMore": "Voir plus",
+    "showLess": "Voir moins",
+    "clearAll": "Tout effacer",
+    "loading": "Chargement",
+    "continue": "Continuer",
+    "create": "Créer",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les modifications",
+    "cancelChanges": "Annuler les modifications",
+    "or": "Ou",
+    "units": {
+      "kg": "kg",
+      "cm": "cm",
+      "pages": "Pages"
+    },
+    "authentication": {
+      "fullName": "Nom complet",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "phone": "Numéro de téléphone",
+      "address": "Adresse",
+      "addressOptional": "Adresse (optionnel)",
+      "zipCode": "Code Postal",
+      "city": "Ville",
+      "password": "Mot de passe",
+      "passwordHint": "Entrez votre mot de passe",
+      "newPassword": "Nouveau mot de passe",
+      "newPasswordHint": "Entrez votre nouveau mot de passe",
+      "recentPassword": "Mot de passe récent",
+      "recentPasswordHint": "Entrez votre mot de passe récent",
+      "passwordConfirm": "Confirmez le mot de passe",
+      "passwordConfirmHint": "Entrez la confirmation de votre mot de passe",
+      "forgotPassword": "Mot de passe oublié ?",
+      "privacyNotice": "En créant un compte, vous acceptez la Politique de confidentialité et les Conditions générales de vente de Librairie Alfia.",
+      "login": "Connexion",
+      "resetPassword": "Réinitialiser le mot de passe",
+      "resendRequest": "Renvoyer la demande",
+      "existingAccount": "Se connecter à mon compte",
+      "createNewAccount": "Créer un nouveau compte"
+    },
+    "notifications": {
+      "default": {
+        "successTitle": "Action Terminée",
+        "successMessage": "L'opération a été effectuée avec succès.",
+        "warningTitle": "Attention Requise",
+        "warningMessage": "Il semble y avoir un problème. Veuillez vérifier et procéder avec prudence.",
+        "errorTitle": "Une Erreur S'est Produite",
+        "errorMessage": "Quelque chose s'est mal passé. Veuillez réessayer plus tard."
+      },
+      "wishlist": {
+        "title": "ajouté à la liste de souhaits avec succès",
+        "message": "Vous pouvez trouver cet article dans votre liste de souhaits."
+      },
+      "cart": {
+        "title": "ajouté au panier avec succès",
+        "message": "Vous pouvez trouver cet article dans votre panier."
+      },
+      "accountCreated": {
+        "title": "Compte Créé avec Succès",
+        "message": "Votre compte a été créé avec succès. Bienvenue !"
+      },
+      "SignedIn": {
+        "title": "Connexion Réussie",
+        "message": "Vous êtes connecté(e) avec succès à votre compte !"
+      },
+      "signedOut": {
+        "title": "Déconnexion Réussie",
+        "message": "Vous avez été déconnecté(e) de votre compte. À bientôt !"
+      },
+      "requestResetPassword": {
+        "title": "Demande de Réinitialisation de Mot de Passe",
+        "message": "Nous vous avons envoyé un email avec les instructions pour réinitialiser votre mot de passe. Veuillez vérifier votre boîte de réception."
+      },
+      "passwordReseted": {
+        "title": "Mot de Passe Réinitialisé avec Succès",
+        "message": "Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe."
+      },
+      "userDataUpdated": {
+        "title": "Informations du Compte Mises à Jour",
+        "message": "Les informations de votre compte ont été mises à jour avec succès."
+      },
+      "userPasswordUpdated": {
+        "title": "Mot de Passe Mis à Jour",
+        "message": "Votre mot de passe a été mis à jour avec succès."
+      }
+    },
+    "product": {
+      "noCover": "COUVERTURE NON TROUVÉE",
+      "offerBadge": {
+        "megaSale": "MEGA PROMO",
+        "bigSale": "GRANDE PROMO",
+        "hotDeal": "BONNE PROMO",
+        "saveNow": "ÉCONOMISEZ",
+        "discount": "RÉDUCTION",
+        "newArrivals": "NOUVEAUTÉ",
+        "bestSellers": "MEILLEURS VENTES"
+      }
+    }
+  },
+  "screens": {}
+}

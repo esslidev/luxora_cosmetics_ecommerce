@@ -1,7 +1,7 @@
 services:
   ## MYSQL DB DATABASE
-  db_alfia:
-    container_name: db_alfia
+  db_luxora:
+    container_name: db_luxora
     image: mysql:latest
     restart: always
     environment:
@@ -33,8 +33,8 @@ services:
       - pma_networks
 
   ## PROJECT BACKEND
-  librairie-alfia-backend:
-    container_name: librairie-alfia-backend
+  luxora-cosmetics-backend:
+    container_name: luxora-cosmetics-backend
     stdin_open: true
     tty: true
     command: sh -c "yarn start & yarn run studio"
@@ -51,22 +51,6 @@ services:
       - .env
     networks:
       - pma_networks
-
-  # PROJECT FRONTEND
-  #librairie-alfia-frontend:
-  #  container_name: librairie-alfia-frontend
-  #  restart: always
-  #  build:
-  #    context: ./librairie_alfia
-  #    dockerfile: Dockerfile
-  #    args:
-  #      - DART_VM_PRODUCT=true
-  #  ports:
-  #    - '3003:80'
-  #  depends_on:
-  #    - librairie-alfia-backend
-  #  networks:
-  #    - pma_networks
 
 volumes:
   frontend-data:

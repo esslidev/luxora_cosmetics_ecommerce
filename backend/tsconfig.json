@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "esnext", // Modern JavaScript for better performance
+    "module": "commonjs", // Node.js compatibility
+    "moduleResolution": "node", // Node.js module resolution strategy
+    "outDir": "./build", // Output directory for compiled files
+    "esModuleInterop": true, // Allow interop with non-ES modules
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file imports
+    "strict": true, // Enable strict type-checking
+    "skipLibCheck": true, // Skip library type checking
+    "resolveJsonModule": true, // Allow importing JSON modules
+    "sourceMap": false, // Disable source maps in production
+    "incremental": true, // Enable incremental compilation
+    "composite": true, // Enable project references for large projects
+    "rootDir": "./src", // Root directory for source files
+    "isolatedModules": true // Treat each file as isolated for better performance
+  },
+  "include": [
+    "./src/routes/**/*.ts",
+    "./src/controllers/**/*.ts",
+    "./src/core/**/*.ts",
+    "./src/middlewares/**/*.ts",
+    "./src/server.ts",
+    "./src/core/utils/mailSender.ts"
+  ],
+  "exclude": ["node_modules", "build", "src/**/*.test.ts", ".dockerignore", ".gitignore", ".prettierrc"]
+}

@@ -9,7 +9,6 @@ part 'data_response.g.dart';
 class DataResponse<T> {
   final T? data;
   final String? status;
-  final FilteringDataModel? filteringData;
   final PaginationModel? pagination;
 
   final String? message;
@@ -17,7 +16,6 @@ class DataResponse<T> {
   DataResponse({
     this.data,
     this.status,
-    this.filteringData,
     this.pagination,
     this.message,
   });

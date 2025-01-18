@@ -1,8 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:librairie_alfia/features/data/models/author.dart';
-import 'package:librairie_alfia/features/data/models/product.dart';
-
-import '../../../core/enums/product.dart';
 
 class ProductEntity extends Equatable {
   final int? id;
@@ -11,7 +7,6 @@ class ProductEntity extends Equatable {
   final int? primaryCategoryNumber;
   final String? title;
   final String? imageUrl;
-  final AuthorModel? author;
   final String? editor;
   final String? publicationDate;
   final String? description;
@@ -28,10 +23,8 @@ class ProductEntity extends Equatable {
   final String? thickness;
   final bool? isPublic;
   final bool? isPreorder;
-  final ProductFormatType? formatType;
   final int? deliveryTime;
   final int? stockCount;
-  final List<ProductModel>? formats;
   final bool? isNewArrival;
   final bool? isBestSeller;
   final int? ratingCount;
@@ -44,7 +37,6 @@ class ProductEntity extends Equatable {
     this.primaryCategoryNumber,
     this.title,
     this.imageUrl,
-    this.author,
     this.editor,
     this.publicationDate,
     this.description,
@@ -61,10 +53,8 @@ class ProductEntity extends Equatable {
     this.thickness,
     this.isPublic,
     this.isPreorder,
-    this.formatType,
     this.deliveryTime,
     this.stockCount,
-    this.formats,
     this.isNewArrival,
     this.isBestSeller,
     this.ratingCount,
@@ -79,7 +69,6 @@ class ProductEntity extends Equatable {
         primaryCategoryNumber,
         title,
         imageUrl,
-        author,
         editor,
         publicationDate,
         description,
@@ -96,10 +85,8 @@ class ProductEntity extends Equatable {
         thickness,
         isPublic,
         isPreorder,
-        formatType,
         deliveryTime,
         stockCount,
-        formats,
         isNewArrival,
         isBestSeller,
         ratingCount,

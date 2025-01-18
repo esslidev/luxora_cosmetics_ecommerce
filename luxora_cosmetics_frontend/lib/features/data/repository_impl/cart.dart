@@ -30,7 +30,6 @@ class CartRepositoryImpl implements CartRepository {
         _authApiService,
         () => _cartApiService.syncCart(
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
           items: {'items': cartItems},
         ),
       );
@@ -58,7 +57,6 @@ class CartRepositoryImpl implements CartRepository {
           _authApiService,
           () => _cartApiService.getCart(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
           ),
         );
 
@@ -91,7 +89,6 @@ class CartRepositoryImpl implements CartRepository {
           _authApiService,
           () => _cartApiService.addItemToCart(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
             productId: {'productId': productId},
           ),
         );
@@ -127,7 +124,6 @@ class CartRepositoryImpl implements CartRepository {
           _authApiService,
           () => _cartApiService.addManyItemsToCart(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
             productIds: {'productIds': productIds},
           ),
         );
@@ -162,7 +158,6 @@ class CartRepositoryImpl implements CartRepository {
           _authApiService,
           () => _cartApiService.updateCartItem(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
             body: {'productId': productId, 'quantity': quantity},
           ),
         );
@@ -197,7 +192,6 @@ class CartRepositoryImpl implements CartRepository {
           _authApiService,
           () => _cartApiService.removeItemFromCart(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
             body: {'productId': productId, 'allQuantity': allQuantity},
           ),
         );
@@ -231,7 +225,6 @@ class CartRepositoryImpl implements CartRepository {
           _authApiService,
           () => _cartApiService.clearCart(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
           ),
         );
 

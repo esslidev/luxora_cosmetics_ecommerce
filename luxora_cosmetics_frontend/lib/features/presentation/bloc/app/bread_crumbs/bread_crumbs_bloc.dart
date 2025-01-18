@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:librairie_alfia/core/resources/bread_crumb_model.dart';
 
+import '../../../../../core/resources/bread_crumb_model.dart';
 import 'bread_crumbs_event.dart';
 import 'bread_crumbs_state.dart';
 

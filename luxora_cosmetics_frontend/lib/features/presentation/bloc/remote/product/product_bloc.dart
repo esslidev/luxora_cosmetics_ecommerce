@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:librairie_alfia/core/enums/product.dart';
 
 import '../../../../../core/resources/data_state.dart';
 import '../../../../domain/usecases/product.dart';
@@ -114,7 +113,6 @@ class RemoteProductBloc extends Bloc<RemoteProductEvent, RemoteProductState> {
       editor: event.editor,
       categoryNumber: event.categoryNumber,
       categoryName: event.categoryName,
-      formatType: event.formatType,
       priceRange: event.priceRange,
       publicationDate: event.publicationDate,
       isPublished: event.isPublished,
@@ -134,12 +132,10 @@ class RemoteProductBloc extends Bloc<RemoteProductEvent, RemoteProductState> {
       orderByPublicationDate: event.orderByPublicationDate,
       orderByStock: event.orderByStock,
       orderByPreorder: event.orderByPreorder,
-      sortOrder: event.sortOrder,
     );
     if (dataState is DataSuccess && dataState.data != null) {
       emit(RemoteProductsLoaded(
         boutiqueProducts: dataState.data!,
-        filteringData: dataState.filteringData!,
         pagination: dataState.pagination!,
       ));
     } else if (dataState is DataFailed) {
@@ -175,7 +171,6 @@ class RemoteProductBloc extends Bloc<RemoteProductEvent, RemoteProductState> {
     emit(const RemoteProductsLoading(productsNewArrivalsLoading: true));
     final dataState = await _productUseCases.getProducts(
       orderByCreateDate: true,
-      sortOrder: SortOrder.desc,
       limit: event.limit,
     );
     if (dataState is DataSuccess && dataState.data != null) {

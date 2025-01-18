@@ -11,17 +11,12 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'config/routes/app_routes/app_routes.dart';
 import 'config/theme/app_theme.dart';
 import 'features/presentation/bloc/app/bread_crumbs/bread_crumbs_bloc.dart';
-import 'features/presentation/bloc/app/currency/currency_bloc.dart';
-import 'features/presentation/bloc/app/language/translation_bloc.dart';
 import 'features/presentation/bloc/app/lite_notification/lite_notifications_bloc.dart';
 import 'features/presentation/bloc/app/route/route_bloc.dart';
-import 'features/presentation/bloc/app/theme/theme_bloc.dart';
 import 'features/presentation/bloc/remote/auth/auth_bloc.dart';
-import 'features/presentation/bloc/remote/author/author_bloc.dart';
 import 'features/presentation/bloc/remote/cart/cart_bloc.dart';
 import 'features/presentation/bloc/remote/category/category_bloc.dart';
 import 'features/presentation/bloc/remote/product/product_bloc.dart';
-import 'features/presentation/bloc/remote/system_messages/system_message_bloc.dart';
 import 'features/presentation/bloc/remote/user/user_bloc.dart';
 import 'features/presentation/bloc/remote/wishlist/wishlist_bloc.dart';
 import 'locator.dart';
@@ -60,12 +55,6 @@ class MyApp extends StatelessWidget {
         // Local Blocs
         BlocProvider<AppRouteBloc>(
             create: (context) => locator<AppRouteBloc>()),
-        BlocProvider<AppCurrencyBloc>(
-            create: (context) => locator<AppCurrencyBloc>()),
-        BlocProvider<AppTranslationBloc>(
-            create: (context) => locator<AppTranslationBloc>()),
-        BlocProvider<AppThemeBloc>(
-            create: (context) => locator<AppThemeBloc>()),
         BlocProvider<AppLiteNotificationsBloc>(
             create: (context) => locator<AppLiteNotificationsBloc>()),
         BlocProvider<AppBreadCrumbsBloc>(
@@ -76,12 +65,8 @@ class MyApp extends StatelessWidget {
             create: (context) => locator<RemoteAuthBloc>()),
         BlocProvider<RemoteUserBloc>(
             create: (context) => locator<RemoteUserBloc>()),
-        BlocProvider<RemoteSystemMessageBloc>(
-            create: (context) => locator<RemoteSystemMessageBloc>()),
         BlocProvider<RemoteProductBloc>(
             create: (context) => locator<RemoteProductBloc>()),
-        BlocProvider<RemoteAuthorBloc>(
-            create: (context) => locator<RemoteAuthorBloc>()),
         BlocProvider<RemoteCategoryBloc>(
             create: (context) => locator<RemoteCategoryBloc>()),
         BlocProvider<RemoteWishlistBloc>(

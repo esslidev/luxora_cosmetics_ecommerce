@@ -3,14 +3,12 @@ import 'package:dio/dio.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/constants/shared_preference_keys.dart';
-import '../../../core/enums/product.dart';
 import '../../../core/resources/data_state.dart';
 import '../../../core/util/api_util.dart';
 import '../../../core/util/prefs_util.dart';
 
 import '../../domain/entities/product.dart';
 import '../../domain/repository/product.dart';
-import '../data_sources/dummy_remote/dummy_product_api_service.dart';
 import '../data_sources/remote/auth_api_service.dart';
 import '../data_sources/remote/product_api_service.dart';
 import '../models/product.dart';
@@ -18,10 +16,8 @@ import '../models/product.dart';
 class ProductRepositoryImpl implements ProductRepository {
   final AuthApiService _authApiService;
   final ProductApiService _productApiService;
-  final DummyProductApiService _dummyProductApiService;
 
-  ProductRepositoryImpl(this._authApiService, this._productApiService,
-      this._dummyProductApiService);
+  ProductRepositoryImpl(this._authApiService, this._productApiService);
 
   @override
   Future<DataState<ProductEntity>> createProduct({
@@ -33,18 +29,10 @@ class ProductRepositoryImpl implements ProductRepository {
         () => _productApiService.createProduct(
           product: product,
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ),
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyProductApiService.createProduct(
-          product: product,
-          accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-        );
-        return DataSuccess(data: dummyResponse.data);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(data: httpResponse.data.data);
       } else {
         return DataFailed(DioException(
@@ -69,18 +57,10 @@ class ProductRepositoryImpl implements ProductRepository {
         () => _productApiService.updateProduct(
           product: product,
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ),
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyProductApiService.updateProduct(
-          product: product,
-          accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-        );
-        return DataSuccess(data: dummyResponse.data);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(data: httpResponse.data.data);
       } else {
         return DataFailed(DioException(
@@ -105,18 +85,10 @@ class ProductRepositoryImpl implements ProductRepository {
         () => _productApiService.deleteProduct(
           id: id,
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ),
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyProductApiService.deleteProduct(
-          id: id,
-          accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-        );
-        return DataSuccess(message: dummyResponse.message);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(message: httpResponse.data.message);
       } else {
         return DataFailed(DioException(
@@ -141,18 +113,10 @@ class ProductRepositoryImpl implements ProductRepository {
         () => _productApiService.deleteProduct(
           isbn: isbn,
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ),
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyProductApiService.deleteProduct(
-          isbn: isbn,
-          accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-        );
-        return DataSuccess(message: dummyResponse.message);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(data: httpResponse.data.data);
       } else {
         return DataFailed(DioException(
@@ -175,17 +139,9 @@ class ProductRepositoryImpl implements ProductRepository {
       final httpResponse = await _productApiService.getProduct(
         id: id,
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyProductApiService.getProduct(
-          id: id,
-          apiKey: apiKey,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-        );
-        return DataSuccess(data: dummyResponse.data);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(data: httpResponse.data.data);
       } else {
         return DataFailed(DioException(
@@ -208,17 +164,9 @@ class ProductRepositoryImpl implements ProductRepository {
       final httpResponse = await _productApiService.getProduct(
         isbn: isbn,
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyProductApiService.getProduct(
-          isbn: isbn,
-          apiKey: apiKey,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-        );
-        return DataSuccess(data: dummyResponse.data);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(data: httpResponse.data.data);
       } else {
         return DataFailed(DioException(
@@ -245,7 +193,6 @@ class ProductRepositoryImpl implements ProductRepository {
     String? editor,
     int? categoryNumber,
     String? categoryName,
-    ProductFormatType? formatType,
     String? priceRange,
     String? publicationDate,
     bool? isPublished,
@@ -265,12 +212,10 @@ class ProductRepositoryImpl implements ProductRepository {
     bool? orderByPublicationDate,
     bool? orderByStock,
     bool? orderByPreorder,
-    SortOrder? sortOrder,
   }) async {
     try {
       final httpResponse = await _productApiService.getProducts(
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         limit: limit,
         page: page,
         productIds: productIds,
@@ -281,7 +226,6 @@ class ProductRepositoryImpl implements ProductRepository {
         editor: editor,
         categoryNumber: categoryNumber,
         categoryName: categoryName,
-        formatType: formatType,
         priceRange: priceRange,
         publicationDate: publicationDate,
         isPublished: isPublished,
@@ -301,29 +245,11 @@ class ProductRepositoryImpl implements ProductRepository {
         orderByPublicationDate: orderByPublicationDate,
         orderByStock: orderByStock,
         orderByPreorder: orderByPreorder,
-        sortOrder: sortOrder,
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyProductApiService.getProducts(
-          apiKey: apiKey,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-          limit: limit,
-          page: page,
-          search: search,
-          categoryNumber: categoryNumber,
-          orderByCreateDate: orderByCreateDate,
-          orderBySales: orderBySales,
-          orderByTitle: orderByTitle,
-          orderByPrice: orderByPrice,
-          sortOrder: sortOrder,
-        );
-        return DataSuccess(
-            data: dummyResponse.data, pagination: httpResponse.data.pagination);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(
           data: httpResponse.data.data,
-          filteringData: httpResponse.data.filteringData,
           pagination: httpResponse.data.pagination,
         );
       } else {
@@ -346,7 +272,6 @@ class ProductRepositoryImpl implements ProductRepository {
     try {
       final httpResponse = await _productApiService.getProductsByProductIds(
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         productIds: productIds,
       );
 

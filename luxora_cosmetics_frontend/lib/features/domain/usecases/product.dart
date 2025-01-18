@@ -1,4 +1,3 @@
-import '../../../core/enums/product.dart';
 import '../../../core/resources/data_state.dart';
 
 import '../../data/models/product.dart';
@@ -57,7 +56,6 @@ class ProductUseCases {
     String? editor,
     int? categoryNumber,
     String? categoryName,
-    ProductFormatType? formatType,
     String? priceRange,
     String? publicationDate,
     bool? isPublished,
@@ -77,7 +75,6 @@ class ProductUseCases {
     bool? orderByPublicationDate,
     bool? orderByStock,
     bool? orderByPreorder,
-    SortOrder? sortOrder,
   }) async {
     return await repository.getProducts(
       limit: limit,
@@ -90,7 +87,6 @@ class ProductUseCases {
       editor: editor,
       categoryNumber: categoryNumber,
       categoryName: categoryName,
-      formatType: formatType,
       priceRange: priceRange,
       publicationDate: publicationDate,
       isPublished: isPublished,
@@ -110,7 +106,6 @@ class ProductUseCases {
       orderByPublicationDate: orderByPublicationDate,
       orderByStock: orderByStock,
       orderByPreorder: orderByPreorder,
-      sortOrder: sortOrder,
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:librairie_alfia/features/domain/entities/category.dart';
+
+import '../../../../domain/entities/category.dart';
 
 abstract class RemoteCategoryState extends Equatable {
   final CategoryEntity? category;

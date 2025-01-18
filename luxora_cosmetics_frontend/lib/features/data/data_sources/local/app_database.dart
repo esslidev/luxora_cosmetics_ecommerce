@@ -2,9 +2,9 @@
 import 'dart:async';
 
 import 'package:floor/floor.dart';
-import 'package:librairie_alfia/features/domain/entities/cart_item.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
+import '../../../domain/entities/cart_item.dart';
 import '../../../domain/entities/wishlist_item.dart';
 import 'daos/cart_dao.dart';
 import 'daos/wishlist_dao.dart';

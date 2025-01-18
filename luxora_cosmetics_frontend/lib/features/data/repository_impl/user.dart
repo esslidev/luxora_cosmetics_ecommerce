@@ -25,7 +25,6 @@ class UserRepositoryImpl implements UserRepository {
         _authApiService,
         () => _userApiService.getUser(
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ),
       );
 
@@ -57,7 +56,6 @@ class UserRepositoryImpl implements UserRepository {
         _authApiService,
         () => _userApiService.getAllUsers(
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
           limit: limit,
           page: page,
           search: search,
@@ -91,7 +89,6 @@ class UserRepositoryImpl implements UserRepository {
         () => _userApiService.updateUser(
           user: user,
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ),
       );
 
@@ -120,7 +117,6 @@ class UserRepositoryImpl implements UserRepository {
         _authApiService,
         () => _userApiService.updateUserPassword(
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
           body: {'recentPassword': recentPassword, 'newPassword': newPassword},
         ),
       );
@@ -147,7 +143,6 @@ class UserRepositoryImpl implements UserRepository {
         _authApiService,
         () => _userApiService.deleteUser(
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
           id: id,
         ),
       );

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:librairie_alfia/features/data/models/wishlist_item.dart';
 
 import '../../../core/constants/shared_preference_keys.dart';
 import '../../../core/resources/data_state.dart';
@@ -13,6 +12,7 @@ import '../data_sources/local/daos/wishlist_dao.dart';
 import '../data_sources/local/wishlist_local_data_source.dart';
 import '../data_sources/remote/auth_api_service.dart';
 import '../data_sources/remote/wishlist_api_service.dart';
+import '../models/wishlist_item.dart';
 
 class WishlistRepositoryImpl implements WishlistRepository {
   final AuthApiService _authApiService;
@@ -35,7 +35,6 @@ class WishlistRepositoryImpl implements WishlistRepository {
         _authApiService,
         () => _wishlistApiService.syncWishlist(
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
           items: {'items': wishlistItems},
         ),
       );
@@ -63,7 +62,6 @@ class WishlistRepositoryImpl implements WishlistRepository {
           _authApiService,
           () => _wishlistApiService.getWishlist(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
           ),
         );
 
@@ -97,7 +95,6 @@ class WishlistRepositoryImpl implements WishlistRepository {
           _authApiService,
           () => _wishlistApiService.addItemToWishlist(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
             productId: {'productId': productId},
           ),
         );
@@ -132,7 +129,6 @@ class WishlistRepositoryImpl implements WishlistRepository {
           _authApiService,
           () => _wishlistApiService.updateWishlistItem(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
             body: {'productId': productId, 'quantity': quantity},
           ),
         );
@@ -167,7 +163,6 @@ class WishlistRepositoryImpl implements WishlistRepository {
           _authApiService,
           () => _wishlistApiService.removeItemFromWishlist(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
             body: {'productId': productId, 'allQuantity': allQuantity},
           ),
         );
@@ -202,7 +197,6 @@ class WishlistRepositoryImpl implements WishlistRepository {
           _authApiService,
           () => _wishlistApiService.clearWishlist(
             accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-            language: PrefsUtil.getString(PrefsKeys.languageCode)!,
           ),
         );
 

@@ -1,4 +1,3 @@
-import '../../../../../core/enums/product.dart';
 import '../../../../data/models/product.dart';
 
 abstract class RemoteProductEvent {
@@ -47,7 +46,6 @@ class GetBoutiqueProducts extends RemoteProductEvent {
   final String? authorName;
   final String? editor;
   final String? categoryName;
-  final ProductFormatType? formatType;
   final String? priceRange;
   final String? publicationDate;
   final bool? isPublished;
@@ -67,40 +65,38 @@ class GetBoutiqueProducts extends RemoteProductEvent {
   final bool? orderByPublicationDate;
   final bool? orderByStock;
   final bool? orderByPreorder;
-  final SortOrder? sortOrder;
 
-  const GetBoutiqueProducts(
-      {this.limit,
-      this.page,
-      this.productIds,
-      this.search,
-      this.isbn,
-      this.title,
-      this.authorName,
-      this.editor,
-      this.categoryNumber,
-      this.categoryName,
-      this.formatType,
-      this.priceRange,
-      this.publicationDate,
-      this.isPublished,
-      this.publishedIn,
-      this.publishedWithin,
-      this.isNewArrivals,
-      this.isBestSellers,
-      this.isPreorder,
-      this.isInStock,
-      this.isOutStock,
-      this.orderByCreateDate,
-      this.orderBySales,
-      this.orderByProductIds,
-      this.orderByTitle,
-      this.orderByAuthor,
-      this.orderByPrice,
-      this.orderByPublicationDate,
-      this.orderByStock,
-      this.orderByPreorder,
-      this.sortOrder});
+  const GetBoutiqueProducts({
+    this.limit,
+    this.page,
+    this.productIds,
+    this.search,
+    this.isbn,
+    this.title,
+    this.authorName,
+    this.editor,
+    this.categoryNumber,
+    this.categoryName,
+    this.priceRange,
+    this.publicationDate,
+    this.isPublished,
+    this.publishedIn,
+    this.publishedWithin,
+    this.isNewArrivals,
+    this.isBestSellers,
+    this.isPreorder,
+    this.isInStock,
+    this.isOutStock,
+    this.orderByCreateDate,
+    this.orderBySales,
+    this.orderByProductIds,
+    this.orderByTitle,
+    this.orderByAuthor,
+    this.orderByPrice,
+    this.orderByPublicationDate,
+    this.orderByStock,
+    this.orderByPreorder,
+  });
 }
 
 class GetSearchedProducts extends RemoteProductEvent {

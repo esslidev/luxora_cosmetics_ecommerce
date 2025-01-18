@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import '../../data/models/category.dart';
-import '../../data/models/category_translation.dart';
 
 class CategoryEntity extends Equatable {
   final int? id;
@@ -8,7 +7,6 @@ class CategoryEntity extends Equatable {
   final int? categoryNumber;
   final bool? isPublic;
   final int? promoPercent;
-  final List<CategoryTranslationModel>? translations;
   final List<CategoryModel>? subCategories;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -19,7 +17,6 @@ class CategoryEntity extends Equatable {
     this.categoryNumber,
     this.isPublic,
     this.promoPercent,
-    this.translations,
     this.subCategories,
     this.createdAt,
     this.updatedAt,
@@ -32,7 +29,6 @@ class CategoryEntity extends Equatable {
         categoryNumber,
         isPublic,
         promoPercent,
-        translations,
         subCategories,
         createdAt,
         updatedAt,

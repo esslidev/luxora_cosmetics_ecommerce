@@ -9,17 +9,14 @@ import '../../../core/util/prefs_util.dart';
 import '../../data/models/category.dart';
 import '../../domain/entities/category.dart';
 import '../../domain/repository/category.dart';
-import '../data_sources/dummy_remote/dummy_category_api_service.dart';
 import '../data_sources/remote/auth_api_service.dart';
 import '../data_sources/remote/category_api_service.dart';
 
 class CategoryRepositoryImpl implements CategoryRepository {
   final AuthApiService _authApiService;
   final CategoryApiService _categoryApiService;
-  final DummyCategoryApiService _dummyCategoryApiService;
 
-  CategoryRepositoryImpl(this._authApiService, this._categoryApiService,
-      this._dummyCategoryApiService);
+  CategoryRepositoryImpl(this._authApiService, this._categoryApiService);
 
   @override
   Future<DataState<CategoryEntity>> createCategory({
@@ -31,18 +28,10 @@ class CategoryRepositoryImpl implements CategoryRepository {
         () => _categoryApiService.createCategory(
           category: category,
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ),
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyCategoryApiService.createCategory(
-          category: category,
-          accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-        );
-        return DataSuccess(data: dummyResponse.data);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(data: httpResponse.data.data);
       } else {
         return DataFailed(DioException(
@@ -67,18 +56,10 @@ class CategoryRepositoryImpl implements CategoryRepository {
         () => _categoryApiService.updateCategory(
           category: category,
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ),
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyCategoryApiService.updateCategory(
-          category: category,
-          accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-        );
-        return DataSuccess(data: dummyResponse.data);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(data: httpResponse.data.data);
       } else {
         return DataFailed(DioException(
@@ -105,19 +86,10 @@ class CategoryRepositoryImpl implements CategoryRepository {
           id: id,
           categoryNumber: categoryNumber,
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ),
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyCategoryApiService.deleteCategory(
-          id: id,
-          categoryNumber: categoryNumber,
-          accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-        );
-        return DataSuccess(data: dummyResponse.data);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(message: httpResponse.data.message);
       } else {
         return DataFailed(DioException(
@@ -140,20 +112,11 @@ class CategoryRepositoryImpl implements CategoryRepository {
     try {
       final httpResponse = await _categoryApiService.getCategory(
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         id: id,
         categoryNumber: categoryNumber,
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyCategoryApiService.getCategory(
-          apiKey: apiKey,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-          id: id,
-          categoryNumber: categoryNumber,
-        );
-        return DataSuccess(data: dummyResponse.data);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(data: httpResponse.data.data);
       } else {
         return DataFailed(DioException(
@@ -176,20 +139,11 @@ class CategoryRepositoryImpl implements CategoryRepository {
     try {
       final httpResponse = await _categoryApiService.getAllCategories(
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         level: level,
         isMainCategory: isMainCategory,
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyCategoryApiService.getAllCategories(
-          apiKey: apiKey,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-          level: level,
-          isMainCategory: isMainCategory,
-        );
-        return DataSuccess(data: dummyResponse.data);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(data: httpResponse.data.data);
       } else {
         return DataFailed(DioException(
@@ -212,7 +166,6 @@ class CategoryRepositoryImpl implements CategoryRepository {
     try {
       final httpResponse = await _categoryApiService.getMainCategories(
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ids: ids,
         categoryNumbers: categoryNumbers,
       );
@@ -240,20 +193,11 @@ class CategoryRepositoryImpl implements CategoryRepository {
     try {
       final httpResponse = await _categoryApiService.getCategories(
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ids: ids,
         categoryNumbers: categoryNumbers,
       );
 
-      if (useDummyData) {
-        final dummyResponse = await _dummyCategoryApiService.getCategories(
-          apiKey: apiKey,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
-          ids: ids,
-          categoryNumbers: categoryNumbers,
-        );
-        return DataSuccess(data: dummyResponse.data);
-      } else if (httpResponse.response.statusCode == HttpStatus.ok) {
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(data: httpResponse.data.data);
       } else {
         return DataFailed(DioException(

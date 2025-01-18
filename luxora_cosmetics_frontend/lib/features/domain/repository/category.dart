@@ -1,6 +1,5 @@
-import 'package:librairie_alfia/features/data/models/category.dart';
-
 import '../../../core/resources/data_state.dart';
+import '../../data/models/category.dart';
 import '../entities/category.dart';
 
 abstract class CategoryRepository {

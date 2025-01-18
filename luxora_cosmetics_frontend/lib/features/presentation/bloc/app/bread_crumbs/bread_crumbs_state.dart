@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:librairie_alfia/core/resources/bread_crumb_model.dart';
+
+import '../../../../../core/resources/bread_crumb_model.dart';
 
 abstract class AppBreadCrumbsState extends Equatable {
   final List<BreadCrumbModel>? breadCrumbs;

@@ -22,7 +22,6 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final httpResponse = await _authApiService.signUp(
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         user: user,
       );
 
@@ -45,7 +44,6 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final httpResponse = await _authApiService.signIn(
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         user: user,
       );
 
@@ -68,7 +66,6 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final httpResponse = await _authApiService.requestPasswordReset(
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         body: {'email': email},
       );
 
@@ -92,7 +89,6 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final httpResponse = await _authApiService.resetPassword(
         apiKey: apiKey,
-        language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         body: {'token': token, 'newPassword': newPassword},
       );
 
@@ -117,7 +113,6 @@ class AuthRepositoryImpl implements AuthRepository {
         _authApiService,
         () => _authApiService.signOut(
           accessToken: PrefsUtil.getString(PrefsKeys.userAccessToken)!,
-          language: PrefsUtil.getString(PrefsKeys.languageCode)!,
         ),
       );
 

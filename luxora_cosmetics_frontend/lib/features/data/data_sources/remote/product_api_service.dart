@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../../../core/constants/api_constants.dart';
-import '../../../../core/enums/product.dart';
 import '../../models/data_response.dart';
 import '../../models/product.dart';
 
@@ -15,7 +14,6 @@ abstract class ProductApiService {
   @POST("/api/products/product/create")
   Future<HttpResponse<DataResponse<ProductModel>>> createProduct({
     @Header("Authorization") required String accessToken,
-    @Header('language') required String language,
     @Body() required ProductModel product,
     @Header('Content-Type') String contentType = 'application/json',
   });
@@ -23,7 +21,6 @@ abstract class ProductApiService {
   @PUT("/api/products/product/update")
   Future<HttpResponse<DataResponse<ProductModel>>> updateProduct({
     @Header("Authorization") required String accessToken,
-    @Header('language') required String language,
     @Body() required ProductModel product,
     @Header('Content-Type') String contentType = 'application/json',
   });
@@ -31,7 +28,6 @@ abstract class ProductApiService {
   @DELETE("/api/products/product/delete")
   Future<HttpResponse<DataResponse>> deleteProduct({
     @Header("Authorization") required String accessToken,
-    @Header('language') required String language,
     @Query("id") int? id,
     @Query("isbn") String? isbn,
     @Header('Content-Type') String contentType = 'application/json',
@@ -40,7 +36,6 @@ abstract class ProductApiService {
   @GET("/api/products/product")
   Future<HttpResponse<DataResponse<ProductModel>>> getProduct({
     @Header('apiKey') required String apiKey,
-    @Header('language') required String language,
     @Query("id") int? id,
     @Query("isbn") String? isbn,
     @Header('Content-Type') String contentType = 'application/json',
@@ -49,7 +44,6 @@ abstract class ProductApiService {
   @GET("/api/products/products")
   Future<HttpResponse<DataResponse<List<ProductModel>>>> getProducts({
     @Header('apiKey') required String apiKey,
-    @Header('language') required String language,
     @Query("limit") int? limit,
     @Query("page") int? page,
     @Query("productIds") String? productIds,
@@ -60,7 +54,6 @@ abstract class ProductApiService {
     @Query("editor") String? editor,
     @Query("categoryNumber") int? categoryNumber,
     @Query("categoryName") String? categoryName,
-    @Query("formatType") ProductFormatType? formatType,
     @Query("priceRange") String? priceRange,
     @Query("publicationDate") String? publicationDate,
     @Query("isPublished") bool? isPublished,
@@ -80,7 +73,6 @@ abstract class ProductApiService {
     @Query("orderByPublicationDate") bool? orderByPublicationDate,
     @Query("orderByStock") bool? orderByStock,
     @Query("orderByPreorder") bool? orderByPreorder,
-    @Query("sortOrder") SortOrder? sortOrder,
     @Header('Content-Type') String contentType = 'application/json',
   });
 
@@ -88,7 +80,6 @@ abstract class ProductApiService {
   Future<HttpResponse<DataResponse<List<ProductModel>>>>
       getProductsByProductIds({
     @Header('apiKey') required String apiKey,
-    @Header('language') required String language,
     @Query("productIds") String? productIds,
     @Header('Content-Type') String contentType = 'application/json',
   });

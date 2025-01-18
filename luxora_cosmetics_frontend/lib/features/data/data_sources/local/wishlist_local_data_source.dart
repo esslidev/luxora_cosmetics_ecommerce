@@ -1,8 +1,7 @@
-import 'package:librairie_alfia/features/data/models/wishlist_item.dart';
-
 import '../../../domain/entities/wishlist.dart';
 import '../../../domain/entities/wishlist_item.dart';
 import '../../models/data_response.dart';
+import '../../models/wishlist_item.dart';
 import 'daos/wishlist_dao.dart';
 
 class WishlistLocalDataSource {
@@ -53,7 +52,8 @@ class WishlistLocalDataSource {
       final updatedItem =
           await wishlistDao.getWishlistItemByProductId(productId);
       return DataResponse(
-          message: 'The item was added successfully to the wishlist',
+          message:
+              'Le produit a été ajouté avec succès à la liste de souhaits.',
           data: WishlistItemModel(
             id: updatedItem?.id,
             wishlistId: updatedItem?.wishlistId,
@@ -61,7 +61,7 @@ class WishlistLocalDataSource {
             quantity: updatedItem?.quantity,
           ));
     } catch (e) {
-      throw 'Failed to add the item to the wishlist $e';
+      throw 'Échec de l\'ajout du produit à la liste de souhaits. $e';
     }
   }
 

@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import '../../../core/enums/product.dart';
 import '../../domain/entities/product.dart';
 import 'author.dart';
 

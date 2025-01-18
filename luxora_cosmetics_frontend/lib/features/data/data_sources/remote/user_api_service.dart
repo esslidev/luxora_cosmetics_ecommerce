@@ -14,14 +14,12 @@ abstract class UserApiService {
   @GET("/api/users/user")
   Future<HttpResponse<DataResponse<UserModel>>> getUser({
     @Header("Authorization") required String accessToken,
-    @Header('language') required String language,
     @Header('Content-Type') String contentType = 'application/json',
   });
 
   @GET("/api/users/all")
   Future<HttpResponse<DataResponse<List<UserModel>>>> getAllUsers({
     @Header("Authorization") required String accessToken,
-    @Header('language') required String language,
     @Query("limit") int? limit,
     @Query("page") int? page,
     @Query("search") String? search,
@@ -33,7 +31,6 @@ abstract class UserApiService {
   @PUT("/api/users/user/update")
   Future<HttpResponse<DataResponse<UserModel>>> updateUser({
     @Header("Authorization") required String accessToken,
-    @Header('language') required String language,
     @Body() required UserModel user,
     @Header('Content-Type') String contentType = 'application/json',
   });
@@ -41,7 +38,6 @@ abstract class UserApiService {
   @PUT("/api/users/user/update/password")
   Future<HttpResponse<DataResponse<UserModel>>> updateUserPassword({
     @Header("Authorization") required String accessToken,
-    @Header('language') required String language,
     @Body() required Map<String, dynamic> body,
     @Header('Content-Type') String contentType = 'application/json',
   });
@@ -49,7 +45,6 @@ abstract class UserApiService {
   @DELETE("/api/users/user/delete")
   Future<HttpResponse<DataResponse>> deleteUser({
     @Header("Authorization") required String accessToken,
-    @Header('language') required String language,
     @Path("userId") required int id,
     @Header('Content-Type') String contentType = 'application/json',
   });

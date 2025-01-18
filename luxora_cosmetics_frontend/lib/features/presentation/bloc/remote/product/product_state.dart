@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:librairie_alfia/features/domain/entities/product.dart'; // Ensure you have the correct import for your Product entity
-import '../../../../data/models/filtering_data.dart';
 import '../../../../domain/entities/pagination.dart';
+import '../../../../domain/entities/product.dart';
 
 abstract class RemoteProductState extends Equatable {
   final ProductEntity? product;
@@ -33,7 +32,6 @@ abstract class RemoteProductState extends Equatable {
   final bool? wishlistProductsLoading;
   final bool? cartProductsLoading;
   final bool? checkoutProductsLoading;
-  final FilteringDataModel? filteringData;
   final PaginationEntity? pagination;
   final String? messageResponse;
   final DioException? error;
@@ -67,7 +65,6 @@ abstract class RemoteProductState extends Equatable {
     this.wishlistProductsLoading,
     this.cartProductsLoading,
     this.checkoutProductsLoading,
-    this.filteringData,
     this.pagination,
     this.messageResponse,
     this.error,
@@ -101,7 +98,6 @@ abstract class RemoteProductState extends Equatable {
         wishlistProductsLoading,
         cartProductsLoading,
         checkoutProductsLoading,
-        filteringData,
         pagination,
         messageResponse,
         error,
@@ -184,7 +180,6 @@ class RemoteProductsLoaded extends RemoteProductState {
       super.wishlistProducts,
       super.cartProducts,
       super.checkoutProducts,
-      super.filteringData,
       super.pagination});
 }
 

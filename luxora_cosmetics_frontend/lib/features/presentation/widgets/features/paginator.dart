@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:librairie_alfia/core/constants/app_paths.dart';
-import 'package:librairie_alfia/core/enums/widgets.dart';
-import 'package:librairie_alfia/core/util/responsive_size_adapter.dart';
-import 'package:librairie_alfia/features/presentation/widgets/common/custom_button.dart';
-import 'package:librairie_alfia/features/presentation/widgets/common/custom_field.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/enums/widgets.dart';
+import '../../../../core/util/responsive_size_adapter.dart';
+import '../common/custom_button.dart';
+import '../common/custom_field.dart';
 
 class Paginator extends StatelessWidget {
   final BaseTheme theme;
@@ -39,7 +38,7 @@ class Paginator extends StatelessWidget {
       svgIconPath: svgIconPath,
       iconWidth: r.size(8),
       iconHeight: r.size(8),
-      iconColor: theme.accent.withOpacity(isUnclickable ? 0.4 : 1),
+      iconColor: theme.accent.withValues(alpha: isUnclickable ? 0.4 : 1),
       width: r.size(26),
       height: r.size(18),
       fontSize: r.size(12),
@@ -49,11 +48,11 @@ class Paginator extends StatelessWidget {
       border: isActive
           ? null
           : Border.all(
-              color: theme.accent.withOpacity(0.4), width: r.size(0.6)),
+              color: theme.accent.withValues(alpha: 0.4), width: r.size(0.6)),
       fontWeight: FontWeight.w500,
       textColor: isActive
-          ? AppColors.colors.whiteOut
-          : theme.accent.withOpacity(isUnclickable ? 0.4 : 1),
+          ? AppColors.colors.whiteWhitest
+          : theme.accent.withValues(alpha: isUnclickable ? 0.4 : 1),
       animationDuration: 300.ms,
       backgroundColor:
           isActive ? theme.primary : theme.secondaryBackgroundColor,
@@ -68,8 +67,8 @@ class Paginator extends StatelessWidget {
     // "First" button
     pageButtons.add(_buildCustomButton(
       svgIconPath: !isRtl
-          ? AppPaths.vectors.previousSkipIcon
-          : AppPaths.vectors.nextSkipIcon,
+          ? 'AppPaths.vectors.previousSkipIcon'
+          : 'AppPaths.vectors.nextSkipIcon',
       isUnclickable: currentPage == 1,
       onPressed: () {
         if (currentPage > 1) onPageChanged(1);
@@ -78,8 +77,9 @@ class Paginator extends StatelessWidget {
 
     // "Previous" button
     pageButtons.add(_buildCustomButton(
-      svgIconPath:
-          !isRtl ? AppPaths.vectors.previousIcon : AppPaths.vectors.nextIcon,
+      svgIconPath: !isRtl
+          ? 'AppPaths.vectors.previousIcon'
+          : 'AppPaths.vectors.nextIcon',
       isUnclickable: currentPage == 1,
       onPressed: () {
         if (currentPage > 1) onPageChanged(currentPage - 1);
@@ -123,8 +123,9 @@ class Paginator extends StatelessWidget {
 
     // "Next" button
     pageButtons.add(_buildCustomButton(
-      svgIconPath:
-          !isRtl ? AppPaths.vectors.nextIcon : AppPaths.vectors.previousIcon,
+      svgIconPath: !isRtl
+          ? 'AppPaths.vectors.nextIcon'
+          : 'AppPaths.vectors.previousIcon',
       isUnclickable: currentPage == totalPages,
       onPressed: () {
         if (currentPage < totalPages) onPageChanged(currentPage + 1);
@@ -134,8 +135,8 @@ class Paginator extends StatelessWidget {
     // "Last" button
     pageButtons.add(_buildCustomButton(
       svgIconPath: !isRtl
-          ? AppPaths.vectors.nextSkipIcon
-          : AppPaths.vectors.previousIcon,
+          ? 'AppPaths.vectors.nextSkipIcon'
+          : 'AppPaths.vectors.previousIcon',
       isUnclickable: currentPage == totalPages,
       onPressed: () {
         if (currentPage < totalPages) onPageChanged(totalPages);

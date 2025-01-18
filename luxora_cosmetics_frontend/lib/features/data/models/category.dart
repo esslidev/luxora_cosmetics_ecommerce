@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import '../../domain/entities/category.dart';
-import 'category_translation.dart';
 
 part 'category.g.dart';
 
@@ -12,7 +11,6 @@ class CategoryModel extends CategoryEntity {
     super.categoryNumber,
     super.isPublic,
     super.promoPercent,
-    super.translations,
     super.subCategories,
   });
 

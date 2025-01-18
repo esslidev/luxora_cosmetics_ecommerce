@@ -1,23 +1,11 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:librairie_alfia/core/constants/app_paths.dart';
-import 'package:librairie_alfia/core/enums/widgets.dart';
-import 'package:librairie_alfia/core/resources/language_model.dart';
-import 'package:librairie_alfia/features/data/models/author.dart';
-import 'package:librairie_alfia/features/presentation/widgets/common/custom_line.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/resources/currency_model.dart';
 import '../../../../core/util/app_util.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 import '../../../../core/util/translation_service.dart';
-import '../../bloc/app/currency/currency_bloc.dart';
-import '../../bloc/app/currency/currency_state.dart';
-import '../../bloc/app/language/translation_bloc.dart';
-import '../../bloc/app/language/translation_state.dart';
-import '../../bloc/app/theme/theme_bloc.dart';
-import '../../bloc/app/theme/theme_state.dart';
 import '../common/custom_button.dart';
 import '../common/custom_display.dart';
 import '../common/custom_field.dart';
@@ -26,7 +14,6 @@ import '../common/custom_text.dart';
 class ProductWidget extends StatefulWidget {
   final int? productId;
   final String? networkImageUrl;
-  final AuthorModel? author;
   final String? title;
   final double? titleMaxWidth;
   final double? price;
@@ -61,14 +48,11 @@ class ProductWidget extends StatefulWidget {
   )? onPressed;
   final Function(int productId)? onWishlistPressed;
   final Function(int productId)? onCartPressed;
-  final Function(int productId)? onPurchasePressed;
-  final Function(AuthorModel author)? onAuthorPressed;
 
   const ProductWidget(
       {super.key,
       this.productId,
       this.networkImageUrl,
-      this.author,
       this.title,
       this.titleMaxWidth,
       this.price,
@@ -555,3 +539,4 @@ class _ProductWidgetState extends State<ProductWidget> {
         ]);
   }
 }
+*/

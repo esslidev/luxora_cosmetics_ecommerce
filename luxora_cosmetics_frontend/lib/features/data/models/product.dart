@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import '../../domain/entities/product.dart';
-import 'author.dart';
 
 part 'product.g.dart';
 
@@ -13,7 +12,6 @@ class ProductModel extends ProductEntity {
     super.primaryCategoryNumber,
     super.title,
     super.imageUrl,
-    super.author,
     super.editor,
     super.publicationDate,
     super.description,
@@ -30,10 +28,8 @@ class ProductModel extends ProductEntity {
     super.thickness,
     super.isPublic,
     super.isPreorder,
-    super.formatType,
     super.deliveryTime,
     super.stockCount,
-    super.formats,
     super.isNewArrival,
     super.isBestSeller,
     super.ratingCount,

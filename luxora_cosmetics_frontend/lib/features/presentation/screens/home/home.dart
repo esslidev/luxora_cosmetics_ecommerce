@@ -3,27 +3,22 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:librairie_alfia/core/constants/app_paths.dart';
-import 'package:librairie_alfia/features/presentation/screens/home/widgets/lite_notifications/lite_notifications.dart';
-import 'package:librairie_alfia/features/presentation/widgets/common/custom_button.dart';
 
 import '../../../../config/routes/app_routes/home_routes/home_routes.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/app_paths.dart';
 import '../../../../core/resources/global_contexts.dart';
-import '../../../../core/resources/language_model.dart';
 import '../../../../core/util/responsive_screen_adapter.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 import '../../../../locator.dart';
 import '../../../data/data_sources/local/app_database.dart';
-import '../../bloc/app/language/translation_bloc.dart';
-import '../../bloc/app/language/translation_state.dart';
-import '../../bloc/app/theme/theme_bloc.dart';
-import '../../bloc/app/theme/theme_state.dart';
+import '../../widgets/common/custom_button.dart';
 import '../../widgets/common/custom_field.dart';
 import 'widgets/footer.dart';
 import 'widgets/header/header.dart';
 import 'widgets/header_tape.dart';
+import 'widgets/lite_notifications/lite_notifications.dart';
 import 'widgets/navigator.dart';
 import 'widgets/quick_links.dart';
 import 'widgets/service_highlights.dart';
@@ -113,28 +108,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppThemeBloc, AppThemeState>(
-        builder: (context, themeState) {
-      return BlocBuilder<AppTranslationBloc, AppTranslationState>(
-          builder: (context, translationState) {
-        if (translationState.language != null) {
-          return Scaffold(
-            backgroundColor: themeState.theme.primaryBackgroundColor,
-            body: _buildHome(
-                context, themeState.theme, translationState.language!),
-          );
-        }
-        return const SizedBox();
-      });
-    });
+    return Scaffold(
+      backgroundColor: AppColors.light.primaryBackgroundColor,
+      body: _buildHome(context),
+    );
   }
 
-  Widget _buildHome(
-      BuildContext context, BaseTheme theme, LanguageModel language) {
+  Widget _buildHome(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Stack(
       children: [
-        CustomField(isRtl: language.isRtl, children: [
+        CustomField(children: [
           Expanded(
             child: SingleChildScrollView(
               controller: _scrollController,

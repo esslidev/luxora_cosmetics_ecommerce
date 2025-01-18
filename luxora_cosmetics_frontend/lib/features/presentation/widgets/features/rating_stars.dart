@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:librairie_alfia/core/constants/app_colors.dart';
-import 'package:librairie_alfia/core/constants/app_paths.dart';
-import 'package:librairie_alfia/core/enums/widgets.dart';
-import 'package:librairie_alfia/core/util/responsive_size_adapter.dart';
-import 'package:librairie_alfia/features/presentation/widgets/common/custom_display.dart';
-import 'package:librairie_alfia/features/presentation/widgets/common/custom_field.dart';
+
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/enums/widgets.dart';
+import '../../../../core/util/responsive_size_adapter.dart';
+import '../common/custom_display.dart';
+import '../common/custom_field.dart';
 
 class RatingStars extends StatelessWidget {
-  final BaseTheme theme;
   final double rating;
   final int starCount;
   final double? starSize;
@@ -22,7 +21,6 @@ class RatingStars extends StatelessWidget {
     this.starSize,
     this.isInteractive = false,
     this.onRatingUpdate,
-    required this.theme,
     required this.isRtl,
   });
 
@@ -34,13 +32,13 @@ class RatingStars extends StatelessWidget {
     return Stack(
       children: [
         CustomDisplay(
-          assetPath: AppPaths.vectors.ratingStarIcon,
+          assetPath: 'AppPaths.vectors.ratingStarIcon',
           isSvg: true,
           width: starSize ?? r.size(10),
           height: starSize ?? r.size(10),
           svgColor: (rating >= index + 1)
-              ? AppColors.colors.yellowHoneyGlow
-              : theme.accent.withOpacity(0.15),
+              ? AppColors.colors.yellowVanillaPudding
+              : AppColors.light.accent.withValues(alpha: 0.15),
           cursor: isInteractive && onRatingUpdate != null
               ? SystemMouseCursors.click
               : SystemMouseCursors.basic,
@@ -51,13 +49,13 @@ class RatingStars extends StatelessWidget {
         IgnorePointer(
           ignoring: true,
           child: CustomDisplay(
-            assetPath: AppPaths.vectors.ratingHalfStarIcon,
+            assetPath: 'AppPaths.vectors.ratingHalfStarIcon',
             isSvg: true,
             width: starSize != null ? (starSize! / 2) : r.size(5),
             height: starSize ?? r.size(10),
             svgColor: (rating > index && rating < index + 1)
-                ? AppColors.colors.yellowHoneyGlow
-                : theme.accent.withOpacity(0.1),
+                ? AppColors.colors.yellowVanillaPudding
+                : AppColors.light.accent.withValues(alpha: 0.1),
           ),
         ),
       ],
@@ -67,7 +65,7 @@ class RatingStars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ResponsiveSizeAdapter r = ResponsiveSizeAdapter(context);
-    final Color starColor = AppColors.colors.yellowHoneyGlow;
+    final Color starColor = AppColors.colors.yellowVanillaPudding;
 
     return CustomField(
       mainAxisSize: MainAxisSize.min,

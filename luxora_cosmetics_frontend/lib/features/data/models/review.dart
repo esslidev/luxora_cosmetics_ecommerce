@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import '../../domain/entities/review.dart';
+import 'product.dart';
+import 'user.dart';
 
 part 'review.g.dart';
 

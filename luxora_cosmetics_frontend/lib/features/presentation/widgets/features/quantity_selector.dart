@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_paths.dart';
 import '../../../../core/enums/widgets.dart';
 import '../../../../core/util/custom_timer.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
@@ -99,16 +98,17 @@ class _QuantitySelectorState extends State<QuantitySelector> {
         CustomButton(
           width: r.size(16),
           height: r.size(16),
-          svgIconPath: AppPaths.vectors.minusIcon,
+          svgIconPath: 'AppPaths.vectors.minusIcon',
           iconWidth: r.size(8),
           iconColor: widget.theme.accent,
           backgroundColor: widget.theme.secondaryBackgroundColor,
           enabled: widget.enabled,
           onDisabledStyle: CustomButtonStyle(
-            iconColor: widget.theme.accent.withOpacity(0.4),
+            iconColor: widget.theme.accent.withValues(alpha: 0.4),
           ),
           border: Border.all(
-              color: widget.theme.accent.withOpacity(0.4), width: r.size(0.6)),
+              color: widget.theme.accent.withValues(alpha: 0.4),
+              width: r.size(0.6)),
           borderRadius: BorderRadius.circular(r.size(1)),
           animationDuration: 300.ms,
           onHoverStyle: CustomButtonStyle(
@@ -127,7 +127,8 @@ class _QuantitySelectorState extends State<QuantitySelector> {
           hintText: '${widget.minQuantity}',
           borderRadius: BorderRadius.circular(r.size(1)),
           border: Border.all(
-              color: widget.theme.accent.withOpacity(0.4), width: r.size(0.6)),
+              color: widget.theme.accent.withValues(alpha: 0.4),
+              width: r.size(0.6)),
           backgroundColor: widget.theme.secondaryBackgroundColor,
           fontSize: r.size(8),
           textAlign: TextAlign.center,
@@ -142,16 +143,17 @@ class _QuantitySelectorState extends State<QuantitySelector> {
         CustomButton(
           width: r.size(16),
           height: r.size(16),
-          svgIconPath: AppPaths.vectors.plusIcon,
+          svgIconPath: 'AppPaths.vectors.plusIcon',
           iconWidth: r.size(8),
           enabled: widget.enabled,
           onDisabledStyle: CustomButtonStyle(
-            iconColor: widget.theme.accent.withOpacity(0.4),
+            iconColor: widget.theme.accent.withValues(alpha: 0.4),
           ),
           iconColor: widget.theme.accent,
           backgroundColor: widget.theme.secondaryBackgroundColor,
           border: Border.all(
-              color: widget.theme.accent.withOpacity(0.4), width: r.size(0.6)),
+              color: widget.theme.accent.withValues(alpha: 0.4),
+              width: r.size(0.6)),
           borderRadius: BorderRadius.circular(r.size(1)),
           animationDuration: 300.ms,
           onHoverStyle: CustomButtonStyle(

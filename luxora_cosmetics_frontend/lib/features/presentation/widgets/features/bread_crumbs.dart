@@ -1,18 +1,18 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:librairie_alfia/core/enums/widgets.dart';
-import 'package:librairie_alfia/core/resources/bread_crumb_model.dart';
-import 'package:librairie_alfia/features/presentation/widgets/common/custom_display.dart';
-import 'package:librairie_alfia/features/presentation/widgets/common/custom_field.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_paths.dart';
+import '../../../../core/enums/widgets.dart';
+import '../../../../core/resources/bread_crumb_model.dart';
 import '../../../../core/util/app_events_util.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 import '../../bloc/app/bread_crumbs/bread_crumbs_bloc.dart';
 import '../../bloc/app/bread_crumbs/bread_crumbs_state.dart';
 import '../common/custom_button.dart';
+import '../common/custom_display.dart';
+import '../common/custom_field.dart';
 
 class BreadCrumbs extends StatefulWidget {
   final BaseTheme theme;
@@ -72,12 +72,12 @@ class _BreadCrumbsState extends State<BreadCrumbs> {
                 isRtl: widget.isRtl,
                 children: [
                   CustomDisplay(
-                    assetPath: AppPaths.vectors.homeFillIcon,
+                    assetPath: 'AppPaths.vectors.homeFillIcon',
                     isSvg: true,
                     width: r.size(8),
                     height: r.size(8),
                     cursor: SystemMouseCursors.click,
-                    svgColor: widget.theme.accent.withOpacity(0.7),
+                    svgColor: widget.theme.accent.withValues(alpha: 0.7),
                     onTap: () {
                       Beamer.of(context)
                           .beamToNamed(AppPaths.routes.exploreScreen);
@@ -85,12 +85,12 @@ class _BreadCrumbsState extends State<BreadCrumbs> {
                   ),
                   CustomDisplay(
                     assetPath: !widget.isRtl
-                        ? AppPaths.vectors.triangleRightIcon
-                        : AppPaths.vectors.triangleLeftIcon,
+                        ? 'AppPaths.vectors.triangleRightIcon'
+                        : 'AppPaths.vectors.triangleLeftIcon',
                     isSvg: true,
                     width: r.size(6),
                     height: r.size(6),
-                    svgColor: widget.theme.accent.withOpacity(0.3),
+                    svgColor: widget.theme.accent.withValues(alpha: 0.3),
                   ),
                   ...breadCrumbs.asMap().entries.map((entry) {
                     int index = entry.key;
@@ -118,22 +118,23 @@ class _BreadCrumbsState extends State<BreadCrumbs> {
                               : SystemMouseCursors.basic,
                           color: index == breadCrumbs.length - 1
                               ? widget.theme.secondary
-                              : widget.theme.accent.withOpacity(0.6),
+                              : widget.theme.accent.withValues(alpha: 0.6),
                           onHoverColor: index == breadCrumbs.length - 1
                               ? widget.theme.primary
-                              : widget.theme.accent.withOpacity(0.8),
+                              : widget.theme.accent.withValues(alpha: 0.8),
                           r: r,
                           fontSize: widget.fontSize ?? r.size(10),
                         ),
                         if (index < breadCrumbs.length - 1)
                           CustomDisplay(
                             assetPath: !widget.isRtl
-                                ? AppPaths.vectors.triangleRightIcon
-                                : AppPaths.vectors.triangleLeftIcon,
+                                ? 'AppPaths.vectors.triangleRightIcon'
+                                : 'AppPaths.vectors.triangleLeftIcon',
                             isSvg: true,
                             width: r.size(6),
                             height: r.size(6),
-                            svgColor: widget.theme.accent.withOpacity(0.3),
+                            svgColor:
+                                widget.theme.accent.withValues(alpha: 0.3),
                           )
                       ],
                     );

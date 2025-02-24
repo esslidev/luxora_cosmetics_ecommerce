@@ -80,7 +80,7 @@ class _BreadCrumbsState extends State<BreadCrumbs> {
                     svgColor: widget.theme.accent.withValues(alpha: 0.7),
                     onTap: () {
                       Beamer.of(context)
-                          .beamToNamed(AppPaths.routes.exploreScreen);
+                          .beamToNamed(AppPaths.routes.homePageScreen);
                     },
                   ),
                   CustomDisplay(

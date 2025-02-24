@@ -3,21 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../features/data/models/category.dart';
 import '../../features/data/models/product.dart';
-import '../../features/data/models/system_message.dart';
 import '../../features/data/models/user.dart';
-import '../../features/domain/entities/author.dart';
 import '../../features/presentation/bloc/remote/auth/auth_bloc.dart';
 import '../../features/presentation/bloc/remote/auth/auth_event.dart';
-import '../../features/presentation/bloc/remote/author/author_bloc.dart';
-import '../../features/presentation/bloc/remote/author/author_event.dart';
+
 import '../../features/presentation/bloc/remote/cart/cart_bloc.dart';
 import '../../features/presentation/bloc/remote/cart/cart_event.dart';
 import '../../features/presentation/bloc/remote/category/category_bloc.dart';
 import '../../features/presentation/bloc/remote/category/category_event.dart';
 import '../../features/presentation/bloc/remote/product/product_bloc.dart';
 import '../../features/presentation/bloc/remote/product/product_event.dart';
-import '../../features/presentation/bloc/remote/system_messages/system_message_bloc.dart';
-import '../../features/presentation/bloc/remote/system_messages/system_message_event.dart';
+
 import '../../features/presentation/bloc/remote/user/user_bloc.dart';
 import '../../features/presentation/bloc/remote/user/user_event.dart';
 import '../../features/presentation/bloc/remote/wishlist/wishlist_bloc.dart';
@@ -26,9 +22,7 @@ import '../../features/presentation/bloc/remote/wishlist/wishlist_event.dart';
 class RemoteEventsUtil {
   static AuthEvents get authEvents => AuthEvents();
   static UserEvents get userEvents => UserEvents();
-  static SystemMessageEvents get systemMessageEvents => SystemMessageEvents();
   static ProductEvents get productEvents => ProductEvents();
-  static AuthorEvents get authorEvents => AuthorEvents();
   static CategoryEvents get categoryEvents => CategoryEvents();
   static WishlistEvents get wishlistEvents => WishlistEvents();
   static CartEvents get cartEvents => CartEvents();
@@ -97,34 +91,6 @@ class UserEvents {
 
   void deleteUser(BuildContext context, int id) {
     context.read<RemoteUserBloc>().add(DeleteUser(id: id));
-  }
-}
-
-class SystemMessageEvents {
-  void createSystemMessage(
-      BuildContext context, SystemMessageModel systemMessage) {
-    context
-        .read<RemoteSystemMessageBloc>()
-        .add(CreateSystemMessage(systemMessage));
-  }
-
-  void updateSystemMessage(
-      BuildContext context, SystemMessageModel systemMessage) {
-    context
-        .read<RemoteSystemMessageBloc>()
-        .add(UpdateSystemMessage(systemMessage));
-  }
-
-  void deleteSystemMessage(BuildContext context, int id) {
-    context.read<RemoteSystemMessageBloc>().add(DeleteSystemMessage(id));
-  }
-
-  void getAllSystemMessages(BuildContext context) {
-    context.read<RemoteSystemMessageBloc>().add(const GetAllSystemMessages());
-  }
-
-  void getShownSystemMessages(BuildContext context) {
-    context.read<RemoteSystemMessageBloc>().add(const GetShownSystemMessages());
   }
 }
 
@@ -312,54 +278,6 @@ class ProductEvents {
   // Method to get a product by ISBN
   void getProductByIsbn(BuildContext context, String isbn) {
     context.read<RemoteProductBloc>().add(GetProductByIsbn(isbn));
-  }
-}
-
-class AuthorEvents {
-  // Method to get authors
-  void getAuthors(
-    BuildContext context, {
-    String? search,
-    bool? isAuthorOfMonth,
-    bool? isFeaturedAuthor,
-    bool? orderByName,
-  }) {
-    context.read<RemoteAuthorBloc>().add(GetAuthors(
-          search: search,
-          isAuthorOfMonth: isAuthorOfMonth,
-          isFeaturedAuthor: isFeaturedAuthor,
-          orderByName: orderByName,
-        ));
-  }
-
-  // Method to get searched authors
-  void getSearchedAuthors(
-    BuildContext context, {
-    String? search,
-  }) {
-    context.read<RemoteAuthorBloc>().add(GetSearchedAuthors(
-          search: search,
-        ));
-  }
-
-  // Method to get boutique featured authors
-  void getBoutiqueFeaturedAuthors(BuildContext context) {
-    context.read<RemoteAuthorBloc>().add(GetBoutiqueFeaturedAuthors());
-  }
-
-  // Method to get author details by ID
-  void getAuthorById(BuildContext context, {required int id}) {
-    context.read<RemoteAuthorBloc>().add(GetAuthorById(id: id));
-  }
-
-  // Method to update an existing author
-  void updateAuthor(BuildContext context, AuthorEntity author) {
-    context.read<RemoteAuthorBloc>().add(UpdateAuthor(author: author));
-  }
-
-  // Method to delete an author by ID
-  void deleteAuthorById(BuildContext context, {required int id}) {
-    context.read<RemoteAuthorBloc>().add(DeleteAuthorById(id: id));
   }
 }
 

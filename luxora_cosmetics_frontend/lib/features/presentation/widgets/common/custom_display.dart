@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:librairie_alfia/core/constants/app_colors.dart';
-
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 
 class CustomDisplay extends StatelessWidget {
@@ -103,7 +102,9 @@ class CustomDisplay extends StatelessWidget {
               width: width,
               height: height,
               fit: fit ?? BoxFit.contain,
-              color: svgColor,
+              colorFilter: svgColor != null
+                  ? ColorFilter.mode(svgColor!, BlendMode.srcIn)
+                  : null,
               placeholderBuilder: (context) =>
                   loadingWidget ?? const SizedBox(),
             )
@@ -112,7 +113,9 @@ class CustomDisplay extends StatelessWidget {
               width: width,
               height: height,
               fit: fit ?? BoxFit.contain,
-              color: svgColor,
+              colorFilter: svgColor != null
+                  ? ColorFilter.mode(svgColor!, BlendMode.srcIn)
+                  : null,
               placeholderBuilder: (context) =>
                   loadingWidget ?? const SizedBox(),
             );
@@ -130,7 +133,7 @@ class CustomDisplay extends StatelessWidget {
               errorBuilder: (context, error, stackTrace) =>
                   errorWidget ??
                   Icon(Icons.error,
-                      size: r.size(40), color: AppColors.colors.redRouge),
+                      size: r.size(40), color: AppColors.light.errorColor),
             )
           : Image.asset(
               assetPath,
@@ -140,7 +143,7 @@ class CustomDisplay extends StatelessWidget {
               errorBuilder: (context, error, stackTrace) =>
                   errorWidget ??
                   Icon(Icons.error,
-                      size: r.size(40), color: AppColors.colors.redRouge),
+                      size: r.size(40), color: AppColors.light.errorColor),
             );
     }
   }

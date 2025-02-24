@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:luxora_cosmetics_frontend/core/constants/app_colors.dart';
 
 import '../../../../config/theme/app_theme.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
-import '../../bloc/app/language/translation_bloc.dart';
-import '../../bloc/app/language/translation_state.dart';
-import '../../bloc/app/theme/theme_bloc.dart';
-import '../../bloc/app/theme/theme_state.dart';
 
 enum TextPosition { start, center, end }
 
@@ -81,107 +77,100 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppThemeBloc, AppThemeState>(
-      builder: (context, themeState) {
-        return BlocBuilder<AppTranslationBloc, AppTranslationState>(
-            builder: (context, translationState) {
-          final effectiveTextStyle = textStyle?.copyWith(
-                  color: color ?? themeState.theme.bodyText,
-                  fontSize: fontSize,
-                  fontWeight: fontWeight,
-                  letterSpacing: letterSpacing,
-                  height: lineHeight,
-                  fontFamily:
-                      fontFamily ?? translationState.language?.fontFamily,
-                  decoration: textDecoration,
-                  decorationColor: textDecorationColor,
-                  decorationThickness: textDecorationThickness,
-                  decorationStyle: textDecorationStyle,
-                  overflow: overflow) ??
-              AppTheme.bodyText.copyWith(
-                  color: color ?? themeState.theme.bodyText,
-                  fontSize: fontSize,
-                  fontWeight: fontWeight,
-                  letterSpacing: letterSpacing,
-                  height: lineHeight,
-                  fontFamily:
-                      fontFamily ?? translationState.language?.fontFamily,
-                  decoration: textDecoration,
-                  decorationColor: textDecorationColor,
-                  decorationThickness: textDecorationThickness,
-                  decorationStyle: textDecorationStyle,
-                  overflow: overflow);
+    final effectiveTextStyle = textStyle?.copyWith(
+            color: color ?? AppColors.light.accent,
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            letterSpacing: letterSpacing,
+            height: lineHeight,
+            fontFamily: fontFamily,
+            decoration: textDecoration,
+            decorationColor: textDecorationColor,
+            decorationThickness: textDecorationThickness,
+            decorationStyle: textDecorationStyle,
+            overflow: overflow) ??
+        AppTheme.bodyText.copyWith(
+            color: color ?? AppColors.light.accent,
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            letterSpacing: letterSpacing,
+            height: lineHeight,
+            fontFamily: fontFamily,
+            decoration: textDecoration,
+            decorationColor: textDecorationColor,
+            decorationThickness: textDecorationThickness,
+            decorationStyle: textDecorationStyle,
+            overflow: overflow);
 
-          final textWidget = selectable
-              ? SelectableText(
-                  text,
-                  style: effectiveTextStyle,
-                  textAlign: textAlign,
-                  maxLines: maxLines,
-                  textDirection: textDirection,
-                )
-              : Text(
-                  text,
-                  style: effectiveTextStyle,
-                  textAlign: textAlign,
-                  maxLines: maxLines,
-                  softWrap: true,
-                  textDirection: textDirection,
-                );
-
-          MainAxisAlignment rowAlignment;
-          switch (textPosition) {
-            case TextPosition.center:
-              rowAlignment = MainAxisAlignment.center;
-              break;
-            case TextPosition.end:
-              rowAlignment = MainAxisAlignment.end;
-              break;
-            case TextPosition.start:
-            default:
-              rowAlignment = MainAxisAlignment.start;
-          }
-
-          return ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: maxWidth ?? double.infinity,
-              maxHeight: maxHeight ?? double.infinity,
-            ),
-            child: Container(
-              width: width,
-              height: height,
-              padding: padding,
-              margin: margin,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(borderRadius ?? 0.0),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: rowAlignment,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (svgIconPath != null && svgIconPath!.isNotEmpty)
-                    SvgPicture.asset(
-                      svgIconPath!,
-                      color: iconColor,
-                      width: iconWidth,
-                      height: iconHeight,
-                    ),
-                  if (svgIconPath != null && svgIconPath!.isNotEmpty)
-                    SizedBox(
-                      width: iconTextPadding ??
-                          ResponsiveSizeAdapter(context).size(8),
-                    ),
-                  Flexible(
-                    child: textWidget,
-                  ),
-                ],
-              ),
-            ),
+    final textWidget = selectable
+        ? SelectableText(
+            text,
+            style: effectiveTextStyle,
+            textAlign: textAlign,
+            maxLines: maxLines,
+            textDirection: textDirection,
+          )
+        : Text(
+            text,
+            style: effectiveTextStyle,
+            textAlign: textAlign,
+            maxLines: maxLines,
+            softWrap: true,
+            textDirection: textDirection,
           );
-        });
-      },
+
+    MainAxisAlignment rowAlignment;
+    switch (textPosition) {
+      case TextPosition.center:
+        rowAlignment = MainAxisAlignment.center;
+        break;
+      case TextPosition.end:
+        rowAlignment = MainAxisAlignment.end;
+        break;
+      case TextPosition.start:
+      default:
+        rowAlignment = MainAxisAlignment.start;
+    }
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: maxWidth ?? double.infinity,
+        maxHeight: maxHeight ?? double.infinity,
+      ),
+      child: Container(
+        width: width,
+        height: height,
+        padding: padding,
+        margin: margin,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(borderRadius ?? 0.0),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: rowAlignment,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (svgIconPath != null && svgIconPath!.isNotEmpty)
+              SvgPicture.asset(
+                svgIconPath!,
+                colorFilter: iconColor != null
+                    ? ColorFilter.mode(iconColor!, BlendMode.srcIn)
+                    : null,
+                width: iconWidth,
+                height: iconHeight,
+              ),
+            if (svgIconPath != null && svgIconPath!.isNotEmpty)
+              SizedBox(
+                width:
+                    iconTextPadding ?? ResponsiveSizeAdapter(context).size(8),
+              ),
+            Flexible(
+              child: textWidget,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

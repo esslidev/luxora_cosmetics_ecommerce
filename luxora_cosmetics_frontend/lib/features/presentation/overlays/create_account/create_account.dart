@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:librairie_alfia/core/enums/widgets.dart';
-import 'package:librairie_alfia/features/data/models/user.dart';
+
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_paths.dart';
 import '../../../../core/enums/notification_type.dart';
-import '../../../../core/enums/theme_style.dart';
+
+import '../../../../core/enums/widgets.dart';
 import '../../../../core/resources/lite_notification_bar_model.dart';
 import '../../../../core/resources/moroccan_cities_list.dart';
 import '../../../../core/util/app_events_util.dart';
 import '../../../../core/util/app_util.dart';
 import '../../../../core/util/custom_timer.dart';
 import '../../../../core/util/remote_events_util.dart';
-import '../../../../core/util/translation_service.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
+import '../../../data/models/user.dart';
 import '../../bloc/remote/auth/auth_bloc.dart';
 import '../../bloc/remote/auth/auth_state.dart';
 import '../../widgets/common/custom_button.dart';
@@ -46,6 +46,7 @@ class CreateAccountOverlay {
 
   late final LoadingOverlay _loadingOverlay = LoadingOverlay(
     context: context,
+    r: r,
   );
 
   late final SignInOverlay _signInOverlay = SignInOverlay(
@@ -93,10 +94,6 @@ class CreateAccountOverlay {
   final ValueNotifier<String?> _errorMessage = ValueNotifier(null);
 
   Future<void> show({
-    required TranslationService translationService,
-    required BaseTheme theme,
-    required ThemeStyle themeStyle,
-    required bool isRtl,
     Function()? onLoginPressed,
   }) async {
     if (isShown()) {
@@ -109,7 +106,7 @@ class CreateAccountOverlay {
         children: [
           ModalBarrier(
             dismissible: true,
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withValues(alpha: 0.6),
             onDismiss: dismiss,
           ).animate(target: toggle ? 1 : 0).fade(
                 duration: 300.ms,
@@ -121,14 +118,11 @@ class CreateAccountOverlay {
               child: BlocListener<RemoteAuthBloc, RemoteAuthState>(
                 listener: (context, state) {
                   if (state is RemoteAuthSigningUp) {
-                    _loadingOverlay.show(
-                      translationService: translationService,
-                      r: r,
-                      theme: theme,
-                    );
+                    _loadingOverlay.show();
                   }
                   if (state is RemoteAuthSignedUp) {
                     _loadingOverlay.dismiss();
+                    RemoteEventsUtil.userEvents.getLoggedInUser(context);
                     RemoteEventsUtil.wishlistEvents.syncWishlist(
                       context,
                     );
@@ -138,10 +132,9 @@ class CreateAccountOverlay {
                     dismiss();
                     AppEventsUtil.liteNotifications.addLiteNotification(context,
                         notification: LiteNotificationModel(
-                          notificationTitle: translationService.translate(
-                              'global.notifications.accountCreated.title'),
-                          notificationMessage: translationService.translate(
-                              'global.notifications.accountCreated.message'),
+                          notificationTitle: "Compte Créé avec Succès",
+                          notificationMessage:
+                              "Votre compte a été créé avec succès. Bienvenue !",
                           notificationType: NotificationType.success,
                         ));
                   }
@@ -156,12 +149,7 @@ class CreateAccountOverlay {
                         state.error?.response?.data["message"];
                   }
                 },
-                child: _buildOverlay(
-                  theme: theme,
-                  themeStyle: themeStyle,
-                  translationService: translationService,
-                  isRtl: isRtl,
-                ).animate(target: toggle ? 1 : 0).fade(
+                child: _buildOverlay().animate(target: toggle ? 1 : 0).fade(
                       duration: 250.ms,
                     ),
               ),
@@ -225,8 +213,7 @@ class CreateAccountOverlay {
 
   //--------------------------------------------//
 
-  Widget _buildCitiesDropdownChild(
-      {required BaseTheme theme, required bool isRtl, required String value}) {
+  Widget _buildCitiesDropdownChild({required String value}) {
     final ScrollController scrollController = ScrollController();
 
     List<Widget> cityButtons = filteredCities(value)
@@ -248,7 +235,7 @@ class CreateAccountOverlay {
         children: [
           Expanded(
             child: RawScrollbar(
-              thumbColor: theme.primary.withOpacity(0.4),
+              thumbColor: AppColors.light.primary.withValues(alpha: 0.4),
               radius: Radius.circular(r.size(10)),
               thickness: r.size(5),
               thumbVisibility: true,
@@ -259,7 +246,6 @@ class CreateAccountOverlay {
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: CustomField(
-                      isRtl: isRtl,
                       padding: r.symmetric(vertical: 4, horizontal: 8),
                       children: cityButtons),
                 ),
@@ -274,16 +260,13 @@ class CreateAccountOverlay {
   //------------------------------------------------//
 
   Widget _buildErrorMessageField({
-    required BaseTheme theme,
-    required bool isRtl,
     String? errorMessage,
   }) {
     return CustomField(
         width: double.infinity,
         borderRadius: r.size(1),
         padding: r.all(4),
-        isRtl: isRtl,
-        backgroundColor: AppColors.colors.redRouge.withOpacity(0.4),
+        backgroundColor: AppColors.light.errorColor.withValues(alpha: 0.4),
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -296,10 +279,7 @@ class CreateAccountOverlay {
   }
 
   Widget _buildTextInput(
-      {required BaseTheme theme,
-      required TranslationService ts,
-      required bool isRtl,
-      required String name,
+      {required String name,
       required String hint,
       required TextEditingController controller,
       TextInputType? keyboardType,
@@ -309,7 +289,7 @@ class CreateAccountOverlay {
     return ValueListenableBuilder<TextEditingValue>(
         valueListenable: controller,
         builder: (BuildContext context, TextEditingValue value, Widget? child) {
-          return CustomField(gap: r.size(2), isRtl: isRtl, children: [
+          return CustomField(gap: r.size(2), children: [
             CustomText(
               text: name,
               fontSize: r.size(10),
@@ -320,7 +300,7 @@ class CreateAccountOverlay {
               fontSize: r.size(10),
               fontWeight: FontWeight.normal,
               borderRadius: BorderRadius.all(Radius.circular(r.size(2))),
-              backgroundColor: theme.secondaryBackgroundColor,
+              backgroundColor: AppColors.light.secondaryBackgroundColor,
               hintText: hint,
               obscureText: obscureText,
               padding: r.symmetric(horizontal: 8, vertical: 4),
@@ -334,11 +314,7 @@ class CreateAccountOverlay {
         });
   }
 
-  Widget _buildPasswordForm({
-    required BaseTheme theme,
-    required TranslationService ts,
-    required bool isRtl,
-  }) {
+  Widget _buildPasswordForm() {
     return ValueListenableBuilder<TextEditingValue>(
       valueListenable: _passwordController,
       builder: (context, passwordValue, _) {
@@ -346,7 +322,6 @@ class CreateAccountOverlay {
           valueListenable: _passwordConfirmController,
           builder: (context, passwordConfirmValue, _) {
             return CustomField(
-              isRtl: isRtl,
               gap: r.size(12),
               children: [
                 CustomTooltip(
@@ -359,35 +334,29 @@ class CreateAccountOverlay {
                     TextSpan(text: '- At least 1 number'),
                   ],
                   child: _buildTextInput(
-                    theme: theme,
-                    ts: ts,
-                    isRtl: isRtl,
-                    name: ts.translate('global.authentication.password'),
+                    name: "Mot de passe",
                     hint: 'Password',
                     obscureText: true,
                     controller: _passwordController,
                     borderColorCallback: (value) {
                       return value != ''
                           ? !AppUtil.isPasswordValid(value)
-                              ? AppColors.colors.redRouge
-                              : theme.primary
+                              ? AppColors.light.errorColor
+                              : AppColors.light.primary
                           : null;
                     },
                   ).animate().fadeIn(delay: 500.ms),
                 ),
                 _buildTextInput(
-                  theme: theme,
-                  ts: ts,
-                  isRtl: isRtl,
                   controller: _passwordConfirmController,
-                  name: ts.translate('global.authentication.passwordConfirm'),
+                  name: "Confirmez le mot de passe",
                   hint: 'Confirm Password',
                   obscureText: true,
                   borderColorCallback: (value) {
                     return value != ''
                         ? value != passwordValue.text
-                            ? AppColors.colors.redRouge
-                            : theme.primary
+                            ? AppColors.light.errorColor
+                            : AppColors.light.primary
                         : null;
                   },
                 ).animate().fadeIn(delay: 500.ms),
@@ -399,79 +368,58 @@ class CreateAccountOverlay {
     );
   }
 
-  Widget _buildForm({
-    required BaseTheme theme,
-    required TranslationService ts,
-    required bool isRtl,
-  }) {
+  Widget _buildForm() {
     return CustomField(
-      isRtl: isRtl,
       gap: r.size(12),
       children: [
         _buildTextInput(
-          theme: theme,
-          ts: ts,
-          isRtl: isRtl,
           hint: 'John',
-          name: ts.translate('global.authentication.firstName'),
+          name: "Prénom",
           keyboardType: TextInputType.name,
           controller: _firstNameController,
           borderColorCallback: (value) {
-            return value.trim().isNotEmpty ? theme.primary : null;
+            return value.trim().isNotEmpty ? AppColors.light.primary : null;
           },
         ).animate().fadeIn(delay: 200.ms),
         _buildTextInput(
-          theme: theme,
-          ts: ts,
-          isRtl: isRtl,
           hint: 'Doe',
-          name: ts.translate('global.authentication.lastName'),
+          name: "Nom",
           keyboardType: TextInputType.name,
           controller: _lastNameController,
           borderColorCallback: (value) {
-            return value.trim().isNotEmpty ? theme.primary : null;
+            return value.trim().isNotEmpty ? AppColors.light.primary : null;
           },
         ).animate().fadeIn(delay: 200.ms),
         _buildTextInput(
-          theme: theme,
-          ts: ts,
-          isRtl: isRtl,
           hint: '+212 00 00 00',
           keyboardType: TextInputType.phone,
-          name: ts.translate('global.authentication.phone'),
+          name: "Numéro de téléphone",
           controller: _phoneController,
           borderColorCallback: (value) {
             return value != ''
                 ? !AppUtil.isPhoneNumberValid(value)
-                    ? AppColors.colors.redRouge
-                    : theme.primary
+                    ? AppColors.light.errorColor
+                    : AppColors.light.primary
                 : null;
           },
         ).animate().fadeIn(delay: 300.ms),
         _buildTextInput(
-          theme: theme,
-          ts: ts,
-          isRtl: isRtl,
-          hint: ts.translate('global.authentication.address'),
-          name: ts.translate('global.authentication.address'),
+          hint: "Adresse",
+          name: "Adresse",
           keyboardType: TextInputType.streetAddress,
           controller: _addressController,
           borderColorCallback: (value) {
-            return value.trim().isNotEmpty ? theme.primary : null;
+            return value.trim().isNotEmpty ? AppColors.light.primary : null;
           },
         ).animate().fadeIn(delay: 300.ms),
         _buildTextInput(
-                theme: theme,
-                ts: ts,
-                isRtl: isRtl,
-                hint: ts.translate('global.authentication.addressOptional'),
-                name: ts.translate('global.authentication.addressOptional'),
+                hint: "Adresse (optionnel)",
+                name: "Adresse (optionnel)",
                 keyboardType: TextInputType.streetAddress,
                 controller: _addressOptionalController)
             .animate()
             .fadeIn(delay: 400.ms),
         CustomField(
-            isRtl: isRtl,
             gap: r.size(8),
             arrangement: FieldArrangement.row,
             children: [
@@ -479,17 +427,14 @@ class CreateAccountOverlay {
                 child: CompositedTransformTarget(
                   link: _moroccanCitiesDropdownLayerLink,
                   child: _buildTextInput(
-                    theme: theme,
-                    ts: ts,
-                    isRtl: isRtl,
-                    hint: ts.translate('global.authentication.city'),
-                    name: ts.translate('global.authentication.city'),
+                    hint: "Ville",
+                    name: "Ville",
                     controller: _cityController,
                     borderColorCallback: (value) {
                       return value != ''
                           ? !_cities.containsValue(value)
-                              ? AppColors.colors.redRouge
-                              : theme.primary
+                              ? AppColors.light.errorColor
+                              : AppColors.light.primary
                           : null;
                     },
                     onChanged: (value, position, size) {
@@ -500,15 +445,19 @@ class CreateAccountOverlay {
                           onTimerStop: () {
                             _moroccanCitiesDropdown.show(
                                 layerLink: _moroccanCitiesDropdownLayerLink,
-                                backgroundColor: theme.overlayBackgroundColor,
-                                borderColor: theme.accent.withOpacity(0.4),
-                                shadowColor: theme.shadowColor,
+                                backgroundColor:
+                                    AppColors.light.secondaryBackgroundColor,
+                                borderColor: AppColors.light.accent
+                                    .withValues(alpha: 0.4),
+                                shadowColor: AppColors.light.accent
+                                    .withValues(alpha: .2),
                                 forceRefresh: true,
                                 targetWidgetSize: r.scaledSize(height: 34),
                                 width: size.width,
                                 dropdownAlignment: DropdownAlignment.start,
                                 child: _buildCitiesDropdownChild(
-                                    theme: theme, value: value, isRtl: isRtl));
+                                  value: value,
+                                ));
                           },
                         );
                         _cityInputDelayTimer!.start(duration: 1000.ms);
@@ -522,44 +471,37 @@ class CreateAccountOverlay {
               ),
               Expanded(
                 child: _buildTextInput(
-                  theme: theme,
-                  ts: ts,
-                  isRtl: isRtl,
-                  hint: ts.translate('global.authentication.zipCode'),
-                  name: ts.translate('global.authentication.zipCode'),
+                  hint: "Code Postal",
+                  name: "Code Postal",
                   controller: _zipCodeController,
                   borderColorCallback: (value) {
-                    return value.trim().isNotEmpty ? theme.primary : null;
+                    return value.trim().isNotEmpty
+                        ? AppColors.light.primary
+                        : null;
                   },
                 ),
               ),
             ]).animate().fadeIn(delay: 400.ms),
         _buildTextInput(
-          theme: theme,
-          ts: ts,
-          isRtl: isRtl,
           hint: 'John.doe@example.com',
           keyboardType: TextInputType.emailAddress,
-          name: ts.translate('global.authentication.email'),
+          name: "Email",
           controller: _emailController,
           borderColorCallback: (value) {
             return value != ''
                 ? !AppUtil.isEmailValid(value)
-                    ? AppColors.colors.redRouge
-                    : theme.primary
+                    ? AppColors.light.errorColor
+                    : AppColors.light.primary
                 : null;
           },
         ).animate().fadeIn(delay: 500.ms),
-        _buildPasswordForm(theme: theme, ts: ts, isRtl: isRtl)
+        _buildPasswordForm()
       ],
     );
   }
 
   Widget _buildActionButton(
-      {required BaseTheme theme,
-      required TranslationService ts,
-      required bool isRtl,
-      required String title,
+      {required String title,
       Color? backgroundColor,
       Color? onHoverbackgroundColor,
       Color? textColor,
@@ -570,29 +512,25 @@ class CreateAccountOverlay {
       text: title,
       fontWeight: FontWeight.bold,
       fontSize: r.size(10),
-      backgroundColor: backgroundColor ?? theme.primary,
-      textColor: textColor ?? AppColors.colors.whiteOut,
+      backgroundColor: backgroundColor ?? AppColors.light.primary,
+      textColor: textColor ?? AppColors.colors.whiteWhitest,
       padding: r.symmetric(vertical: 4, horizontal: 16),
       enabled: isEnabled,
       borderRadius: BorderRadius.all(Radius.circular(r.size(1))),
       animationDuration: 300.ms,
       onHoverStyle: CustomButtonStyle(
-          backgroundColor: onHoverbackgroundColor ?? theme.secondary,
+          backgroundColor: onHoverbackgroundColor ?? AppColors.light.secondary,
           textColor: onHoverTextColor),
       onDisabledStyle: CustomButtonStyle(
-          backgroundColor: theme.secondaryBackgroundColor,
-          textColor: theme.accent.withOpacity(0.3)),
+          backgroundColor: AppColors.light.secondaryBackgroundColor,
+          textColor: AppColors.light.accent.withValues(alpha: 0.3)),
       onPressed: (position, size) {
         onPressed();
       },
     );
   }
 
-  Widget _buildActionButtons({
-    required BaseTheme theme,
-    required TranslationService ts,
-    required bool isRtl,
-  }) {
+  Widget _buildActionButtons() {
     return ValueListenableBuilder<TextEditingValue>(
       valueListenable: _firstNameController,
       builder: (BuildContext context, TextEditingValue firstNameValue,
@@ -643,7 +581,6 @@ class CreateAccountOverlay {
                                                   passwordConfirmValue,
                                               Widget? child) {
                                             return CustomField(
-                                              isRtl: isRtl,
                                               gap: r.size(6),
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
@@ -651,20 +588,16 @@ class CreateAccountOverlay {
                                               arrangement: FieldArrangement.row,
                                               children: [
                                                 _buildActionButton(
-                                                  theme: theme,
-                                                  ts: ts,
-                                                  isRtl: isRtl,
-                                                  title: ts.translate(
-                                                      'global.create'),
+                                                  title: "Créer",
                                                   isEnabled: _areInputsValid(),
                                                   backgroundColor:
-                                                      theme.primary,
+                                                      AppColors.light.primary,
                                                   onHoverbackgroundColor:
-                                                      theme.secondary,
+                                                      AppColors.light.secondary,
                                                   textColor: AppColors
-                                                      .colors.whiteSolid,
+                                                      .colors.whiteWhitest,
                                                   onHoverTextColor: AppColors
-                                                      .colors.whiteSolid,
+                                                      .colors.whiteWhitest,
                                                   onPressed: () {
                                                     RemoteEventsUtil.authEvents
                                                         .signUp(
@@ -697,16 +630,15 @@ class CreateAccountOverlay {
                                                   },
                                                 ),
                                                 _buildActionButton(
-                                                  theme: theme,
-                                                  ts: ts,
-                                                  isRtl: isRtl,
-                                                  title: ts.translate(
-                                                      'global.cancel'),
-                                                  backgroundColor: theme.accent,
-                                                  onHoverbackgroundColor: theme
-                                                      .accent
-                                                      .withOpacity(0.8),
-                                                  textColor: theme.subtle,
+                                                  title: "Annuler",
+                                                  backgroundColor:
+                                                      AppColors.light.accent,
+                                                  onHoverbackgroundColor:
+                                                      AppColors.light.accent
+                                                          .withValues(
+                                                              alpha: 0.8),
+                                                  textColor:
+                                                      AppColors.light.subtle,
                                                   onPressed: () {
                                                     dismiss();
                                                   },
@@ -735,30 +667,24 @@ class CreateAccountOverlay {
     );
   }
 
-  Widget _buildOverlay({
-    required TranslationService translationService,
-    required BaseTheme theme,
-    required ThemeStyle themeStyle,
-    required bool isRtl,
-  }) {
+  Widget _buildOverlay() {
     return IntrinsicHeight(
       child: CustomField(
-        isRtl: isRtl,
         width: r.size(300),
         padding: r.symmetric(vertical: 10),
         margin: r.symmetric(horizontal: 6, vertical: 20),
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        borderColor: theme.accent.withOpacity(0.3),
+        borderColor: AppColors.light.accent.withValues(alpha: 0.3),
         borderRadius: r.size(3),
         clipBehavior: Clip.hardEdge,
         gap: r.size(2),
-        backgroundColor: theme.overlayBackgroundColor,
+        backgroundColor: AppColors.light.secondaryBackgroundColor,
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
             child: RawScrollbar(
-              thumbColor: theme.primary.withOpacity(0.4),
+              thumbColor: AppColors.light.primary.withValues(alpha: 0.4),
               radius: Radius.circular(r.size(10)),
               thickness: r.size(5),
               thumbVisibility: true,
@@ -773,75 +699,54 @@ class CreateAccountOverlay {
                       builder: (BuildContext context, String? errorMessage,
                           Widget? child) {
                         return CustomField(
-                          isRtl: isRtl,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           gap: r.size(14),
                           padding: r.all(16),
                           children: [
                             CustomDisplay(
-                              assetPath: themeStyle == ThemeStyle.light
-                                  ? AppPaths.vectors.logo
-                                  : AppPaths.vectors.logoDark,
+                              assetPath: AppPaths.vectors.logoIcon,
                               isSvg: true,
                               width: r.size(100),
                             ).animate().fadeIn(delay: 100.ms),
                             if (errorMessage != null)
                               _buildErrorMessageField(
-                                  theme: theme,
-                                  isRtl: isRtl,
                                   errorMessage: errorMessage),
-                            _buildForm(
-                                theme: theme,
-                                ts: translationService,
-                                isRtl: isRtl),
+                            _buildForm(),
                             CustomField(
                               width: r.size(250),
                               arrangement: FieldArrangement.row,
                               children: [
                                 Flexible(
                                   child: CustomText(
-                                    text: translationService.translate(
-                                        'global.authentication.privacyNotice'),
-                                    textDirection: isRtl
-                                        ? TextDirection.rtl
-                                        : TextDirection.ltr,
+                                    text:
+                                        "En créant un compte, vous acceptez la Politique de confidentialité et les Conditions générales de vente de Librairie Alfia.",
                                     fontSize: r.size(10),
                                   ),
                                 )
                               ],
                             ).animate().fadeIn(delay: 600.ms),
-                            _buildActionButtons(
-                              theme: theme,
-                              ts: translationService,
-                              isRtl: isRtl,
-                            ).animate().fadeIn(delay: 600.ms),
+                            _buildActionButtons()
+                                .animate()
+                                .fadeIn(delay: 600.ms),
                             CustomField(
-                                isRtl: isRtl,
                                 gap: r.size(3),
                                 arrangement: FieldArrangement.row,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   CustomText(
-                                    text: translationService
-                                        .translate('global.or'),
+                                    text: "Ou",
                                     fontSize: r.size(8),
                                   ),
                                   CustomButton(
-                                    text: translationService.translate(
-                                        'global.authentication.existingAccount'),
-                                    textColor: theme.primary,
+                                    text: "Se connecter à mon compte",
+                                    textColor: AppColors.light.primary,
                                     onHoverStyle: CustomButtonStyle(
-                                      textColor: theme.secondary,
+                                      textColor: AppColors.light.secondary,
                                     ),
                                     onPressed: (position, size) {
                                       dismiss();
-                                      _signInOverlay.show(
-                                          translationService:
-                                              translationService,
-                                          theme: theme,
-                                          isRtl: isRtl,
-                                          themeStyle: themeStyle);
+                                      _signInOverlay.show();
                                     },
                                     fontSize: r.size(8),
                                   ),
@@ -850,21 +755,15 @@ class CreateAccountOverlay {
                                     fontSize: r.size(8),
                                   ),
                                   CustomButton(
-                                    text: translationService.translate(
-                                        'global.authentication.forgotPassword'),
-                                    textColor: theme.primary,
+                                    text: 'Mot de passe oublié ?',
+                                    textColor: AppColors.light.primary,
                                     onHoverStyle: CustomButtonStyle(
-                                      textColor: theme.secondary,
+                                      textColor: AppColors.light.secondary,
                                     ),
                                     fontSize: r.size(8),
                                     onPressed: (position, size) {
                                       dismiss();
-                                      _requestResetPasswordOverlay.show(
-                                        translationService: translationService,
-                                        theme: theme,
-                                        isRtl: isRtl,
-                                        themeStyle: themeStyle,
-                                      );
+                                      _requestResetPasswordOverlay.show();
                                     },
                                   ),
                                 ]).animate().fadeIn(delay: 600.ms),

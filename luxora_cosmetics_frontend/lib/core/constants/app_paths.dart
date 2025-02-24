@@ -32,37 +32,40 @@ class ImagesPaths {
   final String logo = 'assets/images/logo.png';
 }
 
-class VectorsPaths {}
+class VectorsPaths {
+  final String logoIcon = 'assets/vectors/logo-icon.svg';
+  final String informationIcon = 'assets/vectors/information-icon.svg';
+  final String closeIcon = 'assets/vectors/close-icon.svg';
+}
 
 class RoutesPaths {
   // Define route paths
-  final String homeScreen = '/';
-  final String exploreScreen = '/explore';
+  final String baseScreen = '/';
+  final String homePageScreen = '/page-accueil';
   final String boutiqueScreen = '/boutique';
-  final String productOverviewScreen = '/product-overview';
-  final String editProfileScreen = '/edit-profile';
-  final String resetPasswordScreen = '/reset-password';
-  final String checkoutScreen = '/checkout';
-  final String orderHistoryScreen = '/order-history';
-  final String orderOverviewScreen = '/order-overview';
-  final String termsScreen = '/terms';
+  final String productOverviewScreen = '/aperçu-produit';
+  final String editProfileScreen = '/modifier-profil';
+  final String resetPasswordScreen = '/reinitialiser-mot-de-passe';
+  final String checkoutScreen = '/paiement';
+  final String orderHistoryScreen = '/historique-commandes';
+  final String termsAndConditionsScreen = '/conditions-generales';
   final String maintenanceScreen = '/maintenance';
-  final String badRoutingScreen = '/bad-routing';
+  final String badRoutingScreen = '/mauvaise-route';
 
   // Map for French route names
   final Map<String, String> routeNames = {
     '/': '',
-    '/explore': 'Explorer',
+    '/page-accueil': 'Page d\'Accueil',
     '/boutique': 'Boutique',
-    '/product-overview': 'Détail du Produit',
-    '/edit-profile': 'Modifier le Profil',
-    '/reset-password': 'Réinitialiser le Mot de Passe',
-    '/checkout': 'Paiement',
-    '/order-history': 'Historique des Commandes',
-    '/order-overview': 'Détail de la Commande',
-    '/terms': 'Conditions Générales',
+    '/aperçu-produit': 'Détail du Produit',
+    '/modifier-profil': 'Modifier le Profil',
+    '/reinitialiser-mot-de-passe': 'Réinitialiser le Mot de Passe',
+    '/paiement': 'Paiement',
+    '/historique-commandes': 'Historique des Commandes',
+    '/aperçu-commande': 'Détail de la Commande',
+    '/conditions-generales': 'Conditions Générales',
     '/maintenance': 'Maintenance',
-    '/bad-routing': 'Page Introuvable',
+    '/mauvaise-route': 'Page Introuvable',
   };
 
   // Method to get the French route name

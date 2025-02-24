@@ -187,8 +187,6 @@ extension on MainAxisAlignment {
         return WrapAlignment.spaceAround;
       case MainAxisAlignment.spaceEvenly:
         return WrapAlignment.spaceEvenly;
-      default:
-        return WrapAlignment.start;
     }
   }
 }
@@ -204,8 +202,6 @@ extension on CrossAxisAlignment {
         return WrapCrossAlignment.center;
       case CrossAxisAlignment.stretch:
       case CrossAxisAlignment.baseline:
-        return WrapCrossAlignment.start;
-      default:
         return WrapCrossAlignment.start;
     }
   }

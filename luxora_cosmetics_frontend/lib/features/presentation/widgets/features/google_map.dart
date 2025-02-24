@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 import '../common/custom_text.dart';
 
@@ -24,11 +23,7 @@ class GoogleMap extends StatelessWidget {
       return SizedBox(
         height: height ?? r.size(100),
         width: width ?? double.infinity,
-        child: InAppWebView(
-          initialUrlRequest: URLRequest(
-            url: WebUri(mapUrl),
-          ),
-        ),
+        child: SizedBox(),
       );
     } else {
       return Container(

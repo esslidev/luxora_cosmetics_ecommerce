@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:luxora_cosmetics_frontend/core/constants/app_colors.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
-import '../../bloc/app/language/translation_bloc.dart';
-import '../../bloc/app/language/translation_state.dart';
-import '../../bloc/app/theme/theme_bloc.dart';
-import '../../bloc/app/theme/theme_state.dart';
 
 class CustomTextFieldStyle {
   final double? width;
@@ -43,6 +39,7 @@ class CustomTextField extends StatefulWidget {
   final Border? border;
   final double? borderWidth;
   final void Function(String value, Offset position, Size size)? onChanged;
+  final void Function()? onTap;
   final TextInputType? keyboardType;
   final bool obscureText;
   final bool enabled;
@@ -58,6 +55,8 @@ class CustomTextField extends StatefulWidget {
   final double shadowBlurRadius;
   final TextAlign textAlign;
   final List<TextInputFormatter>? inputFormatters;
+  final int? minLines;
+  final int? maxLines;
 
   const CustomTextField({
     super.key,
@@ -74,6 +73,7 @@ class CustomTextField extends StatefulWidget {
     this.border,
     this.borderWidth,
     this.onChanged,
+    this.onTap,
     this.keyboardType,
     this.obscureText = false,
     this.enabled = true, // Default value set to true
@@ -89,6 +89,8 @@ class CustomTextField extends StatefulWidget {
     this.shadowBlurRadius = 0.0,
     this.textAlign = TextAlign.start,
     this.inputFormatters,
+    this.minLines,
+    this.maxLines = 1,
   });
 
   @override
@@ -153,93 +155,80 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppThemeBloc, AppThemeState>(
-      builder: (context, themeState) {
-        return BlocBuilder<AppTranslationBloc, AppTranslationState>(
-          builder: (context, translationState) {
-            final fontFamily = translationState.language?.fontFamily;
+    final TextStyle defaultTextStyle = TextStyle(
+      fontSize: widget.fontSize ?? r.size(12),
+      fontWeight: widget.fontWeight ?? FontWeight.normal,
+      color: widget.enabled
+          ? (_getEffectiveStyle().textColor ?? AppColors.light.accent)
+          : AppColors.light.accent.withValues(alpha: 0.5),
+    );
+    final TextStyle hintTextStyle = TextStyle(
+      fontSize: widget.fontSize ?? r.size(12),
+      fontWeight: widget.hintFontWeight ?? FontWeight.normal,
+      color: _getEffectiveStyle().hintColor ??
+          AppColors.light.accent.withValues(alpha: 0.6),
+    );
 
-            final TextStyle defaultTextStyle = TextStyle(
-              fontSize: widget.fontSize ?? r.size(12),
-              fontWeight: widget.fontWeight ?? FontWeight.normal,
-              color: widget.enabled
-                  ? (_getEffectiveStyle().textColor ??
-                      themeState.theme.bodyText)
-                  : themeState.theme.bodyText.withOpacity(0.5),
-              fontFamily: fontFamily,
-            );
-
-            final TextStyle hintTextStyle = TextStyle(
-              fontSize: widget.fontSize ?? r.size(12),
-              fontWeight: widget.hintFontWeight ?? FontWeight.normal,
-              color: _getEffectiveStyle().hintColor ??
-                  themeState.theme.accent.withOpacity(0.6),
-              fontFamily: fontFamily,
-            );
-
-            final effectiveStyle = _getEffectiveStyle();
-
-            return Container(
-              width: effectiveStyle.width ?? double.infinity,
-              height: effectiveStyle.height,
-              margin: widget.margin,
-              padding: widget.padding,
-              decoration: BoxDecoration(
-                color: effectiveStyle.backgroundColor ?? Colors.transparent,
-                borderRadius: effectiveStyle.borderRadius ?? BorderRadius.zero,
-                border: widget.border ??
-                    Border.all(
-                      color: _focusNode.hasFocus
-                          ? (widget.focusedBorderColor ??
-                              effectiveStyle.borderColor ??
-                              Colors.transparent)
-                          : (effectiveStyle.borderColor ?? Colors.transparent),
-                      width: widget.borderWidth ?? 1.5,
-                    ),
-                boxShadow:
-                    widget.shadowColor != null && widget.shadowBlurRadius > 0
-                        ? [
-                            BoxShadow(
-                              color: widget.shadowColor!,
-                              offset: widget.shadowOffset ?? Offset.zero,
-                              blurRadius: widget.shadowBlurRadius,
-                            ),
-                          ]
-                        : null,
-              ),
-              child: Center(
-                child: TextField(
-                  controller: _controller,
-                  focusNode: _focusNode,
-                  obscureText: widget.obscureText,
-                  keyboardType: widget.keyboardType,
-                  textAlign: widget.textAlign,
-                  style: defaultTextStyle,
-                  inputFormatters: widget.inputFormatters,
-                  enabled: widget.enabled, // Applied enabled parameter
-                  decoration: InputDecoration(
-                    hintText: widget.hintText,
-                    hintStyle: hintTextStyle,
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                  onChanged: widget.enabled
-                      ? (text) {
-                          final RenderBox renderBox =
-                              context.findRenderObject() as RenderBox;
-                          final size = renderBox.size;
-                          final offset = renderBox.localToGlobal(Offset.zero);
-
-                          widget.onChanged?.call(text, offset, size);
-                        }
-                      : null, // Prevent onChanged if disabled
+    final effectiveStyle = _getEffectiveStyle();
+    return Container(
+      width: effectiveStyle.width ?? double.infinity,
+      height: effectiveStyle.height,
+      margin: widget.margin,
+      padding: widget.padding,
+      decoration: BoxDecoration(
+        color: effectiveStyle.backgroundColor ?? Colors.transparent,
+        borderRadius: effectiveStyle.borderRadius ?? BorderRadius.zero,
+        border: widget.border ??
+            Border.all(
+              color: _focusNode.hasFocus
+                  ? (widget.focusedBorderColor ??
+                      effectiveStyle.borderColor ??
+                      Colors.transparent)
+                  : (effectiveStyle.borderColor ?? Colors.transparent),
+              width: widget.borderWidth ?? 1.5,
+            ),
+        boxShadow: widget.shadowColor != null && widget.shadowBlurRadius > 0
+            ? [
+                BoxShadow(
+                  color: widget.shadowColor!,
+                  offset: widget.shadowOffset ?? Offset.zero,
+                  blurRadius: widget.shadowBlurRadius,
                 ),
-              ),
-            );
-          },
-        );
-      },
+              ]
+            : null,
+      ),
+      child: Center(
+        child: TextField(
+          controller: _controller,
+          focusNode: _focusNode,
+          obscureText: widget.obscureText,
+          keyboardType: widget.keyboardType,
+          textAlign: widget.textAlign,
+          style: defaultTextStyle,
+          inputFormatters: widget.inputFormatters,
+          enabled: widget.enabled, // Applied enabled parameter
+          decoration: InputDecoration(
+            hintText: widget.hintText,
+            hintStyle: hintTextStyle,
+            border: InputBorder.none,
+            isDense: true,
+            contentPadding: EdgeInsets.zero,
+          ),
+          minLines: widget.minLines, // Set minLines
+          maxLines: widget.maxLines, // Set maxLines
+          onTap: widget.onTap,
+          onChanged: widget.enabled
+              ? (text) {
+                  final RenderBox renderBox =
+                      context.findRenderObject() as RenderBox;
+                  final size = renderBox.size;
+                  final offset = renderBox.localToGlobal(Offset.zero);
+
+                  widget.onChanged?.call(text, offset, size);
+                }
+              : null, // Prevent onChanged if disabled
+        ),
+      ),
     );
   }
 }

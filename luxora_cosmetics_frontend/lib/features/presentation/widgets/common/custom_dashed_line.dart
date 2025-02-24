@@ -30,7 +30,7 @@ class CustomDashedLine extends StatelessWidget {
         isVertical ? (size ?? double.infinity) : (thickness ?? r.size(1)),
       ),
       painter: _DashedLinePainter(
-        color: color ?? AppColors.colors.whiteMuffled.withOpacity(0.4),
+        color: color ?? AppColors.light.accent.withValues(alpha: 0.4),
         isVertical: isVertical,
         thickness: thickness ?? r.size(1),
         dashLength: dashLength ?? r.size(5),

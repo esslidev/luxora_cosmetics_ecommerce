@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:librairie_alfia/core/enums/widgets.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_paths.dart';
-import '../../../../core/enums/theme_style.dart';
+import '../../../../core/enums/widgets.dart';
 import '../../../../core/util/app_util.dart';
 import '../../../../core/util/remote_events_util.dart';
-import '../../../../core/util/translation_service.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 import '../../bloc/remote/auth/auth_bloc.dart';
 import '../../bloc/remote/auth/auth_state.dart';
@@ -36,6 +34,7 @@ class RequestResetPasswordOverlay {
 
   late final LoadingOverlay _loadingOverlay = LoadingOverlay(
     context: context,
+    r: r,
   );
 
   late final SignInOverlay _signInOverlay = SignInOverlay(
@@ -54,10 +53,6 @@ class RequestResetPasswordOverlay {
   final ValueNotifier<String?> _errorMessage = ValueNotifier(null);
 
   Future<void> show({
-    required TranslationService translationService,
-    required BaseTheme theme,
-    required ThemeStyle themeStyle,
-    required bool isRtl,
     String? emailInput,
   }) async {
     if (isShown()) {
@@ -70,7 +65,7 @@ class RequestResetPasswordOverlay {
         children: [
           ModalBarrier(
             dismissible: true,
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withValues(alpha: 0.6),
             onDismiss: dismiss,
           ).animate(target: toggle ? 1 : 0).fade(
                 duration: 300.ms,
@@ -82,11 +77,7 @@ class RequestResetPasswordOverlay {
               child: BlocListener<RemoteAuthBloc, RemoteAuthState>(
                 listener: (context, state) {
                   if (state is RemoteAuthPasswordResetRequesting) {
-                    _loadingOverlay.show(
-                      translationService: translationService,
-                      r: r,
-                      theme: theme,
-                    );
+                    _loadingOverlay.show();
                   }
                   if (state is RemoteAuthPasswordResetRequested) {
                     _loadingOverlay.dismiss();
@@ -100,12 +91,7 @@ class RequestResetPasswordOverlay {
                         state.error?.response?.data["message"];
                   }
                 },
-                child: _buildOverlay(
-                  theme: theme,
-                  themeStyle: themeStyle,
-                  translationService: translationService,
-                  isRtl: isRtl,
-                ).animate(target: toggle ? 1 : 0).fade(
+                child: _buildOverlay().animate(target: toggle ? 1 : 0).fade(
                       duration: 250.ms,
                     ),
               ),
@@ -150,23 +136,15 @@ class RequestResetPasswordOverlay {
 
   //---------------------------------------//
 
-  Widget _buildHeader({
-    required BaseTheme theme,
-    required ThemeStyle themeStyle,
-    required bool isRtl,
-  }) {
+  Widget _buildHeader() {
     return CustomDisplay(
-      assetPath: themeStyle == ThemeStyle.light
-          ? AppPaths.vectors.logo
-          : AppPaths.vectors.logoDark,
+      assetPath: AppPaths.vectors.logoIcon,
       isSvg: true,
       width: r.size(100),
     );
   }
 
   Widget _buildNotificationMessageField({
-    required BaseTheme theme,
-    required bool isRtl,
     String? successMessage,
     String? errorMessage,
   }) {
@@ -174,10 +152,9 @@ class RequestResetPasswordOverlay {
         width: double.infinity,
         borderRadius: r.size(1),
         padding: r.all(4),
-        isRtl: isRtl,
         backgroundColor: successMessage != null
-            ? theme.primary.withOpacity(0.4)
-            : AppColors.colors.redRouge.withOpacity(0.4),
+            ? AppColors.light.primary.withValues(alpha: 0.4)
+            : AppColors.light.errorColor.withValues(alpha: 0.4),
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -190,10 +167,7 @@ class RequestResetPasswordOverlay {
   }
 
   Widget _buildTextInput(
-      {required BaseTheme theme,
-      required TranslationService ts,
-      required bool isRtl,
-      required String name,
+      {required String name,
       required String hint,
       required TextEditingController controller,
       TextInputType? keyboardType,
@@ -203,7 +177,7 @@ class RequestResetPasswordOverlay {
     return ValueListenableBuilder<TextEditingValue>(
         valueListenable: controller,
         builder: (BuildContext context, TextEditingValue value, Widget? child) {
-          return CustomField(gap: r.size(2), isRtl: isRtl, children: [
+          return CustomField(gap: r.size(2), children: [
             CustomText(
               text: name,
               fontSize: r.size(10),
@@ -214,7 +188,7 @@ class RequestResetPasswordOverlay {
               fontSize: r.size(10),
               fontWeight: FontWeight.normal,
               borderRadius: BorderRadius.all(Radius.circular(r.size(2))),
-              backgroundColor: theme.secondaryBackgroundColor,
+              backgroundColor: AppColors.light.secondaryBackgroundColor,
               hintText: hint,
               obscureText: obscureText,
               padding: r.symmetric(horizontal: 8, vertical: 4),
@@ -228,25 +202,18 @@ class RequestResetPasswordOverlay {
         });
   }
 
-  _buildForm({
-    required BaseTheme theme,
-    required TranslationService ts,
-    required bool isRtl,
-  }) {
-    return CustomField(isRtl: isRtl, gap: r.size(12), children: [
+  _buildForm() {
+    return CustomField(gap: r.size(12), children: [
       _buildTextInput(
-        theme: theme,
-        ts: ts,
-        isRtl: isRtl,
         hint: 'John.doe@example.com',
         keyboardType: TextInputType.emailAddress,
-        name: ts.translate('global.authentication.email'),
+        name: 'Email',
         controller: _emailController,
         borderColorCallback: (value) {
           return value != ''
               ? !AppUtil.isEmailValid(value)
-                  ? AppColors.colors.redRouge
-                  : theme.primary
+                  ? AppColors.light.errorColor
+                  : AppColors.light.primary
               : null;
         },
       ).animate().fadeIn(delay: 200.ms),
@@ -254,10 +221,7 @@ class RequestResetPasswordOverlay {
   }
 
   Widget _buildActionButton(
-      {required BaseTheme theme,
-      required TranslationService ts,
-      required bool isRtl,
-      required String title,
+      {required String title,
       Color? backgroundColor,
       Color? onHoverbackgroundColor,
       Color? textColor,
@@ -268,66 +232,56 @@ class RequestResetPasswordOverlay {
       text: title,
       fontWeight: FontWeight.bold,
       fontSize: r.size(10),
-      backgroundColor: backgroundColor ?? theme.primary,
-      textColor: textColor ?? AppColors.colors.whiteOut,
+      backgroundColor: backgroundColor ?? AppColors.light.primary,
+      textColor: textColor ?? AppColors.colors.whiteWhitest,
       padding: r.symmetric(vertical: 4, horizontal: 16),
       enabled: isEnabled,
       borderRadius: BorderRadius.all(Radius.circular(r.size(1))),
       animationDuration: 300.ms,
       onHoverStyle: CustomButtonStyle(
-          backgroundColor: onHoverbackgroundColor ?? theme.secondary,
+          backgroundColor: onHoverbackgroundColor ?? AppColors.light.secondary,
           textColor: onHoverTextColor),
       onDisabledStyle: CustomButtonStyle(
-          backgroundColor: theme.secondaryBackgroundColor,
-          textColor: theme.accent.withOpacity(0.3)),
+          backgroundColor: AppColors.light.secondaryBackgroundColor,
+          textColor: AppColors.light.accent.withValues(alpha: 0.3)),
       onPressed: (position, size) {
         onPressed();
       },
     );
   }
 
-  Widget _buildActionButtons({
-    required BaseTheme theme,
-    required TranslationService ts,
-    required bool isRtl,
-  }) {
+  Widget _buildActionButtons() {
     return ValueListenableBuilder<TextEditingValue>(
       valueListenable: _emailController,
       builder:
           (BuildContext context, TextEditingValue emailValue, Widget? child) {
         return CustomField(
-          isRtl: isRtl,
           gap: r.size(6),
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           arrangement: FieldArrangement.row,
           children: [
             _buildActionButton(
-              theme: theme,
-              ts: ts,
-              isRtl: isRtl,
               title:
                   _errorMessage.value != null || _successMessage.value != null
-                      ? ts.translate('global.authentication.resendRequest')
-                      : ts.translate('global.authentication.resetPassword'),
+                      ? 'Renvoyer la demande'
+                      : 'Réinitialiser le mot de passe',
               isEnabled: _areInputsValid(),
-              backgroundColor: theme.primary,
-              onHoverbackgroundColor: theme.secondary,
-              textColor: AppColors.colors.whiteSolid,
-              onHoverTextColor: AppColors.colors.whiteSolid,
+              backgroundColor: AppColors.light.primary,
+              onHoverbackgroundColor: AppColors.light.secondary,
+              textColor: AppColors.colors.whiteWhitest,
+              onHoverTextColor: AppColors.colors.whiteWhitest,
               onPressed: () {
                 RemoteEventsUtil.authEvents
                     .requestPasswordReset(context, email: emailValue.text);
               },
             ),
             _buildActionButton(
-              theme: theme,
-              ts: ts,
-              isRtl: isRtl,
-              title: ts.translate('global.cancel'),
-              backgroundColor: theme.accent,
-              onHoverbackgroundColor: theme.accent.withOpacity(0.8),
-              textColor: theme.subtle,
+              title: 'cancel',
+              backgroundColor: AppColors.light.accent,
+              onHoverbackgroundColor:
+                  AppColors.light.accent.withValues(alpha: 0.8),
+              textColor: AppColors.light.subtle,
               onPressed: () {
                 dismiss();
               },
@@ -338,12 +292,7 @@ class RequestResetPasswordOverlay {
     );
   }
 
-  Widget _buildOverlay({
-    required TranslationService translationService,
-    required BaseTheme theme,
-    required ThemeStyle themeStyle,
-    required bool isRtl,
-  }) {
+  Widget _buildOverlay() {
     return IntrinsicHeight(
       child: CustomField(
         width: r.size(300),
@@ -351,11 +300,11 @@ class RequestResetPasswordOverlay {
         margin: r.symmetric(horizontal: 6, vertical: 10),
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        borderColor: theme.accent.withOpacity(0.3),
+        borderColor: AppColors.light.accent.withValues(alpha: 0.3),
         borderRadius: r.size(3),
         clipBehavior: Clip.hardEdge,
         gap: r.size(2),
-        backgroundColor: theme.overlayBackgroundColor,
+        backgroundColor: AppColors.light.secondaryBackgroundColor,
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
@@ -369,59 +318,39 @@ class RequestResetPasswordOverlay {
                         builder: (BuildContext context, String? errorMessage,
                             Widget? child) {
                           return CustomField(
-                            isRtl: isRtl,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             gap: r.size(14),
                             padding: r.symmetric(horizontal: 16, vertical: 22),
                             children: [
-                              _buildHeader(
-                                theme: theme,
-                                themeStyle: themeStyle,
-                                isRtl: isRtl,
-                              ).animate().fadeIn(delay: 100.ms),
+                              _buildHeader().animate().fadeIn(delay: 100.ms),
                               if (successMessage != null ||
                                   errorMessage != null)
                                 _buildNotificationMessageField(
-                                    theme: theme,
-                                    isRtl: isRtl,
                                     successMessage: successMessage,
                                     errorMessage: errorMessage),
-                              _buildForm(
-                                  theme: theme,
-                                  ts: translationService,
-                                  isRtl: isRtl),
-                              _buildActionButtons(
-                                theme: theme,
-                                ts: translationService,
-                                isRtl: isRtl,
-                              ).animate().fadeIn(delay: 300.ms),
+                              _buildForm(),
+                              _buildActionButtons()
+                                  .animate()
+                                  .fadeIn(delay: 300.ms),
                               CustomField(
-                                  isRtl: isRtl,
                                   gap: r.size(3),
                                   arrangement: FieldArrangement.row,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     CustomText(
-                                      text: translationService
-                                          .translate('global.or'),
+                                      text: 'or',
                                       fontSize: r.size(8),
                                     ),
                                     CustomButton(
-                                      text: translationService.translate(
-                                          'global.authentication.existingAccount'),
-                                      textColor: theme.primary,
+                                      text: 'Se connecter à mon compte',
+                                      textColor: AppColors.light.primary,
                                       onHoverStyle: CustomButtonStyle(
-                                        textColor: theme.secondary,
+                                        textColor: AppColors.light.secondary,
                                       ),
                                       onPressed: (position, size) {
                                         dismiss();
-                                        _signInOverlay.show(
-                                            translationService:
-                                                translationService,
-                                            theme: theme,
-                                            isRtl: isRtl,
-                                            themeStyle: themeStyle);
+                                        _signInOverlay.show();
                                       },
                                       fontSize: r.size(8),
                                     ),
@@ -430,22 +359,15 @@ class RequestResetPasswordOverlay {
                                       fontSize: r.size(8),
                                     ),
                                     CustomButton(
-                                      text: translationService.translate(
-                                          'global.authentication.createNewAccount'),
-                                      textColor: theme.primary,
+                                      text: 'Créer un nouveau compte',
+                                      textColor: AppColors.light.primary,
                                       onHoverStyle: CustomButtonStyle(
-                                        textColor: theme.secondary,
+                                        textColor: AppColors.light.secondary,
                                       ),
                                       fontSize: r.size(8),
                                       onPressed: (position, size) {
                                         dismiss();
-                                        _createAccountOverlay.show(
-                                          translationService:
-                                              translationService,
-                                          theme: theme,
-                                          isRtl: isRtl,
-                                          themeStyle: themeStyle,
-                                        );
+                                        _createAccountOverlay.show();
                                       },
                                     ),
                                   ]).animate().fadeIn(delay: 300.ms),

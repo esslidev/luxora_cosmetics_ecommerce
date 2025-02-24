@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:luxora_cosmetics_frontend/core/constants/app_colors.dart';
 import '../../../../config/theme/app_theme.dart';
 import '../../../../core/enums/widgets.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
-import '../../bloc/app/language/translation_bloc.dart';
-import '../../bloc/app/language/translation_state.dart';
-import '../../bloc/app/theme/theme_bloc.dart';
-import '../../bloc/app/theme/theme_state.dart';
 
 class CustomButtonStyle {
   final double? width;
@@ -265,49 +261,34 @@ class _CustomButtonState extends State<CustomButton> {
             if (widget.svgIconPath != null) _buildIcon(iconColor),
           ],
         );
-      default:
-        return Row(
-          mainAxisAlignment: widget.mainAxisAlignment,
-          crossAxisAlignment: widget.crossAxisAlignment,
-          children: [
-            if (widget.svgIconPath != null) _buildIcon(iconColor),
-            if (widget.svgIconPath != null && widget.text != null)
-              SizedBox(width: widget.iconTextGap ?? R.size(6)),
-            if (widget.text != null) _buildText(textColor),
-          ],
-        );
     }
   }
 
   Widget _buildIcon(Color? iconColor) {
     return SvgPicture.asset(
       widget.svgIconPath!,
-      color: iconColor,
+      colorFilter: iconColor != null
+          ? ColorFilter.mode(iconColor, BlendMode.srcIn)
+          : null,
       width: widget.iconWidth,
       height: widget.iconHeight,
     );
   }
 
   Widget _buildText(Color? textColor) {
-    return BlocBuilder<AppThemeBloc, AppThemeState>(
-      builder: (context, themeState) {
-        return BlocBuilder<AppTranslationBloc, AppTranslationState>(
-          builder: (context, translationState) {
-            return Text(
-              widget.text!,
-              style: AppTheme.bodyText.copyWith(
-                color: textColor ?? themeState.theme.bodyText,
-                fontSize: widget.fontSize,
-                fontWeight: widget.fontWeight ?? FontWeight.w400,
-                letterSpacing: widget.letterSpacing,
-                height: widget.lineHeight,
-                fontFamily:
-                    widget.fontFamily ?? translationState.language?.fontFamily,
-              ),
-            );
-          },
-        );
-      },
+    return Flexible(
+      child: Text(
+        widget.text!,
+        style: AppTheme.bodyText.copyWith(
+          color: textColor ?? AppColors.light.accent,
+          fontSize: widget.fontSize,
+          fontWeight: widget.fontWeight ?? FontWeight.w400,
+          letterSpacing: widget.letterSpacing,
+          height: widget.lineHeight,
+          overflow: TextOverflow.ellipsis,
+          fontFamily: widget.fontFamily,
+        ),
+      ),
     );
   }
 }

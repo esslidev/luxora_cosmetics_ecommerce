@@ -4,7 +4,6 @@ import 'package:lottie/lottie.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_paths.dart';
 import '../../../../core/enums/notification_type.dart';
-import '../../../../core/util/translation_service.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 import '../../widgets/common/custom_button.dart';
 import '../../widgets/common/custom_field.dart';
@@ -12,12 +11,10 @@ import '../../widgets/common/custom_text.dart';
 
 class NotificationOverlay {
   final BuildContext context;
-  final ResponsiveSizeAdapter r;
   final VoidCallback? onDismiss;
 
   NotificationOverlay({
     required this.context,
-    required this.r,
     this.onDismiss,
   });
 
@@ -25,8 +22,6 @@ class NotificationOverlay {
   bool toggle = false;
 
   Future<void> show({
-    required TranslationService translationService,
-    required BaseTheme theme,
     NotificationType? notificationType = NotificationType.success,
     String? statusTitle,
     String? statusMessage,
@@ -41,7 +36,7 @@ class NotificationOverlay {
         children: [
           ModalBarrier(
             dismissible: true,
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withValues(alpha: 0.6),
             onDismiss: dismiss,
           ).animate(target: toggle ? 1 : 0).fade(
                 duration: 300.ms,
@@ -51,9 +46,6 @@ class NotificationOverlay {
             child: Material(
               color: Colors.transparent,
               child: _buildOverlay(
-                      r: r,
-                      theme: theme,
-                      translationService: translationService,
                       notificationType: notificationType,
                       statusTitle: statusTitle,
                       statusMessage: statusMessage)
@@ -87,33 +79,31 @@ class NotificationOverlay {
   }
 
   Widget _buildOverlay({
-    required TranslationService translationService,
-    required ResponsiveSizeAdapter r,
-    required BaseTheme theme,
     NotificationType? notificationType,
     String? statusTitle,
     String? statusMessage,
   }) {
+    ResponsiveSizeAdapter r = ResponsiveSizeAdapter(context);
     return CustomField(
       width: r.size(240),
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      borderColor: theme.accent.withOpacity(0.3),
+      borderColor: AppColors.light.accent.withValues(alpha: 0.3),
       borderRadius: r.size(3),
       margin: r.symmetric(horizontal: 6),
       clipBehavior: Clip.hardEdge,
       gap: r.size(2),
-      backgroundColor: theme.overlayBackgroundColor,
+      backgroundColor: AppColors.light.secondaryBackgroundColor,
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: double.infinity,
           color: notificationType == NotificationType.success ||
                   notificationType == NotificationType.info
-              ? theme.primary.withOpacity(0.8)
+              ? AppColors.light.primary.withValues(alpha: 0.8)
               : notificationType == NotificationType.warning
-                  ? theme.warningColor.withOpacity(0.8)
-                  : theme.errorColor.withOpacity(0.8),
+                  ? AppColors.light.warningColor.withValues(alpha: 0.8)
+                  : AppColors.light.errorColor.withValues(alpha: 0.8),
           padding: EdgeInsets.all(r.size(10)),
           child: Lottie.asset(
             notificationType == NotificationType.success
@@ -137,55 +127,49 @@ class NotificationOverlay {
               CustomText(
                 text: statusTitle ??
                     (notificationType == NotificationType.success
-                        ? translationService.translate(
-                            'global.notifications.default.successTitle')
+                        ? 'default success title'
                         : notificationType == NotificationType.warning
-                            ? translationService.translate(
-                                'global.notifications.default.warningTitle')
-                            : translationService.translate(
-                                'global.notifications.default.errorTitle')),
+                            ? 'default warning title'
+                            : 'default error title'),
                 fontSize: r.size(16),
                 fontWeight: FontWeight.bold,
-                color: theme.bodyText,
+                color: AppColors.light.accent,
                 letterSpacing: r.size(1),
                 textAlign: TextAlign.center,
               ),
               CustomText(
                 text: statusMessage ??
                     (notificationType == NotificationType.success
-                        ? translationService.translate(
-                            'global.notifications.default.successMessage')
+                        ? 'default success message'
                         : notificationType == NotificationType.warning
-                            ? translationService.translate(
-                                'global.notifications.default.warningMessage')
-                            : translationService.translate(
-                                'global.notifications.default.errorMessage')),
+                            ? 'default warning message'
+                            : 'default error message'),
                 fontSize: r.size(12),
                 fontWeight: FontWeight.normal,
-                color: theme.bodyText.withOpacity(0.8),
+                color: AppColors.light.accent.withValues(alpha: 0.8),
                 textAlign: TextAlign.center,
               ),
             ]),
         SizedBox(height: r.size(8)),
         CustomButton(
           width: r.size(300),
-          text: translationService.translate('global.continue'),
+          text: 'Continue',
           fontSize: r.size(14),
-          textColor: theme.buttonTextColor,
+          textColor: AppColors.light.subtle,
           padding: EdgeInsets.symmetric(vertical: r.size(4)),
           fontWeight: FontWeight.bold,
           letterSpacing: r.size(2),
           backgroundColor: notificationType == NotificationType.success
-              ? theme.primary.withOpacity(0.8)
+              ? AppColors.light.primary.withValues(alpha: 0.8)
               : notificationType == NotificationType.warning
-                  ? theme.warningColor.withOpacity(0.8)
-                  : theme.errorColor.withOpacity(0.8),
+                  ? AppColors.light.warningColor.withValues(alpha: 0.8)
+                  : AppColors.light.errorColor.withValues(alpha: 0.8),
           onHoverStyle: CustomButtonStyle(
             backgroundColor: notificationType == NotificationType.success
-                ? theme.primary
+                ? AppColors.light.primary
                 : notificationType == NotificationType.warning
-                    ? theme.warningColor
-                    : theme.errorColor,
+                    ? AppColors.light.warningColor
+                    : AppColors.light.errorColor,
           ),
           animationDuration: const Duration(milliseconds: 100),
           onPressed: (position, size) {

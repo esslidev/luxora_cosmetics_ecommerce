@@ -60,8 +60,10 @@ dependencies:
   carousel_slider: ^5.0.0
   # Integrates Google Maps
   uuid: ^4.5.1
-  flutter_inappwebview: ^6.1.5
-  # Flutter localizaions
+  #syncFusion calendar
+  syncfusion_flutter_datepicker: ^28.2.4
+  webview_flutter: ^4.10.0
+
   flutter_localizations:
     sdk: flutter
   flutter_web_plugins:
@@ -70,6 +72,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
   # Linting rules and recommendations
   flutter_lints: ^3.0.0
   # Generates code from annotations (e.g., for JSON serialization)
@@ -96,35 +99,35 @@ flutter:
   fonts:
     - family: recoleta
       fonts:
-        - asset: assets/fonts/barlow_condensed/recoleta-thin.ttf
+        - asset: assets/fonts/recoleta/recoleta-thin.otf
           weight: 100
-        - asset: assets/fonts/barlow_condensed/recoleta-light.ttf
+        - asset: assets/fonts/recoleta/recoleta-light.otf
           weight: 300
-        - asset: assets/fonts/barlow_condensed/recoleta-regular.ttf
+        - asset: assets/fonts/recoleta/recoleta-regular.otf
           weight: 400
-        - asset: assets/fonts/barlow_condensed/recoleta-medium.ttf
+        - asset: assets/fonts/recoleta/recoleta-medium.otf
           weight: 500
-        - asset: assets/fonts/barlow_condensed/recoleta-semibold.ttf
+        - asset: assets/fonts/recoleta/recoleta-semibold.otf
           weight: 600
-        - asset: assets/fonts/barlow_condensed/recoleta-bold.ttf
+        - asset: assets/fonts/recoleta/recoleta-bold.otf
           weight: 700
-        - asset: assets/fonts/barlow_condensed/recoleta-black.ttf
+        - asset: assets/fonts/recoleta/recoleta-black.otf
           weight: 900
     - family: recoleta-alt
       fonts:
-        - asset: assets/fonts/barlow_condensed/recoleta-alt-thin.ttf
+        - asset: assets/fonts/recoleta_alt/recoleta-alt-thin.otf
           weight: 100
-        - asset: assets/fonts/barlow_condensed/recoleta-alt-light.ttf
+        - asset: assets/fonts/recoleta_alt/recoleta-alt-light.otf
           weight: 300
-        - asset: assets/fonts/barlow_condensed/recoleta-alt-regular.ttf
+        - asset: assets/fonts/recoleta_alt/recoleta-alt-regular.otf
           weight: 400
-        - asset: assets/fonts/barlow_condensed/recoleta-alt-medium.ttf
+        - asset: assets/fonts/recoleta_alt/recoleta-alt-medium.otf
           weight: 500
-        - asset: assets/fonts/barlow_condensed/recoleta-alt-semibold.ttf
+        - asset: assets/fonts/recoleta_alt/recoleta-alt-semibold.otf
           weight: 600
-        - asset: assets/fonts/barlow_condensed/recoleta-alt-bold.ttf
+        - asset: assets/fonts/recoleta_alt/recoleta-alt-bold.otf
           weight: 700
-        - asset: assets/fonts/barlow_condensed/recoleta-alt-black.ttf
+        - asset: assets/fonts/recoleta_alt/recoleta-alt-black.otf
           weight: 900
 
   uses-material-design: true

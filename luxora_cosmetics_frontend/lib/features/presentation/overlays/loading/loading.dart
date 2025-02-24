@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:lottie/lottie.dart';
+import 'package:luxora_cosmetics_frontend/core/constants/app_constants.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_paths.dart';
-import '../../../../core/util/translation_service.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 import '../../widgets/common/custom_field.dart';
 import '../../widgets/common/custom_text.dart';
 
 class LoadingOverlay {
+  ResponsiveSizeAdapter r;
   final BuildContext context;
 
   LoadingOverlay({
     required this.context,
+    required this.r,
   });
 
   OverlayEntry? _overlayEntry;
   bool toggle = false;
 
   Future<void> show({
-    required TranslationService translationService,
-    required ResponsiveSizeAdapter r,
-    required BaseTheme theme,
     String? loadingTitle,
   }) async {
     if (isShown()) {
@@ -35,7 +32,7 @@ class LoadingOverlay {
         children: [
           ModalBarrier(
             dismissible: false,
-            color: Colors.black.withOpacity(0.4),
+            color: Colors.black.withValues(alpha: 0.4),
           ).animate(target: toggle ? 1 : 0).fade(
                 duration: 300.ms,
                 curve: Curves.decelerate,
@@ -43,8 +40,7 @@ class LoadingOverlay {
           Center(
             child: Material(
               color: Colors.transparent,
-              child: _buildOverlay(translationService, r, theme,
-                      loadingTitle: loadingTitle)
+              child: _buildOverlay(loadingTitle: loadingTitle)
                   .animate(target: toggle ? 1 : 0)
                   .fade(
                     duration: 250.ms,
@@ -74,22 +70,20 @@ class LoadingOverlay {
     return _overlayEntry != null;
   }
 
-  Widget _buildOverlay(TranslationService translationService,
-      ResponsiveSizeAdapter r, BaseTheme theme,
-      {String? loadingTitle}) {
+  Widget _buildOverlay({String? loadingTitle}) {
     return CustomField(
       padding: EdgeInsets.only(bottom: r.size(10)),
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
-      borderColor: theme.accent.withOpacity(0.3),
+      borderColor: AppColors.light.accent.withValues(alpha: 0.3),
       borderRadius: r.size(5),
       clipBehavior: Clip.hardEdge,
       gap: r.size(2),
-      backgroundColor: theme.overlayBackgroundColor,
+      backgroundColor: AppColors.light.secondaryBackgroundColor,
       children: [
-        Container(
-          color: theme.primary.withOpacity(0.6),
+        /* Container(
+          color: theme.primary.withValues(alpha: 0.6),
           padding: EdgeInsets.all(r.size(30)),
           child: Lottie.asset(
             AppPaths.files.lottie.bookLoading,
@@ -97,20 +91,20 @@ class LoadingOverlay {
             repeat: true,
             fit: BoxFit.contain,
           ),
-        ),
+        ),*/
         SizedBox(height: r.size(4)),
         CustomText(
-          text: translationService.translate('global.appName').toUpperCase(),
+          text: appName.toUpperCase(),
           fontSize: r.size(10),
           fontWeight: FontWeight.bold,
-          color: theme.bodyText,
+          color: AppColors.light.accent,
           letterSpacing: r.size(1),
         ),
         CustomText(
-          text: loadingTitle ?? translationService.translate('global.loading'),
+          text: loadingTitle ?? 'Loading',
           fontSize: r.size(10),
           fontWeight: FontWeight.w600,
-          color: theme.bodyText.withOpacity(0.6),
+          color: AppColors.light.accent.withValues(alpha: 0.6),
           letterSpacing: r.size(1),
         ),
       ],

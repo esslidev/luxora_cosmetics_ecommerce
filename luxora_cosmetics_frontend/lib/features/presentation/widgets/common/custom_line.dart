@@ -24,7 +24,7 @@ class CustomLine extends StatelessWidget {
       width: isVertical ? (thickness ?? r.size(1)) : (size ?? double.infinity),
       height: isVertical ? (size ?? double.infinity) : (thickness ?? r.size(1)),
       decoration: BoxDecoration(
-        color: color ?? AppColors.colors.whiteMuffled.withOpacity(0.4),
+        color: color ?? AppColors.light.accent.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(
             15), // Optional: consider making this parameterized
       ),

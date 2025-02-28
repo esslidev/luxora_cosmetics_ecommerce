@@ -61,7 +61,7 @@ class _LiteNotificationsWidgetState extends State<LiteNotificationsWidget> {
     return CustomField(
       padding: r.symmetric(vertical: 4, horizontal: 4),
       arrangement: FieldArrangement.row,
-      backgroundColor: AppColors.light.secondaryBackgroundColor,
+      backgroundColor: AppColors.light.backgroundSecondary,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -81,7 +81,7 @@ class _LiteNotificationsWidgetState extends State<LiteNotificationsWidget> {
           text: 'Clear all',
           fontSize: r.size(8),
           padding: r.symmetric(vertical: 2, horizontal: 4),
-          backgroundColor: AppColors.light.secondaryBackgroundColor,
+          backgroundColor: AppColors.light.backgroundSecondary,
           borderRadius: BorderRadius.circular(r.size(1)),
           onPressed: (position, size) {
             AppEventsUtil.liteNotifications.clearLiteNotifications(context);
@@ -105,7 +105,7 @@ class _LiteNotificationsWidgetState extends State<LiteNotificationsWidget> {
       shadowOffset: Offset(r.size(2), r.size(2)),
       shadowBlurRadius: 4,
       shadowColor: AppColors.light.accent.withValues(alpha: .2),
-      backgroundColor: AppColors.light.primaryBackgroundColor,
+      backgroundColor: AppColors.light.backgroundPrimary,
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildHeader(),

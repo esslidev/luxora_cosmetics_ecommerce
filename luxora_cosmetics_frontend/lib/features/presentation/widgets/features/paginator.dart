@@ -51,11 +51,10 @@ class Paginator extends StatelessWidget {
               color: theme.accent.withValues(alpha: 0.4), width: r.size(0.6)),
       fontWeight: FontWeight.w500,
       textColor: isActive
-          ? AppColors.colors.whiteWhitest
+          ? AppColors.colors.white
           : theme.accent.withValues(alpha: isUnclickable ? 0.4 : 1),
       animationDuration: 300.ms,
-      backgroundColor:
-          isActive ? theme.primary : theme.secondaryBackgroundColor,
+      backgroundColor: isActive ? theme.primary : theme.backgroundSecondary,
       onPressed: isUnclickable ? null : (position, size) => onPressed(),
     );
   }

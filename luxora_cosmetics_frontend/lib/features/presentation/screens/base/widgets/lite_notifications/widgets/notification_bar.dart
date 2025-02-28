@@ -81,8 +81,8 @@ class _NotificationBarState extends State<NotificationBar> {
               ? AppColors.light.primary.withValues(alpha: .1)
               : widget.liteNotification.notificationType ==
                       NotificationType.warning
-                  ? AppColors.light.warningColor.withValues(alpha: .1)
-                  : AppColors.light.errorColor.withValues(alpha: .1),
+                  ? AppColors.light.warning.withValues(alpha: .1)
+                  : AppColors.light.error.withValues(alpha: .1),
           gap: r.size(4),
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -104,8 +104,8 @@ class _NotificationBarState extends State<NotificationBar> {
                         ? AppColors.light.primary
                         : widget.liteNotification.notificationType ==
                                 NotificationType.warning
-                            ? AppColors.light.warningColor
-                            : AppColors.light.errorColor,
+                            ? AppColors.light.warning
+                            : AppColors.light.error,
                     isSvg: true,
                     width: r.size(12),
                     height: r.size(12),
@@ -128,8 +128,8 @@ class _NotificationBarState extends State<NotificationBar> {
                                 ? AppColors.light.primary
                                 : widget.liteNotification.notificationType ==
                                         NotificationType.warning
-                                    ? AppColors.light.warningColor
-                                    : AppColors.light.errorColor,
+                                    ? AppColors.light.warning
+                                    : AppColors.light.error,
                           ),
                           strokeWidth: r.size(1.5),
                         ),
@@ -156,8 +156,8 @@ class _NotificationBarState extends State<NotificationBar> {
                     ? AppColors.light.primary
                     : widget.liteNotification.notificationType ==
                             NotificationType.warning
-                        ? AppColors.light.warningColor
-                        : AppColors.light.errorColor,
+                        ? AppColors.light.warning
+                        : AppColors.light.error,
               ),
             ),
             CustomButton(

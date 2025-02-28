@@ -1,85 +1,45 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:luxora_cosmetics_frontend/core/constants/app_paths.dart';
+import 'package:luxora_cosmetics_frontend/core/enums/widgets.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/util/app_util.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
-import '../../../../core/util/translation_service.dart';
+
 import '../common/custom_button.dart';
 import '../common/custom_display.dart';
 import '../common/custom_field.dart';
 import '../common/custom_text.dart';
 
 class ProductWidget extends StatefulWidget {
-  final int? productId;
-  final String? networkImageUrl;
-  final String? title;
-  final double? titleMaxWidth;
-  final double? price;
+  final String imageUrl;
+  final String name;
+  final double price;
   final double? pricePromo;
-  final double? pricePromoPercentage;
-  final bool? isNewArrival;
-  final bool? isBestSellers;
-  final bool? isOnWishlist;
-  final bool? isOnCart;
-  final bool isHorizontal;
-  final bool borderOnHover;
-  final double? offerBadgeSize;
-  final double? offerBadgeFontSize;
-  final bool isOfferBadgeVisible;
-  final bool isActionsCardVisible;
-  final bool isPriceVisible;
-
-  // New font size parameters
-  final double? coverWidth;
-  final double? authorFontSize;
-  final double? titleFontSize;
-  final double? priceFontSize;
-
-  // New width and height parameters
-  final double? width;
-  final double? height;
-
+  final bool isNewArrival;
+  final bool isBestSellers;
+  final bool isOnWishlist;
+  final bool isOnCart;
   // action callbacks
-  final Function(
-    int productId,
-    String productName,
-  )? onPressed;
-  final Function(int productId)? onWishlistPressed;
-  final Function(int productId)? onCartPressed;
+  final Function() onPressed;
+  final Function()? onWishlistPressed;
+  final Function()? onCartPressed;
 
-  const ProductWidget(
-      {super.key,
-      this.productId,
-      this.networkImageUrl,
-      this.title,
-      this.titleMaxWidth,
-      this.price,
-      this.pricePromo,
-      this.pricePromoPercentage,
-      this.isNewArrival = false,
-      this.isBestSellers = false,
-      this.isOnWishlist = false,
-      this.isOnCart = false,
-      this.isHorizontal = false,
-      this.borderOnHover = false,
-      this.coverWidth,
-      this.authorFontSize,
-      this.titleFontSize,
-      this.priceFontSize,
-      this.width,
-      this.height,
-      this.offerBadgeSize,
-      this.offerBadgeFontSize,
-      this.isOfferBadgeVisible = true,
-      this.isActionsCardVisible = true,
-      this.isPriceVisible = true,
-      this.onWishlistPressed,
-      this.onCartPressed,
-      this.onPressed,
-      this.onPurchasePressed,
-      this.onAuthorPressed});
+  const ProductWidget({
+    super.key,
+    required this.imageUrl,
+    required this.name,
+    required this.price,
+    this.pricePromo,
+    this.isNewArrival = false,
+    this.isBestSellers = false,
+    this.isOnWishlist = false,
+    this.isOnCart = false,
+    required this.onPressed,
+    this.onWishlistPressed,
+    this.onCartPressed,
+  });
 
   @override
   State<ProductWidget> createState() => _ProductWidgetState();
@@ -87,8 +47,8 @@ class ProductWidget extends StatefulWidget {
 
 class _ProductWidgetState extends State<ProductWidget> {
   late ResponsiveSizeAdapter r;
-  bool _toggleActionsWidget = false;
-  bool _isHovered = false;
+
+  ValueNotifier<bool> isHoveredNotifier = ValueNotifier(false);
 
   @override
   void initState() {
@@ -96,243 +56,107 @@ class _ProductWidgetState extends State<ProductWidget> {
     r = ResponsiveSizeAdapter(context);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AppThemeBloc, AppThemeState>(
-        builder: (context, themeState) {
-      return BlocBuilder<AppTranslationBloc, AppTranslationState>(
-          builder: (context, translationState) {
-        if (translationState.translationService != null &&
-            translationState.language != null) {
-          return BlocBuilder<AppCurrencyBloc, AppCurrencyState>(
-              builder: (context, currencyState) {
-            return MouseRegion(
-              cursor: SystemMouseCursors.click,
-              onEnter: (event) {
-                setState(() {
-                  _toggleActionsWidget = true;
-                  _isHovered = true;
-                });
-              },
-              onExit: (event) {
-                setState(() {
-                  _toggleActionsWidget = false;
-                  _isHovered = false;
-                });
-              },
-              child: GestureDetector(
-                onTap: () {
-                  if (widget.productId != null && widget.onPressed != null) {
-                    widget.onPressed!(widget.productId!, widget.title!);
-                  }
-                },
-                onDoubleTap: () {
-                  setState(() {
-                    if (_toggleActionsWidget != true) {
-                      setState(() {
-                        _toggleActionsWidget = true;
-                      });
-                    } else {
-                      setState(() {
-                        _toggleActionsWidget = false;
-                      });
-                    }
-                  });
-                },
-                child: _buildProduct(
-                  context: context,
-                  theme: themeState.theme,
-                  ts: translationState.translationService!,
-                  language: translationState.language!,
-                  currency: currencyState.currency,
-                  coverWidth: widget.coverWidth,
-                ),
-              ),
-            );
-          });
-        }
-        return const SizedBox();
-      });
-    });
-  }
+  //----------------------------------------------------------------------------------------------------//
 
-  Widget _buildProductActionCardButton({
-    required String svgIconPath,
-    required BaseTheme theme,
-    Color? iconColor,
-    Color? onHoverIconColor,
-    Function? onPressed,
+  Widget _buildActionButton({
+    required String svgPath,
+    bool isActive = true,
+    required Function() onPressed,
+    required Function() onHoverEnter,
+    required Function() onHoverExit,
   }) {
     return CustomButton(
-      svgIconPath: svgIconPath,
-      width: r.size(18),
-      iconColor: iconColor ?? theme.accent,
-      padding: r.symmetric(vertical: 4, horizontal: 4),
-      onHoverStyle: CustomButtonStyle(iconColor: onHoverIconColor),
+      width: r.size(24),
+      height: r.size(24),
+      svgIconPath: svgPath,
+      iconWidth: r.size(10),
+      iconHeight: r.size(10),
+      iconColor: AppColors.light.secondary,
+      border: Border.all(color: AppColors.light.primary, width: r.size(1)),
+      borderRadius: BorderRadius.circular(r.size(15)),
+      animationDuration: 300.ms,
+      onHoverStyle: CustomButtonStyle(
+        iconColor: AppColors.colors.white,
+        backgroundColor: AppColors.light.primary,
+      ),
+      onHoverEnter: (position, size) {
+        onHoverEnter();
+      },
+      onHoverExit: () {
+        onHoverExit();
+      },
       onPressed: (position, size) {
-        if (onPressed != null) {
-          onPressed();
-        }
+        onPressed();
       },
     );
   }
 
-  Widget _buildProductActionsCard({
-    required BaseTheme theme,
-    required bool isRtl,
-    int? productId,
-    bool isVisible = true,
-    bool? isOnWishlist = true,
-    bool? isOnCart = true,
+  Widget _buildActionButtons({
+    required Function() onHoverEnter,
+    required Function() onHoverExit,
   }) {
-    return isVisible
-        ? CustomField(
-            mainAxisSize: MainAxisSize.min,
-            margin: r.only(top: 4, left: isRtl ? 8 : 0, right: !isRtl ? 8 : 0),
-            backgroundColor: theme.thirdBackgroundColor,
-            padding: r.all(2),
-            borderRadius: r.size(2),
-            shadowColor: theme.shadowColor,
-            shadowOffset: Offset(r.size(2), r.size(2)),
-            arrangement: FieldArrangement.row,
-            isRtl: isRtl,
-            gap: r.size(2),
-            height: r.size(20),
-            children: [
-              _buildProductActionCardButton(
-                  theme: theme,
-                  svgIconPath: AppPaths.vectors.heartIcon,
-                  iconColor: isOnWishlist == true
-                      ? AppColors.colors.redRouge
-                      : theme.accent,
-                  onHoverIconColor: isOnWishlist == true
-                      ? AppColors.colors.redRouge.withOpacity(0.8)
-                      : theme.accent.withOpacity(0.8),
-                  onPressed: () {
-                    if (widget.productId != null &&
-                        widget.onWishlistPressed != null) {
-                      widget.onWishlistPressed!(widget.productId!);
-                    }
-                  }),
-              CustomLine(
-                thickness: 1,
-                isVertical: true,
-                size: r.size(24),
-                color: theme.accent.withOpacity(0.2),
-              ),
-              _buildProductActionCardButton(
-                  theme: theme,
-                  svgIconPath: AppPaths.vectors.cartFillIcon,
-                  iconColor: isOnCart == true ? theme.primary : theme.accent,
-                  onHoverIconColor: isOnCart == true
-                      ? theme.primary.withOpacity(0.8)
-                      : theme.accent.withOpacity(0.8),
-                  onPressed: () {
-                    if (widget.productId != null &&
-                        widget.onCartPressed != null) {
-                      widget.onCartPressed!(widget.productId!);
-                    }
-                  }),
-              CustomLine(
-                thickness: 1,
-                isVertical: true,
-                size: r.size(24),
-                color: theme.accent.withOpacity(0.2),
-              ),
-              _buildProductActionCardButton(
-                  theme: theme,
-                  svgIconPath: AppPaths.vectors.purchaseFillIcon,
-                  onHoverIconColor: AppColors.colors.yellowHoneyGlow,
-                  onPressed: () {
-                    if (widget.productId != null &&
-                        widget.onPurchasePressed != null) {
-                      widget.onPurchasePressed!(widget.productId!);
-                    }
-                  }),
-              CustomLine(
-                thickness: 1,
-                isVertical: true,
-                size: r.size(24),
-                color: theme.accent.withOpacity(0.2),
-              ),
-              _buildProductActionCardButton(
-                  theme: theme,
-                  svgIconPath: AppPaths.vectors.eyeFillIcon,
-                  iconColor: theme.accent,
-                  onHoverIconColor: theme.accent.withOpacity(0.8),
-                  onPressed: () {
-                    if (widget.productId != null && widget.onPressed != null) {
-                      widget.onPressed!(widget.productId!, widget.title!);
-                    }
-                  }),
-            ],
-          )
-        : const SizedBox();
+    return CustomField(
+      mainAxisSize: MainAxisSize.min,
+      gap: r.size(2),
+      children: [
+        _buildActionButton(
+          svgPath: AppPaths.vectors.cartIcon,
+          isActive: widget.isOnCart,
+          onHoverEnter: () {
+            onHoverEnter();
+          },
+          onHoverExit: () {
+            onHoverExit();
+          },
+          onPressed: () {
+            if (widget.onCartPressed != null) {
+              widget.onCartPressed!();
+            }
+          },
+        ),
+        _buildActionButton(
+          svgPath: AppPaths.vectors.wishlistIcon,
+          isActive: widget.isOnWishlist,
+          onHoverEnter: () {
+            onHoverEnter();
+          },
+          onHoverExit: () {
+            onHoverExit();
+          },
+          onPressed: () {
+            if (widget.onWishlistPressed != null) {
+              widget.onWishlistPressed!();
+            }
+          },
+        )
+      ],
+    );
   }
 
-  Widget _buildProductOfferBadge(
-      {required TranslationService ts,
-      required bool isRtl,
-      double? size,
-      double? fontSize,
-      bool isVisible = true,
-      double discount = 0,
-      bool? isNewArrival,
-      bool? isBestSellers}) {
-    return isVisible &&
-            (discount != 0 || isNewArrival == true || isBestSellers == true)
+  Widget _buildOfferTag() {
+    return widget.isNewArrival == true || widget.isBestSellers == true
         ? IgnorePointer(
             ignoring: true,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: CustomField(
-                mainAxisSize: MainAxisSize.min,
-                margin:
-                    r.only(top: 4, left: !isRtl ? 4 : 0, right: isRtl ? 4 : 0),
-                isRtl: isRtl,
-                width: size ?? r.size(54),
-                height: size ?? r.size(54),
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CustomDisplay(
-                        assetPath: AppPaths.vectors.badge,
-                        width: size ?? r.size(54),
-                        height: size ?? r.size(54),
-                        isSvg: true,
-                        svgColor: discount != 0
-                            ? AppColors.colors.redRouge
-                            : isBestSellers == true
-                                ? AppColors.colors.yellowHoneyGlow
-                                : AppColors.colors.greenSwagger,
-                      ),
-                      CustomText(
-                        text: discount != 0
-                            ? AppUtil.getDiscountBadge(ts, discount)
-                            : isBestSellers == true
-                                ? ts.translate(
-                                    'widgets.product.offerBadge.bestSellers')
-                                : isNewArrival == true
-                                    ? ts.translate(
-                                        'widgets.product.offerBadge.newArrivals')
-                                    : '',
-                        fontSize: fontSize ?? r.size(8),
-                        textAlign: TextAlign.center,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.colors.whiteSolid,
-                        padding: r.symmetric(horizontal: 4),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+            child: CustomText(
+              backgroundColor: widget.isBestSellers == true
+                  ? AppColors.colors.peachOfMind.withValues(alpha: .2)
+                  : AppColors.light.backgroundSecondary,
+              text: widget.isBestSellers == true
+                  ? 'Meilleure Vente'
+                  : widget.isNewArrival == true
+                      ? 'Nouvelle Arrivée'
+                      : '',
+              fontSize: r.size(8),
+              borderRadius: r.size(1),
+              fontWeight: FontWeight.w600,
+              color: AppColors.light.accent.withValues(alpha: .6),
+              padding: r.symmetric(horizontal: 6, vertical: 2),
             ),
           )
         : const SizedBox();
   }
 
-  Widget _buildNoCover({
+  /* Widget _buildNoCover({
     required BaseTheme theme,
     required TranslationService ts,
     double? coverWidth,
@@ -378,8 +202,143 @@ class _ProductWidgetState extends State<ProductWidget> {
       ),
     );
   }
+*/
+  Widget _buildProduct(BuildContext context) {
+    return CustomField(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      width: r.size(180),
+      gap: r.size(8),
+      children: [
+        ValueListenableBuilder(
+            valueListenable: isHoveredNotifier,
+            builder: (BuildContext context, bool isHovered, Widget? child) {
+              return ClipRect(
+                child: Stack(
+                  children: [
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      onEnter: (event) {
+                        isHoveredNotifier.value = true;
+                      },
+                      onExit: (event) {
+                        isHoveredNotifier.value = false;
+                      },
+                      child: GestureDetector(
+                        onTap: () {
+                          widget.onPressed();
+                        },
+                        child: CustomField(
+                            width: r.size(180),
+                            height: r.size(180),
+                            backgroundColor: AppColors.colors.white,
+                            children: [
+                              IgnorePointer(
+                                child: CustomDisplay(
+                                  assetPath: widget.imageUrl,
+                                  width: r.size(180),
+                                  height: r.size(180),
+                                )
+                                    .animate(target: isHovered == true ? 1 : 0)
+                                    .scaleXY(
+                                      duration: 250.ms,
+                                      curve: Curves.easeOut,
+                                      begin: 1,
+                                      end: 1.1,
+                                    )
+                                    .rotate(
+                                      duration: 250.ms,
+                                      curve: Curves.easeOut,
+                                      begin: 1,
+                                      end: 1.02,
+                                    ),
+                              )
+                            ]),
+                      ),
+                    ),
+                    Positioned(
+                      top: r.size(4),
+                      left: r.size(4),
+                      child: _buildOfferTag()
+                          .animate(target: isHovered == true ? 1 : 0)
+                          .fadeIn(
+                            duration: 250.ms,
+                            curve: Curves.easeOut,
+                            begin: 0,
+                          ),
+                    ),
+                    Positioned(
+                      bottom: r.size(8),
+                      right: r.size(8),
+                      child: _buildActionButtons(
+                        onHoverEnter: () {
+                          isHoveredNotifier.value = true;
+                        },
+                        onHoverExit: () {
+                          isHoveredNotifier.value = false;
+                        },
+                      ).animate(target: isHovered == true ? 1 : 0).slideY(
+                            duration: 400.ms,
+                            curve: Curves.easeOut,
+                            begin: 1.5,
+                            end: 0,
+                          ),
+                    )
+                  ],
+                ),
+              );
+            }),
+        CustomField(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          gap: r.size(6),
+          padding: r.symmetric(horizontal: 4),
+          children: [
+            CustomText(
+              text: widget.name,
+              fontFamily: 'recoleta',
+              fontSize: r.size(11),
+              lineHeight: 1.1,
+              textAlign: TextAlign.center,
+              color: AppColors.light.accent,
+            ),
+            CustomField(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              gap: r.size(3),
+              arrangement: FieldArrangement.row,
+              children: [
+                CustomText(
+                  text:
+                      '${AppUtil.formatToTwoDecimalPlaces(widget.pricePromo ?? widget.price).toString().replaceAll('.', ',')} Dhs',
+                  fontSize: r.size(8),
+                  color: AppColors.light.accent.withValues(alpha: .6),
+                  fontWeight: FontWeight.w600,
+                  lineHeight: 1,
+                ),
+                if (widget.pricePromo != null)
+                  CustomText(
+                    text:
+                        '${AppUtil.formatToTwoDecimalPlaces(widget.price).toString().replaceAll('.', ',')} Dhs',
+                    fontSize: r.size(7),
+                    fontWeight: FontWeight.w600,
+                    lineHeight: 0.6,
+                    color: AppColors.light.secondary,
+                    textDecoration: TextDecoration.lineThrough,
+                    textDecorationStyle: TextDecorationStyle.solid,
+                    textDecorationColor: AppColors.light.secondary,
+                    textDecorationThickness: r.size(0.8),
+                  ),
+              ],
+            )
+          ],
+        ),
+      ],
+    );
+  }
 
-  Widget _buildProduct({
+  /* Widget _buildProduct({
     required BuildContext context,
     required BaseTheme theme,
     required TranslationService ts,
@@ -538,5 +497,13 @@ class _ProductWidgetState extends State<ProductWidget> {
           ),
         ]);
   }
-}
 */
+  //----------------------------------------------------------------------------------------------------//
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildProduct(
+      context,
+    );
+  }
+}

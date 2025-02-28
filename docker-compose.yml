@@ -1,54 +1,70 @@
 services:
   ## MYSQL DB DATABASE
-  db_luxora:
-    container_name: db_luxora
-    image: mysql:latest
-    restart: always
-    environment:
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'no'
-    ports:
-      - 3307:${DB_PORT}
-    expose:
-      - ${DB_PORT}
-    networks:
-      - pma_networks
-    ## should change to phpmyadmin:5.0.0
-  php-my-admin:
-    container_name: php-my-admin
-    image: phpmyadmin:5
-    restart: always
-    environment:
-      PMA_HOST: ${DB_HOST}
-      PMA_ARBITRARY: 1
-      PHP_UPLOAD_MAX_FILESIZE: 10M
-      PHP_POST_MAX_SIZE: 10M
-      UPLOAD_LIMIT: 64M
-    ports:
-      - 8081:80
-    depends_on:
-      - db_alfia
-    networks:
-      - pma_networks
+  #db_luxora:
+  #  container_name: db_luxora
+  #  image: mysql:latest
+  #  restart: always
+  #  environment:
+  #    MYSQL_DATABASE: ${DB_NAME}
+  #    MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+  #    MYSQL_ALLOW_EMPTY_PASSWORD: 'no'
+  #  ports:
+  #    - 3307:${DB_PORT}
+  #  expose:
+  #    - ${DB_PORT}
+  #  networks:
+  #    - pma_networks
+  ## should change to phpmyadmin:5.0.0
+  #php-my-admin:
+  #  container_name: php-my-admin
+  #  image: phpmyadmin:5
+  #  restart: always
+  #  environment:
+  #    PMA_HOST: ${DB_HOST}
+  #    PMA_ARBITRARY: 1
+  #    PHP_UPLOAD_MAX_FILESIZE: 10M
+  #    PHP_POST_MAX_SIZE: 10M
+  #    UPLOAD_LIMIT: 64M
+  #  ports:
+  #    - 8081:80
+  #  depends_on:
+  #    - db_alfia
+  #  networks:
+  #    - pma_networks
 
   ## PROJECT BACKEND
-  luxora-cosmetics-backend:
-    container_name: luxora-cosmetics-backend
-    stdin_open: true
-    tty: true
-    command: sh -c "yarn start & yarn run studio"
+  #luxora-cosmetics-backend:
+  #  container_name: luxora-cosmetics-backend
+  #  stdin_open: true
+  #  tty: true
+  #  command: sh -c "yarn start & yarn run studio"
+  #  restart: always
+  #  build:
+  #    context: ./Backend
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - '${HTTP_PORT}:${HTTP_PORT}' # Port for Express.js server
+  #    - '${STUDIO_PORT}:${STUDIO_PORT}' # Port for Prisma Studio
+  #  depends_on:
+  #    - db_alfia
+  #  env_file:
+  #    - .env
+  #  networks:
+  #    - pma_networks
+
+  # PROJECT FRONTEND
+  luxora-cosmetics-frontend:
+    container_name: luxora-cosmetics-frontend
     restart: always
     build:
-      context: ./Backend
+      context: ./luxora_cosmetics_frontend
       dockerfile: Dockerfile
+      args:
+        - DART_VM_PRODUCT=true
     ports:
-      - '${HTTP_PORT}:${HTTP_PORT}' # Port for Express.js server
-      - '${STUDIO_PORT}:${STUDIO_PORT}' # Port for Prisma Studio
-    depends_on:
-      - db_alfia
-    env_file:
-      - .env
+      - '3003:80'
+    #  depends_on:
+    #    - librairie-alfia-backend
     networks:
       - pma_networks
 

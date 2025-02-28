@@ -101,7 +101,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
           svgIconPath: 'AppPaths.vectors.minusIcon',
           iconWidth: r.size(8),
           iconColor: widget.theme.accent,
-          backgroundColor: widget.theme.secondaryBackgroundColor,
+          backgroundColor: widget.theme.backgroundSecondary,
           enabled: widget.enabled,
           onDisabledStyle: CustomButtonStyle(
             iconColor: widget.theme.accent.withValues(alpha: 0.4),
@@ -129,7 +129,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
           border: Border.all(
               color: widget.theme.accent.withValues(alpha: 0.4),
               width: r.size(0.6)),
-          backgroundColor: widget.theme.secondaryBackgroundColor,
+          backgroundColor: widget.theme.backgroundSecondary,
           fontSize: r.size(8),
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,
@@ -150,7 +150,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
             iconColor: widget.theme.accent.withValues(alpha: 0.4),
           ),
           iconColor: widget.theme.accent,
-          backgroundColor: widget.theme.secondaryBackgroundColor,
+          backgroundColor: widget.theme.backgroundSecondary,
           border: Border.all(
               color: widget.theme.accent.withValues(alpha: 0.4),
               width: r.size(0.6)),

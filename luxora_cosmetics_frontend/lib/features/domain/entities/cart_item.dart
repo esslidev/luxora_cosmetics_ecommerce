@@ -1,9 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:floor/floor.dart';
 
-@Entity(tableName: 'cart_item')
 class CartItemEntity extends Equatable {
-  @PrimaryKey(autoGenerate: true)
   final int? id;
   final int? cartId;
   final int? productId;

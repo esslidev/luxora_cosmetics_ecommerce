@@ -163,7 +163,7 @@ class SignInOverlay {
         padding: r.all(4),
         backgroundColor: successMessage != null
             ? AppColors.light.primary.withValues(alpha: 0.4)
-            : AppColors.light.errorColor.withValues(alpha: 0.4),
+            : AppColors.light.error.withValues(alpha: 0.4),
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -197,7 +197,7 @@ class SignInOverlay {
               fontSize: r.size(10),
               fontWeight: FontWeight.normal,
               borderRadius: BorderRadius.all(Radius.circular(r.size(2))),
-              backgroundColor: AppColors.light.secondaryBackgroundColor,
+              backgroundColor: AppColors.light.backgroundSecondary,
               hintText: hint,
               obscureText: obscureText,
               padding: r.symmetric(horizontal: 8, vertical: 4),
@@ -221,7 +221,7 @@ class SignInOverlay {
         borderColorCallback: (value) {
           return value != ''
               ? !AppUtil.isEmailValid(value)
-                  ? AppColors.light.errorColor
+                  ? AppColors.light.error
                   : AppColors.light.primary
               : null;
         },
@@ -234,7 +234,7 @@ class SignInOverlay {
         borderColorCallback: (value) {
           return value != ''
               ? !AppUtil.isPasswordValid(value)
-                  ? AppColors.light.errorColor
+                  ? AppColors.light.error
                   : AppColors.light.primary
               : null;
         },
@@ -255,7 +255,7 @@ class SignInOverlay {
       fontWeight: FontWeight.bold,
       fontSize: r.size(10),
       backgroundColor: backgroundColor ?? AppColors.light.primary,
-      textColor: textColor ?? AppColors.colors.whiteWhitest,
+      textColor: textColor ?? AppColors.colors.white,
       padding: r.symmetric(vertical: 4, horizontal: 16),
       enabled: isEnabled,
       borderRadius: BorderRadius.all(Radius.circular(r.size(1))),
@@ -264,7 +264,7 @@ class SignInOverlay {
           backgroundColor: onHoverbackgroundColor ?? AppColors.light.secondary,
           textColor: onHoverTextColor),
       onDisabledStyle: CustomButtonStyle(
-          backgroundColor: AppColors.light.secondaryBackgroundColor,
+          backgroundColor: AppColors.light.backgroundSecondary,
           textColor: AppColors.light.accent.withValues(alpha: 0.3)),
       onPressed: (position, size) {
         onPressed();
@@ -292,8 +292,8 @@ class SignInOverlay {
                   isEnabled: _areInputsValid(),
                   backgroundColor: AppColors.light.primary,
                   onHoverbackgroundColor: AppColors.light.secondary,
-                  textColor: AppColors.colors.whiteWhitest,
-                  onHoverTextColor: AppColors.colors.whiteWhitest,
+                  textColor: AppColors.colors.white,
+                  onHoverTextColor: AppColors.colors.white,
                   onPressed: () {
                     RemoteEventsUtil.authEvents.signIn(
                         context,
@@ -333,7 +333,7 @@ class SignInOverlay {
         borderRadius: r.size(3),
         clipBehavior: Clip.hardEdge,
         gap: r.size(2),
-        backgroundColor: AppColors.light.secondaryBackgroundColor,
+        backgroundColor: AppColors.light.backgroundSecondary,
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
@@ -353,7 +353,7 @@ class SignInOverlay {
                             padding: r.symmetric(horizontal: 16, vertical: 22),
                             children: [
                               CustomDisplay(
-                                assetPath: AppPaths.vectors.logoIcon,
+                                assetPath: AppPaths.vectors.logo,
                                 isSvg: true,
                                 width: r.size(100),
                               ).animate().fadeIn(delay: 100.ms),

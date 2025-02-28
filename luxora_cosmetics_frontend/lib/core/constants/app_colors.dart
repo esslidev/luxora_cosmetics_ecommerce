@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static GlobalColors get colors => GlobalColors();
-  static LightTheme get light => LightTheme();
+  AppColors._(); // Private constructor to prevent instantiation
+
+  static final GlobalColors colors = GlobalColors();
+  static final LightTheme light = LightTheme();
 }
 
 class GlobalColors {
   // Global colors
   final Color white = const Color(0xFFFFFFFF);
-  final Color whiteWhitest = const Color(0xFFFAF7F5);
-  final Color greenSpearmintStick = const Color(0xFFE7F0E3);
-  final Color blackLostInSadness = const Color(0xFF19183A);
-  final Color brownGlazedPecan = const Color(0xFFCC9562);
-  final Color redFruit = const Color(0xFFF6866A);
-  final Color redSweetPimento = const Color(0xFFFF6944);
-  final Color yellowVanillaPudding = const Color(0xFFF6E66A);
-  final Color greenSageSensation = const Color(0xFFB0E997);
+  final Color whitest = const Color(0xFFFAF7F5);
+  final Color spearmint = const Color(0xFFE7F0E3);
+  final Color snowGreen = const Color(0xFFC7D8C0);
+  final Color jetGrey = const Color(0xFF565655);
+  final Color lostInSadness = const Color(0xFF19183A);
+  final Color pecanBrown = const Color(0xFFCC9562);
+  final Color fruitRed = const Color(0xFFF6866A);
+  final Color pimentoRed = const Color(0xFFFF6944);
+  final Color peachOfMind = const Color(0xFFFFE2B3);
+  final Color hotPepperGreen = const Color(0xFF8FB17F);
 }
 
 abstract class BaseTheme {
@@ -23,30 +27,30 @@ abstract class BaseTheme {
   Color get subtle;
   Color get primary;
   Color get secondary;
-  Color get primaryBackgroundColor;
-  Color get secondaryBackgroundColor;
-  Color get successColor;
-  Color get warningColor;
-  Color get errorColor;
+  Color get backgroundPrimary;
+  Color get backgroundSecondary;
+  Color get success;
+  Color get warning;
+  Color get error;
 }
 
 class LightTheme extends BaseTheme {
   @override
-  final Color accent = AppColors.colors.blackLostInSadness;
+  final Color accent = AppColors.colors.lostInSadness;
   @override
   final Color subtle = AppColors.colors.white;
   @override
-  final Color primary = AppColors.colors.brownGlazedPecan;
+  final Color primary = AppColors.colors.pecanBrown;
   @override
-  final Color secondary = AppColors.colors.redFruit;
+  final Color secondary = AppColors.colors.fruitRed;
   @override
-  final Color primaryBackgroundColor = AppColors.colors.whiteWhitest;
+  final Color backgroundPrimary = AppColors.colors.whitest;
   @override
-  final Color secondaryBackgroundColor = AppColors.colors.greenSpearmintStick;
+  final Color backgroundSecondary = AppColors.colors.spearmint;
   @override
-  final Color successColor = AppColors.colors.greenSageSensation;
+  final Color success = AppColors.colors.hotPepperGreen;
   @override
-  final Color warningColor = AppColors.colors.yellowVanillaPudding;
+  final Color warning = AppColors.colors.peachOfMind;
   @override
-  final Color errorColor = AppColors.colors.redSweetPimento;
+  final Color error = AppColors.colors.pimentoRed;
 }

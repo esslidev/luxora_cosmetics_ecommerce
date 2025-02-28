@@ -48,7 +48,7 @@ class _BaseScreenState extends State<BaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.light.primaryBackgroundColor,
+      backgroundColor: AppColors.light.backgroundPrimary,
       body: _buildHome(context),
     );
   }

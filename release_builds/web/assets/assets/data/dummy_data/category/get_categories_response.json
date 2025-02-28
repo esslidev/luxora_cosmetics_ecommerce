@@ -1,0 +1,74 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "categoryNumber": 100,
+            "parentId": null,
+            "translations": [
+                {
+                    "languageCode": "fr",
+                    "name": "Livre en français"
+                },
+                {
+                    "languageCode": "ar",
+                    "name": "كتب باللغة الفرنسية"
+                },
+                {
+                    "languageCode": "de",
+                    "name": "Bücher auf Französisch"
+                },
+                {
+                    "languageCode": "en",
+                    "name": "French Books"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "categoryNumber": 102,
+            "parentId": null,
+            "translations": [
+                {
+                    "languageCode": "en",
+                    "name": "English Books"
+                },
+                {
+                    "languageCode": "fr",
+                    "name": "Livres en anglais"
+                },
+                {
+                    "languageCode": "de",
+                    "name": "Bücher auf Englisch"
+                },
+                {
+                    "languageCode": "ar",
+                    "name": "كتب باللغة الإنجليزية"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "categoryNumber": 103,
+            "parentId": null,
+            "translations": [
+                {
+                    "languageCode": "en",
+                    "name": "Stationery & Supplies"
+                },
+                {
+                    "languageCode": "fr",
+                    "name": "Papeteries & Fournitures"
+                },
+                {
+                    "languageCode": "de",
+                    "name": "Schreibwaren & Bürobedarf"
+                },
+                {
+                    "languageCode": "ar",
+                    "name": "أدوات مكتبية ولوازم"
+                }
+            ]
+        }
+    ],
+    "status": "Success"
+}

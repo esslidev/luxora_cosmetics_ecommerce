@@ -37,12 +37,9 @@ class RatingStars extends StatelessWidget {
           width: starSize ?? r.size(10),
           height: starSize ?? r.size(10),
           svgColor: (rating >= index + 1)
-              ? AppColors.colors.yellowVanillaPudding
+              ? AppColors.colors.peachOfMind
               : AppColors.light.accent.withValues(alpha: 0.15),
-          cursor: isInteractive && onRatingUpdate != null
-              ? SystemMouseCursors.click
-              : SystemMouseCursors.basic,
-          onTap: isInteractive && onRatingUpdate != null
+          onPressed: isInteractive && onRatingUpdate != null
               ? () => onRatingUpdate!(index + 1.0)
               : null,
         ),
@@ -54,7 +51,7 @@ class RatingStars extends StatelessWidget {
             width: starSize != null ? (starSize! / 2) : r.size(5),
             height: starSize ?? r.size(10),
             svgColor: (rating > index && rating < index + 1)
-                ? AppColors.colors.yellowVanillaPudding
+                ? AppColors.colors.peachOfMind
                 : AppColors.light.accent.withValues(alpha: 0.1),
           ),
         ),
@@ -65,7 +62,7 @@ class RatingStars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ResponsiveSizeAdapter r = ResponsiveSizeAdapter(context);
-    final Color starColor = AppColors.colors.yellowVanillaPudding;
+    final Color starColor = AppColors.colors.peachOfMind;
 
     return CustomField(
       mainAxisSize: MainAxisSize.min,

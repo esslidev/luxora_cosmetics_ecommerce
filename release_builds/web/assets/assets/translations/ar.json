@@ -1,0 +1,390 @@
+{
+  "global": {
+    "appName": "مكتبة ألفية",
+    "showMore": "عرض المزيد",
+    "showLess": "عرض أقل",
+    "clearAll": "مسح الكل",
+    "loading": "جارٍ التحميل",
+    "continue": "متابعة",
+    "create": "إنشاء",
+    "cancel": "إلغاء",
+    "saveChanges": "حفظ التغييرات",
+    "cancelChanges": "إلغاء التغييرات",
+    "or": "أو",
+    "currencies": {
+      "usDollar": {
+        "name": "دولار أمريكي",
+        "code": "USD",
+        "symbol": "$"
+      },
+      "euro": {
+        "name": "يورو",
+        "code": "EUR",
+        "symbol": "€"
+      },
+      "moroccanDirham": {
+        "name": "درهم مغربي",
+        "code": "MAD",
+        "symbol": "د.م"
+      }
+    },
+    "units": {
+      "kg": "كغ",
+      "cm": "سم",
+      "pages": "صفحات"
+    },
+    "bookTerms": {
+      "isbn": "ردمك-13",
+      "format": "التنسيق",
+      "author": "المؤلف",
+      "editor": "المحرر",
+      "publicationDate": "تاريخ النشر",
+      "pagesNumber": "عدد الصفحات",
+      "weight": "الوزن",
+      "dimensions": "الأبعاد",
+      "bookFormats": {
+        "standard": "قياسي",
+        "compact": "مضغوط",
+        "grand": "كبير",
+        "paperback": "غلاف ورقي",
+        "hardcover": "غلاف صلب",
+        "ebook": "كتاب إلكتروني",
+        "audio": "صوتي",
+        "unknown": "صيغة غير معروفة"
+      }
+    },
+    "authentication": {
+      "fullName": "الاسم الكامل",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف",
+      "address": "العنوان",
+      "addressOptional": "العنوان (اختياري)",
+      "zipCode": "الرمز البريدي",
+      "city": "المدينة",
+      "password": "كلمة المرور",
+      "passwordHint": "أدخل كلمة المرور الخاصة بك",
+      "newPassword": "كلمة المرور الجديدة",
+      "newPasswordHint": "أدخل كلمة المرور الجديدة",
+      "recentPassword": "كلمة المرور الحالية",
+      "recentPasswordHint": "أدخل كلمة المرور الحالية",
+      "passwordConfirm": "تأكيد كلمة المرور",
+      "passwordConfirmHint": "أدخل تأكيد كلمة المرور",
+      "forgotPassword": "هل نسيت كلمة المرور؟",
+      "privacyNotice": "بإنشاء حساب، فإنك توافق على سياسة الخصوصية وشروط وأحكام البيع الخاصة بـ مكتبة ألفيا.",
+      "login": "تسجيل الدخول",
+      "resetPassword": "إعادة تعيين كلمة المرور",
+      "resendRequest": "إعادة إرسال الطلب",
+      "existingAccount": "تسجيل الدخول إلى حسابي",
+      "createNewAccount": "إنشاء حساب جديد"
+    },
+    "notifications": {
+      "default": {
+        "successTitle": "تم إكمال العملية",
+        "successMessage": "تمت العملية بنجاح.",
+        "warningTitle": "يتطلب الحذر",
+        "warningMessage": "يبدو أن هناك مشكلة. يرجى التحقق والمتابعة بحذر.",
+        "errorTitle": "حدث خطأ",
+        "errorMessage": "حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقًا."
+      },
+      "wishlist": {
+        "title": "تمت الإضافة إلى قائمة الرغبات بنجاح",
+        "message": "يمكنك العثور على هذا العنصر في قائمة الرغبات الخاصة بك."
+      },
+      "cart": {
+        "title": "تمت الإضافة إلى سلة التسوق بنجاح",
+        "message": "يمكنك العثور على هذا العنصر في سلة التسوق الخاصة بك."
+      },
+      "accountCreated": {
+        "title": "تم إنشاء الحساب بنجاح",
+        "message": "تم إنشاء حسابك بنجاح. مرحبًا!"
+      },
+      "SignedIn": {
+        "title": "تم تسجيل الدخول بنجاح",
+        "message": "لقد قمت بتسجيل الدخول بنجاح إلى حسابك!"
+      },
+      "signedOut": {
+        "title": "تم تسجيل الخروج بنجاح",
+        "message": "لقد تم تسجيل خروجك من حسابك. إلى اللقاء قريبًا!"
+      },
+      "requestResetPassword": {
+        "title": "طلب إعادة تعيين كلمة المرور",
+        "message": "لقد أرسلنا إليك بريدًا إلكترونيًا يحتوي على تعليمات لإعادة تعيين كلمة المرور. يرجى التحقق من بريدك الوارد."
+      },
+      "passwordReseted": {
+        "title": "تم إعادة تعيين كلمة المرور بنجاح",
+        "message": "تم إعادة تعيين كلمة المرور الخاصة بك بنجاح. يمكنك الآن تسجيل الدخول باستخدام كلمة المرور الجديدة."
+      },
+      "userDataUpdated": {
+        "title": "تم تحديث بيانات المستخدم",
+        "message": "تم تحديث معلومات حسابك بنجاح."
+      },
+      "userPasswordUpdated": {
+        "title": "تم تحديث كلمة المرور",
+        "message": "تم تحديث كلمة المرور الخاصة بك بنجاح."
+      }
+    }
+  },
+
+  "widgets": {
+    "showcase": {
+      "emptyShowcase": "لم يتم العثور على صورة. يرجى إضافة صورة واحدة على الأقل للمعاينة."
+    },
+    "productSlider": {
+      "seeAll": "عرض الكل"
+    },
+    "product": {
+      "noCover": "غلاف الكتاب غير موجود",
+      "offerBadge": {
+        "megaSale": "تخفيض كبير",
+        "bigSale": "عرض خاص",
+        "hotDeal": "خصم مهم",
+        "saveNow": "وفر الآن",
+        "discount": "خصم",
+        "newArrivals": "جديد",
+        "bestSellers": "الأكثر مبيعًا"
+      }
+    }
+  },
+  "screens": {
+    "names": {
+      "aboutUs": "معلومات عنا",
+      "blog": "مدونة",
+      "termsAndPolicies": "الشروط والسياسات"
+    },
+    "home": {
+      "headerTape": {
+        "welcome": "مرحبًا بكم في مكتبة ألفية - مكتبتكم الرقمية"
+      },
+      "header": {
+        "searchbar": {
+          "advancedButtonText": "بحث متقدم",
+          "advancedOverlay": {
+            "title": "بحث متقدم",
+            "searchCriteria": "معايير البحث:",
+            "authorName": "المؤلف:",
+            "authorHint": "أدخل اسم المؤلف",
+            "titleName": "العنوان:",
+            "titleHint": "أدخل العنوان",
+            "categoryName": "الفئة:",
+            "categoryHint": "اختر فئة",
+            "editorName": "الناشر:",
+            "editorHint": "أدخل اسم الناشر",
+            "publicationDateName": "تاريخ النشر:",
+            "publicationDateHint": "أدخل تاريخ النشر",
+            "startSearch": "ابدأ البحث"
+          },
+          "resultOverlay": {
+            "title": "نتيجة البحث",
+            "NoResult": "لا توجد نتائج متوفرة",
+            "seeAllResult": "عرض جميع النتائج"
+          },
+          "hintText": "ابحث عن مقال، مؤلف، مجموعة..."
+        },
+        "wishlist": {
+          "title": "قائمة الرغبات",
+          "empty": "قائمة الرغبات فارغة",
+          "error": "حدث خطأ أثناء تحميل بيانات قائمة الرغبات",
+          "addToCart": "أضف إلى السلة",
+          "addAllToCart": "إضافة الكل إلى العربة"
+        },
+        "cart": {
+          "title": "عربة التسوق",
+          "empty": "عربة التسوق فارغة",
+          "error": "حدث خطأ أثناء تحميل بيانات عربة التسوق",
+          "checkoutAll": "إتمام الدفع"
+        },
+        "wishlistCart": {
+          "outOfStock": "غير متوفر في الوقت الحالي.",
+          "purchase": "اشتر الآن"
+        },
+        "magasinLocations": {
+          "title": "مواقع مكتباتنا"
+        },
+        "profile": {
+          "signIn": "تسجيل الدخول",
+          "createAccount": "إنشاء حساب",
+          "signOut": "تسجيل الخروج",
+          "admin": "المسؤول",
+          "editProfile": "تعديل الملف الشخصي",
+          "orderHistory": "سجل الطلبات",
+          "showcaseManagement": "إدارة العرض",
+          "postManagement": "إدارة المنشورات"
+        }
+      },
+      "liteNotifications": {
+        "title": "الإشعارات"
+      },
+      "navigator": {
+        "frenchBooks": "Livre en français",
+        "arabicBooks": "كتب بالعربية",
+        "englishBooks": "English Books",
+        "stationerySupplies": "القرطاسية واللوازم",
+        "luggageAccessories": "الأمتعة والإكسسوارات",
+        "artBooks": "كتب فنية"
+      },
+      "serviceHighlights": {
+        "securedPayment": "دفع آمن",
+        "adviceOrderTracking": "نصيحة وتتبع الطلبات",
+        "fastDelivery": "تسليم سريع"
+      },
+      "socialNewsLetter": {
+        "followUs": "ابق على اتصال معنا",
+        "subscribe": "اشترك",
+        "enterEmailHint": "أدخل عنوان بريدك الإلكتروني هنا..",
+        "signUp": "التسجيل"
+      },
+      "quickLinks": {
+        "information": {
+          "title": "معلومات",
+          "whoWeAre": "من نحن؟",
+          "deliveryInformation": "معلومات التوصيل",
+          "privacyPolicy": "سياسة الخصوصية",
+          "salesTerms": "شروط وأحكام البيع",
+          "contactUs": "اتصل بنا",
+          "siteMap": "خريطة الموقع",
+          "newsletter": "النشرة الإخبارية"
+        },
+        "extras": {
+          "title": "المزايا",
+          "author": "المؤلف",
+          "giftVouchers": "قسائم هدايا",
+          "affiliations": "الانتماءات",
+          "promotions": "العروض الترويجية",
+          "returnPolicy": "سياسة الإرجاع",
+          "orderHistory": "تاريخ الطلبات",
+          "wishlist": "قائمة الأمنيات"
+        }
+      },
+      "footer": {
+        "paymentMode": "طريقة الدفع",
+        "allRights": "جميع الحقوق محفوظة. © 2024 ألفيا للمكتبات."
+      }
+    },
+    "explore": {
+      "productSliderNames": {
+        "newArrivals": "الإصدارات الجديدة",
+        "booksReferences": "كتب/مراجع",
+        "BestsellersLiterature": "الأكثر مبيعًا في الأدب",
+        "BestsellersEssays": "الأكثر مبيعًا في المقالات",
+        "BestsellersHealth": "الأكثر مبيعًا في الصحة"
+      },
+      "topProducts": {
+        "title": "أعلى 100 مبيعًا"
+      },
+      "authorOfMonth": {
+        "title": "كاتب الشهر"
+      },
+      "recentBlogs": {
+        "title1": "التدوينات ",
+        "title2": "الأخيرة",
+        "readMore": "اقرأ المزيد"
+      },
+      "toTopPage": {
+        "topPage": "أعلى الصفحة"
+      }
+    },
+    "boutique": {
+      "boutiqueName": "متجر",
+      "subCategoryList": {
+        "sections": "الأقسام"
+      },
+      "controller": {
+        "showing": "عرض",
+        "of": "من",
+        "results": "النتائج",
+        "pages": "الصفحات",
+        "pageLimit": "حد الصفحة",
+        "sortBy": "ترتيب حسب",
+        "sortings": {
+          "default": "افتراضي",
+          "newArrivals": "وصل حديثاً",
+          "bestSeller": "الأكثر مبيعاً",
+          "priceLowest": "السعر من الأدنى إلى الأعلى",
+          "priceHighest": "السعر من الأعلى إلى الأدنى",
+          "nameAsc": "الاسم تصاعدي (أ إلى ي)",
+          "nameDesc": "الاسم تنازلي (ي إلى أ)",
+          "unknown": "ترتيب غير معروف"
+        }
+      }
+    },
+    "bookOverview": {
+      "noTitle": "لم يتم توفير العنوان",
+      "noAuthor": "مؤلف مجهول",
+      "noEditor": "محرر مجهول",
+      "noDescription": "وصف الكتاب غير متوفر حالياً.",
+      "reviews": "التعليقات",
+      "formats": "الصيغ",
+      "stock": {
+        "available": "متوفر الآن في المخزون.",
+        "limited": "مخزون محدود – اطلب قريباً!",
+        "outOfStock": "غير متوفر حالياً – سيتوفر قريباً!"
+      },
+      "delivery": {
+        "unavailable": "معلومات تاريخ التسليم غير متوفرة حالياً.",
+        "available1": "يتم التسليم بين",
+        "available2": "و"
+      },
+      "actionButtons": {
+        "purchase": "اشترِ الآن",
+        "pickUp": "الاستلام من المتجر"
+      },
+      "sectionsSelector": {
+        "aboutBook": "حول الكتاب",
+        "specifications": "المواصفات",
+        "bookReviews": "مراجعات الكتاب"
+      },
+      "sliderTitles": {
+        "sameCategory": "بنفس الفئة",
+        "suggestedBooks": "كتب مقترحة"
+      }
+    },
+    "checkout": {
+      "title": "إتمام الشراء",
+      "confirmPayment": "تأكيد الدفع",
+      "subTitle": "راجع العناصر الخاصة بك وأكمل عملية الشراء هنا.",
+      "itemsList": {
+        "title": "قائمة العناصر"
+      },
+      "shippingDetails": {
+        "title": "تفاصيل الشحن"
+      },
+      "deliveryOptions": {
+        "title": "خيارات التوصيل",
+        "deliveredText1": "سيتم التوصيل خلال حوالي",
+        "deliveredText2": "أيام.",
+        "pickupInMagasins": "الاستلام من متاجر مكتبة ألفيا",
+        "magasinsLocationsTitle": "مواقع المتاجر"
+      },
+      "paymentOptions": {
+        "title": "خيارات الدفع",
+        "payOnline": "الدفع عبر الإنترنت بأمان مع",
+        "payOnDelivery": "الدفع عند الاستلام",
+        "payAtMagasin": "الدفع في المتجر"
+      },
+      "orderSummary": {
+        "title": "ملخص الطلب",
+        "deliveryTax": {
+          "totalExc": "الإجمالي (بدون الضرائب والتوصيل)",
+          "delivery": "التوصيل",
+          "tax": "الضريبة"
+        },
+        "totalText": "إجمالي الطلب الخاص بك"
+      }
+    },
+    "editProfile": {
+      "editProfileTitle": "تعديل الملف الشخصي",
+      "editProfileSubTitle": "يمكنك تعديل معلوماتك الشخصية هنا.",
+      "shippingTitle": "معلومات الشحن",
+      "shippingSubTitle": "قم بتحديث عنوان التوصيل وبيانات الاتصال الخاصة بك.",
+      "changePasswordTitle": "تغيير كلمة المرور",
+      "changePasswordSubTitle": "قم بتحديث كلمة مرور حسابك للحفاظ على أمانه."
+    },
+    "resetPassword": {
+      "resetPasswordTitle": "إعادة تعيين كلمة المرور",
+      "resetPasswordSubTitle": "يمكنك إعادة تعيين كلمة المرور المنسية هنا.",
+      "saveButton": "إعادة تعيين كلمة المرور"
+    }
+  }
+}

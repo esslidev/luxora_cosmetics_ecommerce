@@ -1,0 +1,6 @@
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInVzZXJSb2xlIjoidXNlciIsImlzVmVyaWZpZWQiOmZhbHNlLCJpYXQiOjE3MzAzMTgxNTAsImV4cCI6MTczMDMxOTk1MH0.69xiXbsb-xG6QPaiQ05ugq-kal5lSS6zci5ak-sufwo",
+    "renewToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInVzZXJSb2xlIjoidXNlciIsImlzVmVyaWZpZWQiOmZhbHNlLCJpYXQiOjE3MzAzMTgxNTAsImV4cCI6MTczMDQwNDU1MH0.Br747Yh7h0XKfOdzjMHGwJzae36m5StFNKE0D1UXg5E",
+    "isAdmin": false,
+    "status": "Success"
+}

@@ -1,9 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:floor/floor.dart';
 
-@Entity(tableName: 'wishlist_item')
 class WishlistItemEntity extends Equatable {
-  @PrimaryKey(autoGenerate: true)
   final int? id;
   final int? wishlistId;
   final int? productId;

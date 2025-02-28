@@ -102,7 +102,7 @@ class DatePickerOverlay {
       borderRadius: r.size(3),
       clipBehavior: Clip.hardEdge,
       gap: r.size(4),
-      backgroundColor: theme.secondaryBackgroundColor,
+      backgroundColor: theme.backgroundSecondary,
       mainAxisSize: MainAxisSize.min,
       children: [
         SfDateRangePicker(

@@ -20,10 +20,6 @@ dependencies:
   dio: ^5.7.0
   # Simplifies equality comparisons
   equatable: ^2.0.5
-  # SQLite-based local database
-  floor: ^1.5.0
-  sqflite: ^2.4.1
-  sqflite_common_ffi_web: ^0.4.5+4
   # Enables complex animations
   flutter_animate: ^4.5.0
   # State management using the Bloc pattern
@@ -77,8 +73,6 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   # Generates code from annotations (e.g., for JSON serialization)
   build_runner: ^2.4.9
-  # Code generator for Floor ORM
-  floor_generator: ^1.5.0
   # Generates app launcher icons
   flutter_launcher_icons: ^0.13.1
   # Code generator for JSON serialization
@@ -92,10 +86,9 @@ flutter:
     - assets/files/lottie/
     - assets/vectors/
     - assets/images/
+    - assets/animated_images/
     - assets/icons/
     - assets/translations/
-    - assets/data/
-    - assets/data/local_data/
   fonts:
     - family: recoleta
       fonts:
@@ -129,5 +122,49 @@ flutter:
           weight: 700
         - asset: assets/fonts/recoleta_alt/recoleta-alt-black.otf
           weight: 900
+    - family: inter
+      fonts:
+        - asset: assets/fonts/inter/inter-thin.ttf
+          weight: 100
+        - asset: assets/fonts/inter/inter-thinitalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/inter/inter-extralight.ttf
+          weight: 200
+        - asset: assets/fonts/inter/inter-extralightitalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonts/inter/inter-light.ttf
+          weight: 300
+        - asset: assets/fonts/inter/inter-lightitalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/inter/inter-regular.ttf
+          weight: 400
+        - asset: assets/fonts/inter/inter-medium.ttf
+          weight: 500
+        - asset: assets/fonts/inter/inter-mediumitalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/inter/inter-semibold.ttf
+          weight: 600
+        - asset: assets/fonts/inter/inter-semibolditalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/inter/inter-bold.ttf
+          weight: 700
+        - asset: assets/fonts/inter/inter-bolditalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/inter/inter-extrabold.ttf
+          weight: 800
+        - asset: assets/fonts/inter/inter-extrabolditalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/inter/inter-black.ttf
+          weight: 900
+        - asset: assets/fonts/inter/inter-blackitalic.ttf
+          weight: 900
+          style: italic
 
   uses-material-design: true

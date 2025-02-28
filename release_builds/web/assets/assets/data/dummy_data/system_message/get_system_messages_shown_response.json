@@ -1,0 +1,57 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "isPublic": true,
+            "startDate": null,
+            "endDate": null,
+            "translations": [
+                {
+                    "languageCode": "en",
+                    "message": "Discover captivating stories and insightful knowledge. Find your next favorite read today!"
+                },
+                {
+                    "languageCode": "fr",
+                    "message": "Découvrez des histoires captivantes et des connaissances enrichissantes. Trouvez votre prochaine lecture favorite dès aujourd'hui !"
+                },
+                {
+                    "languageCode": "de",
+                    "message": "Finden Sie fesselnde Geschichten und wertvolles Wissen. Suchen Sie sich noch heute Ihr nächstes Lieblingsbuch aus!"
+                },
+                {
+                    "languageCode": "ar",
+                    "message": "اكتشف قصصًا مثيرة ومعرفة ملهمة. ابحث عن قراءتك المفضلة اليوم!"
+                }
+            ],
+            "createdAt": "2024-10-30T18:46:54.360Z",
+            "updatedAt": "2024-10-30T18:46:54.360Z"
+        },
+        {
+            "id": 2,
+            "isPublic": true,
+            "startDate": null,
+            "endDate": null,
+            "translations": [
+    {
+        "languageCode": "en",
+        "message": "Discover captivating stories and exclusive discounts on select titles. Shop now and fuel your love for reading!"
+    },
+    {
+        "languageCode": "fr",
+        "message": "Découvrez des histoires captivantes et des réductions exclusives sur certains titres. Achetez maintenant et nourrissez votre passion pour la lecture !"
+    },
+    {
+        "languageCode": "de",
+        "message": "Entdecken Sie fesselnde Geschichten und exklusive Rabatte auf ausgewählte Titel. Kaufen Sie jetzt ein und entfachen Sie Ihre Leidenschaft fürs Lesen!"
+    },
+    {
+        "languageCode": "ar",
+        "message": "اكتشف قصصًا مثيرة وخصومات حصرية على بعض العناوين. تسوق الآن وأشعل شغفك بالقراءة!"
+    }
+],
+            "createdAt": "2024-10-30T18:46:58.327Z",
+            "updatedAt": "2024-10-30T18:46:58.327Z"
+        }
+    ],
+    "status": "Success"
+}

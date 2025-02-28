@@ -266,7 +266,7 @@ class CreateAccountOverlay {
         width: double.infinity,
         borderRadius: r.size(1),
         padding: r.all(4),
-        backgroundColor: AppColors.light.errorColor.withValues(alpha: 0.4),
+        backgroundColor: AppColors.light.error.withValues(alpha: 0.4),
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -300,7 +300,7 @@ class CreateAccountOverlay {
               fontSize: r.size(10),
               fontWeight: FontWeight.normal,
               borderRadius: BorderRadius.all(Radius.circular(r.size(2))),
-              backgroundColor: AppColors.light.secondaryBackgroundColor,
+              backgroundColor: AppColors.light.backgroundSecondary,
               hintText: hint,
               obscureText: obscureText,
               padding: r.symmetric(horizontal: 8, vertical: 4),
@@ -341,7 +341,7 @@ class CreateAccountOverlay {
                     borderColorCallback: (value) {
                       return value != ''
                           ? !AppUtil.isPasswordValid(value)
-                              ? AppColors.light.errorColor
+                              ? AppColors.light.error
                               : AppColors.light.primary
                           : null;
                     },
@@ -355,7 +355,7 @@ class CreateAccountOverlay {
                   borderColorCallback: (value) {
                     return value != ''
                         ? value != passwordValue.text
-                            ? AppColors.light.errorColor
+                            ? AppColors.light.error
                             : AppColors.light.primary
                         : null;
                   },
@@ -398,7 +398,7 @@ class CreateAccountOverlay {
           borderColorCallback: (value) {
             return value != ''
                 ? !AppUtil.isPhoneNumberValid(value)
-                    ? AppColors.light.errorColor
+                    ? AppColors.light.error
                     : AppColors.light.primary
                 : null;
           },
@@ -433,7 +433,7 @@ class CreateAccountOverlay {
                     borderColorCallback: (value) {
                       return value != ''
                           ? !_cities.containsValue(value)
-                              ? AppColors.light.errorColor
+                              ? AppColors.light.error
                               : AppColors.light.primary
                           : null;
                     },
@@ -446,7 +446,7 @@ class CreateAccountOverlay {
                             _moroccanCitiesDropdown.show(
                                 layerLink: _moroccanCitiesDropdownLayerLink,
                                 backgroundColor:
-                                    AppColors.light.secondaryBackgroundColor,
+                                    AppColors.light.backgroundSecondary,
                                 borderColor: AppColors.light.accent
                                     .withValues(alpha: 0.4),
                                 shadowColor: AppColors.light.accent
@@ -490,7 +490,7 @@ class CreateAccountOverlay {
           borderColorCallback: (value) {
             return value != ''
                 ? !AppUtil.isEmailValid(value)
-                    ? AppColors.light.errorColor
+                    ? AppColors.light.error
                     : AppColors.light.primary
                 : null;
           },
@@ -513,7 +513,7 @@ class CreateAccountOverlay {
       fontWeight: FontWeight.bold,
       fontSize: r.size(10),
       backgroundColor: backgroundColor ?? AppColors.light.primary,
-      textColor: textColor ?? AppColors.colors.whiteWhitest,
+      textColor: textColor ?? AppColors.colors.white,
       padding: r.symmetric(vertical: 4, horizontal: 16),
       enabled: isEnabled,
       borderRadius: BorderRadius.all(Radius.circular(r.size(1))),
@@ -522,7 +522,7 @@ class CreateAccountOverlay {
           backgroundColor: onHoverbackgroundColor ?? AppColors.light.secondary,
           textColor: onHoverTextColor),
       onDisabledStyle: CustomButtonStyle(
-          backgroundColor: AppColors.light.secondaryBackgroundColor,
+          backgroundColor: AppColors.light.backgroundSecondary,
           textColor: AppColors.light.accent.withValues(alpha: 0.3)),
       onPressed: (position, size) {
         onPressed();
@@ -594,10 +594,10 @@ class CreateAccountOverlay {
                                                       AppColors.light.primary,
                                                   onHoverbackgroundColor:
                                                       AppColors.light.secondary,
-                                                  textColor: AppColors
-                                                      .colors.whiteWhitest,
-                                                  onHoverTextColor: AppColors
-                                                      .colors.whiteWhitest,
+                                                  textColor:
+                                                      AppColors.colors.white,
+                                                  onHoverTextColor:
+                                                      AppColors.colors.white,
                                                   onPressed: () {
                                                     RemoteEventsUtil.authEvents
                                                         .signUp(
@@ -679,7 +679,7 @@ class CreateAccountOverlay {
         borderRadius: r.size(3),
         clipBehavior: Clip.hardEdge,
         gap: r.size(2),
-        backgroundColor: AppColors.light.secondaryBackgroundColor,
+        backgroundColor: AppColors.light.backgroundSecondary,
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
@@ -705,7 +705,7 @@ class CreateAccountOverlay {
                           padding: r.all(16),
                           children: [
                             CustomDisplay(
-                              assetPath: AppPaths.vectors.logoIcon,
+                              assetPath: AppPaths.vectors.logo,
                               isSvg: true,
                               width: r.size(100),
                             ).animate().fadeIn(delay: 100.ms),

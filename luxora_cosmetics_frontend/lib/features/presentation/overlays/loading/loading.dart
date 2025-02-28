@@ -80,7 +80,7 @@ class LoadingOverlay {
       borderRadius: r.size(5),
       clipBehavior: Clip.hardEdge,
       gap: r.size(2),
-      backgroundColor: AppColors.light.secondaryBackgroundColor,
+      backgroundColor: AppColors.light.backgroundSecondary,
       children: [
         /* Container(
           color: theme.primary.withValues(alpha: 0.6),

@@ -1,4 +1,4 @@
-import 'dart:io';
+/*import 'dart:io';
 import 'package:dio/dio.dart';
 
 import '../../../core/constants/shared_preference_keys.dart';
@@ -8,8 +8,6 @@ import '../../../core/util/api_util.dart';
 import '../../../core/util/prefs_util.dart';
 import '../../domain/entities/cart.dart';
 import '../../domain/repository/cart.dart';
-import '../data_sources/local/cart_local_data_source.dart';
-import '../data_sources/local/daos/cart_dao.dart';
 import '../data_sources/remote/auth_api_service.dart';
 import '../data_sources/remote/cart_api_service.dart';
 import '../models/cart_item.dart';
@@ -17,15 +15,12 @@ import '../models/cart_item.dart';
 class CartRepositoryImpl implements CartRepository {
   final AuthApiService _authApiService;
   final CartApiService _cartApiService;
-  final CartDao _cartDao;
 
-  CartRepositoryImpl(this._authApiService, this._cartApiService, this._cartDao);
+  CartRepositoryImpl(this._authApiService, this._cartApiService);
 
-  @override
+   @override
   Future<DataState<CartEntity>> syncCart() async {
     try {
-      final localData = await CartLocalDataSource(_cartDao).getCart();
-      List<CartItemModel> cartItems = localData.data?.items ?? [];
       final httpResponse = await ApiUtil.autoAccessRenewal(
         _authApiService,
         () => _cartApiService.syncCart(
@@ -71,8 +66,7 @@ class CartRepositoryImpl implements CartRepository {
           ));
         }
       } else {
-        final localData = await CartLocalDataSource(_cartDao).getCart();
-        return DataSuccess(data: localData.data);
+        
       }
     } on DioException catch (e) {
       return DataFailed(e);
@@ -247,3 +241,4 @@ class CartRepositoryImpl implements CartRepository {
     }
   }
 }
+*/

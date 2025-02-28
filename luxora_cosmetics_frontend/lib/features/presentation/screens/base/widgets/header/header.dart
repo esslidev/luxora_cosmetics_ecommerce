@@ -1,5 +1,6 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:luxora_cosmetics_frontend/core/constants/app_colors.dart';
 import 'package:luxora_cosmetics_frontend/features/presentation/widgets/common/custom_field.dart';
 
@@ -21,9 +22,13 @@ import '../../../../widgets/common/custom_text.dart';
 
 class HeaderWidget extends StatefulWidget {
   final List<WishlistItemModel> wishlistItems;
+  final bool isUserSignedIn;
   final List<CartItemModel> cartItems;
   const HeaderWidget(
-      {super.key, required this.wishlistItems, required this.cartItems});
+      {super.key,
+      required this.wishlistItems,
+      this.isUserSignedIn = false,
+      required this.cartItems});
 
   @override
   State<HeaderWidget> createState() => _HeaderWidgetState();
@@ -34,14 +39,14 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   late BuildContext? homeContext;
 
   final LayerLink _wishlistDropdownLayerLink = LayerLink();
-  final LayerLink _userDropdownLayerLink = LayerLink();
+  final LayerLink _profileDropdownLayerLink = LayerLink();
   final LayerLink _cartDropdownLayerLink = LayerLink();
 
   late SignInOverlay _signInOverlay;
   late CreateAccountOverlay _createAccountOverlay;
 
   late DropdownOverlay _wishlistDropdown;
-  late DropdownOverlay _userDropdown;
+  late DropdownOverlay _profileDropdown;
   late DropdownOverlay _cartDropdown;
 
   @override
@@ -65,7 +70,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       );
 
       _wishlistDropdown = _buildActionButtonsDropdown();
-      _userDropdown = _buildActionButtonsDropdown();
+      _profileDropdown = _buildActionButtonsDropdown();
       _cartDropdown = _buildActionButtonsDropdown();
     });
   }
@@ -87,73 +92,177 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
   Widget _buildLogoButton({double? height}) {
     return CustomDisplay(
-      assetPath: AppPaths.vectors.closeIcon,
-      isSvg: true,
-      height: height ?? r.size(42),
-      onTap: () {
+      assetPath: AppPaths.images.logo,
+      height: height ?? r.size(32),
+      onPressed: () {
         Beamer.of(context).beamToNamed(
           AppPaths.routes.homePageScreen,
         );
       },
-      cursor: SystemMouseCursors.click,
+    );
+  }
+
+  Widget _buildNavButton({required String name, required String path}) {
+    return CustomButton(
+      text: name,
+      fontSize: r.size(9),
+      fontWeight: FontWeight.w500,
+      textColor: AppColors.colors.jetGrey,
+      animationDuration: 200.ms,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      onHoverStyle: CustomButtonStyle(
+        textColor: AppColors.light.primary,
+      ),
+      onPressed: (position, size) {
+        Beamer.of(context).beamToNamed(
+          path,
+        );
+      },
+    );
+  }
+
+  Widget _buildNavButtons() {
+    return CustomField(
+      gap: r.size(24),
+      arrangement: FieldArrangement.row,
+      children: [
+        _buildNavButton(name: 'Produits', path: AppPaths.routes.boutiqueScreen),
+        _buildNavButton(name: 'À propos', path: AppPaths.routes.boutiqueScreen),
+        _buildNavButton(name: 'Blog', path: AppPaths.routes.boutiqueScreen),
+        _buildNavButton(name: 'Avis', path: AppPaths.routes.boutiqueScreen),
+      ],
     );
   }
 
   Widget _buildActionButton(
-      {double? width,
-      double? height,
-      required String svgIconPath,
-      Color? iconColor,
-      int? itemsCount,
+      {required String svgIconPath,
+      int? itemsLength,
       bool? isActive,
       required Function(Offset position, Size size)? onPressed}) {
     return Stack(
       children: [
         CustomButton(
-          height: width ?? r.size(15),
-          width: height ?? r.size(22),
+          height: r.size(24),
+          width: r.size(24),
           svgIconPath: svgIconPath,
-          iconColor: iconColor,
+          iconWidth: r.size(9),
+          iconHeight: r.size(9),
+          iconColor: AppColors.colors.white,
+          backgroundColor: AppColors.colors.jetGrey,
+          borderRadius: BorderRadius.circular(r.size(15)),
+          animationDuration: 200.ms,
+          margin: r.all(3),
+          onHoverStyle: CustomButtonStyle(
+            backgroundColor: AppColors.light.primary,
+          ),
           onPressed: onPressed,
         ),
-        if (itemsCount != null || isActive == true)
+        if (itemsLength != null)
           Positioned(
               right: 0,
-              bottom: 0,
+              top: 0,
               child: IgnorePointer(
                 ignoring: true,
                 child: CustomField(
-                    backgroundColor: isActive == true
-                        ? AppColors.light.primary
-                        : AppColors.light.primary,
+                    backgroundColor: AppColors.colors.hotPepperGreen,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    borderWidth: r.size(0.6),
+                    borderColor: AppColors.light.backgroundPrimary,
                     borderRadius: r.size(6),
-                    padding: r.symmetric(vertical: 2.5, horizontal: 2.5),
+                    padding: r.all(3),
                     children: [
                       CustomText(
-                        text: isActive == true ? '  ' : itemsCount.toString(),
-                        fontSize: r.size(8),
+                        text: itemsLength.toString(),
+                        color: AppColors.colors.white,
+                        fontSize: r.size(6),
                         lineHeight: 0.5,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.bold,
                       ),
                     ]),
-              )),
+              ))
+        else if (isActive == true)
+          Positioned(
+              right: 0,
+              top: 0,
+              child: IgnorePointer(
+                ignoring: true,
+                child: CustomField(
+                  width: r.size(6),
+                  height: r.size(6),
+                  borderRadius: r.size(3),
+                  backgroundColor: AppColors.colors.hotPepperGreen,
+                  children: const [],
+                ),
+              ))
       ],
     );
   }
 
+  Widget _buildActionButtons({
+    required LayerLink wishlistLink,
+    required LayerLink profileLink,
+    required LayerLink cartLink,
+  }) {
+    return CustomField(
+        arrangement: FieldArrangement.row,
+        gap: r.size(10),
+        children: [
+          CompositedTransformTarget(
+            link: wishlistLink,
+            child: _buildActionButton(
+              itemsLength: widget.wishlistItems.length,
+              svgIconPath: AppPaths.vectors.wishlistIcon,
+              onPressed: (Offset position, Size size) {},
+            ),
+          ),
+          CompositedTransformTarget(
+            link: profileLink,
+            child: _buildActionButton(
+              svgIconPath: AppPaths.vectors.profileIcon,
+              isActive: widget.isUserSignedIn,
+              onPressed: (Offset position, Size size) {},
+            ),
+          ),
+          CompositedTransformTarget(
+            link: cartLink,
+            child: _buildActionButton(
+              itemsLength: widget.cartItems.length,
+              svgIconPath: AppPaths.vectors.cartIcon,
+              onPressed: (Offset position, Size size) {},
+            ),
+          ),
+        ]);
+  }
+
   Widget _buildHeader(BuildContext context, {bool? isCompact}) {
     return CustomField(
-      padding: r.symmetric(vertical: 12, horizontal: 30),
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      padding: r.symmetric(vertical: 12, horizontal: 140),
+      margin: r.only(bottom: r.size(12)),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       arrangement: FieldArrangement.row,
       children: [
         _buildLogoButton(),
+        CustomField(
+          gap: r.size(24),
+          crossAxisAlignment: CrossAxisAlignment.center,
+          arrangement: FieldArrangement.row,
+          children: [
+            _buildNavButtons(),
+            _buildActionButtons(
+              wishlistLink: _wishlistDropdownLayerLink,
+              profileLink: _profileDropdownLayerLink,
+              cartLink: _cartDropdownLayerLink,
+            )
+          ],
+        ),
       ],
     );
   }
+
+  //----------------------------------------------------------------------------------------------------//
 
   @override
   Widget build(BuildContext context) {

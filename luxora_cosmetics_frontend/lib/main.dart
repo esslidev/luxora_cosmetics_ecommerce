@@ -14,11 +14,9 @@ import 'features/presentation/bloc/app/bread_crumbs/bread_crumbs_bloc.dart';
 import 'features/presentation/bloc/app/lite_notification/lite_notifications_bloc.dart';
 import 'features/presentation/bloc/app/route/route_bloc.dart';
 import 'features/presentation/bloc/remote/auth/auth_bloc.dart';
-import 'features/presentation/bloc/remote/cart/cart_bloc.dart';
 import 'features/presentation/bloc/remote/category/category_bloc.dart';
 import 'features/presentation/bloc/remote/product/product_bloc.dart';
 import 'features/presentation/bloc/remote/user/user_bloc.dart';
-import 'features/presentation/bloc/remote/wishlist/wishlist_bloc.dart';
 import 'locator.dart';
 
 Future<void> main() async {
@@ -69,10 +67,10 @@ class MyApp extends StatelessWidget {
             create: (context) => locator<RemoteProductBloc>()),
         BlocProvider<RemoteCategoryBloc>(
             create: (context) => locator<RemoteCategoryBloc>()),
-        BlocProvider<RemoteWishlistBloc>(
+        /* BlocProvider<RemoteWishlistBloc>(
             create: (context) => locator<RemoteWishlistBloc>()),
         BlocProvider<RemoteCartBloc>(
-            create: (context) => locator<RemoteCartBloc>()),
+            create: (context) => locator<RemoteCartBloc>()),*/
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

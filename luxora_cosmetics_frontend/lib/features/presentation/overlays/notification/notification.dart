@@ -93,7 +93,7 @@ class NotificationOverlay {
       margin: r.symmetric(horizontal: 6),
       clipBehavior: Clip.hardEdge,
       gap: r.size(2),
-      backgroundColor: AppColors.light.secondaryBackgroundColor,
+      backgroundColor: AppColors.light.backgroundSecondary,
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
@@ -102,8 +102,8 @@ class NotificationOverlay {
                   notificationType == NotificationType.info
               ? AppColors.light.primary.withValues(alpha: 0.8)
               : notificationType == NotificationType.warning
-                  ? AppColors.light.warningColor.withValues(alpha: 0.8)
-                  : AppColors.light.errorColor.withValues(alpha: 0.8),
+                  ? AppColors.light.warning.withValues(alpha: 0.8)
+                  : AppColors.light.error.withValues(alpha: 0.8),
           padding: EdgeInsets.all(r.size(10)),
           child: Lottie.asset(
             notificationType == NotificationType.success
@@ -162,14 +162,14 @@ class NotificationOverlay {
           backgroundColor: notificationType == NotificationType.success
               ? AppColors.light.primary.withValues(alpha: 0.8)
               : notificationType == NotificationType.warning
-                  ? AppColors.light.warningColor.withValues(alpha: 0.8)
-                  : AppColors.light.errorColor.withValues(alpha: 0.8),
+                  ? AppColors.light.warning.withValues(alpha: 0.8)
+                  : AppColors.light.error.withValues(alpha: 0.8),
           onHoverStyle: CustomButtonStyle(
             backgroundColor: notificationType == NotificationType.success
                 ? AppColors.light.primary
                 : notificationType == NotificationType.warning
-                    ? AppColors.light.warningColor
-                    : AppColors.light.errorColor,
+                    ? AppColors.light.warning
+                    : AppColors.light.error,
           ),
           animationDuration: const Duration(milliseconds: 100),
           onPressed: (position, size) {

@@ -1,150 +1,159 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:luxora_cosmetics_frontend/features/presentation/widgets/common/custom_field.dart';
+
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 
-class CustomDisplay extends StatelessWidget {
+class CustomDisplay extends StatefulWidget {
   final String assetPath;
+  final bool isSvg;
+  final Color? svgColor;
+  final bool isNetwork;
   final double? width;
   final double? height;
+  final Color? backgroundColor;
   final BoxFit? fit;
-  final bool isSvg;
-  final bool isNetwork;
-  final double borderWidth;
-  final Color borderColor;
-  final EdgeInsets borderPadding;
-  final EdgeInsetsGeometry margin;
-  final bool inFront;
-  final VoidCallback? onTap;
-  final Color? svgColor;
-  final MouseCursor? cursor;
+  final double? borderWidth;
+  final Color? borderColor;
+  final BorderRadius borderRadius;
+  final EdgeInsets padding;
+  final EdgeInsets margin;
+  final Function()? onPressed;
+  final Function()? onHoverEnter;
+  final Function()? onHoverExit;
+  final Widget? placeholderWidget;
   final Widget? loadingWidget;
   final Widget? errorWidget;
 
   const CustomDisplay({
     super.key,
     required this.assetPath,
+    this.isSvg = false,
+    this.svgColor,
+    this.isNetwork = false,
     this.width,
     this.height,
+    this.backgroundColor,
     this.fit,
-    this.isSvg = false,
-    this.isNetwork = false,
-    this.borderWidth = 0.0,
-    this.borderColor = Colors.transparent,
-    this.borderPadding = EdgeInsets.zero,
+    this.borderWidth,
+    this.borderColor,
+    this.borderRadius = BorderRadius.zero,
+    this.padding = EdgeInsets.zero,
     this.margin = EdgeInsets.zero,
-    this.inFront = false,
-    this.onTap,
-    this.svgColor,
-    this.cursor,
+    this.onPressed,
+    this.onHoverEnter,
+    this.onHoverExit,
+    this.placeholderWidget,
     this.loadingWidget,
     this.errorWidget,
   });
 
   @override
+  State<CustomDisplay> createState() => _CustomDisplayState();
+}
+
+class _CustomDisplayState extends State<CustomDisplay> {
+  late ResponsiveSizeAdapter r;
+
+  @override
+  void initState() {
+    super.initState();
+    r = ResponsiveSizeAdapter(context);
+  }
+
+  Widget _buildCustomDisplay() {
+    return widget.isSvg
+        ? widget.isNetwork
+            ? SvgPicture.network(
+                widget.assetPath,
+                width: widget.width,
+                height: widget.height,
+                fit: widget.fit ?? BoxFit.contain,
+                colorFilter: widget.svgColor != null
+                    ? ColorFilter.mode(widget.svgColor!, BlendMode.srcIn)
+                    : null,
+                placeholderBuilder: widget.loadingWidget != null
+                    ? (context) => widget.loadingWidget!
+                    : null,
+              )
+            : SvgPicture.asset(
+                widget.assetPath,
+                width: widget.width,
+                height: widget.height,
+                fit: widget.fit ?? BoxFit.contain,
+                colorFilter: widget.svgColor != null
+                    ? ColorFilter.mode(widget.svgColor!, BlendMode.srcIn)
+                    : null,
+                placeholderBuilder: widget.placeholderWidget != null
+                    ? (context) => widget.placeholderWidget!
+                    : null,
+              )
+        : widget.isNetwork
+            ? Image.network(
+                widget.assetPath,
+                width: widget.width,
+                height: widget.height,
+                fit: widget.fit ?? BoxFit.contain,
+                loadingBuilder: widget.loadingWidget != null
+                    ? (context, child, loadingProgress) => widget.loadingWidget!
+                    : null,
+                errorBuilder: (context, error, stackTrace) =>
+                    widget.errorWidget ??
+                    Icon(Icons.error,
+                        size: r.size(40), color: AppColors.light.error),
+              )
+            : Image.asset(
+                widget.assetPath,
+                width: widget.width,
+                height: widget.height,
+                fit: widget.fit ?? BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) =>
+                    widget.errorWidget ??
+                    Icon(Icons.error,
+                        size: r.size(40), color: AppColors.light.error),
+              );
+  }
+
+  //----------------------------------------------------------------------------------------------------//
+
+  @override
   Widget build(BuildContext context) {
-    ResponsiveSizeAdapter r = ResponsiveSizeAdapter(context);
-    final double effectiveWidth = width ?? 100;
-    final double effectiveHeight = height ?? 100;
-
-    final borderSizeWidth =
-        effectiveWidth + borderPadding.left + borderPadding.right;
-    final borderSizeHeight =
-        effectiveHeight + borderPadding.top + borderPadding.bottom;
-
     return MouseRegion(
-      cursor: cursor ?? SystemMouseCursors.basic,
+      cursor: widget.onPressed != null
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
+      onEnter: (event) {
+        if (widget.onHoverEnter != null) {
+          widget.onHoverEnter!();
+        }
+      },
+      onExit: (event) {
+        if (widget.onHoverExit != null) {
+          widget.onHoverExit!();
+        }
+      },
       child: GestureDetector(
-        onTap: onTap,
-        child: Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.center,
-          children: [
-            if (!inFront)
-              Container(
-                margin: margin,
-                width: borderSizeWidth,
-                height: borderSizeHeight,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: borderColor,
-                    width: borderWidth,
-                  ),
-                ),
-              ),
-            _buildImageWidget(r),
-            if (inFront)
-              Positioned(
-                top: -borderPadding.top,
-                left: -borderPadding.left,
-                child: Container(
-                  width: borderSizeWidth,
-                  height: borderSizeHeight,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: borderColor,
-                      width: borderWidth,
-                    ),
-                  ),
-                ),
-              ),
-          ],
+        onTap: () {
+          if (widget.onPressed != null) {
+            widget.onPressed!();
+          }
+        },
+        child: ClipRRect(
+          borderRadius: widget.borderRadius,
+          child: CustomField(
+            mainAxisSize: MainAxisSize.min,
+            backgroundColor: widget.backgroundColor,
+            padding: widget.padding,
+            margin: widget.margin,
+            borderColor: widget.borderColor,
+            borderWidth: widget.borderWidth,
+            children: [
+              _buildCustomDisplay(),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Widget _buildImageWidget(ResponsiveSizeAdapter r) {
-    if (isSvg) {
-      return isNetwork
-          ? SvgPicture.network(
-              assetPath,
-              width: width,
-              height: height,
-              fit: fit ?? BoxFit.contain,
-              colorFilter: svgColor != null
-                  ? ColorFilter.mode(svgColor!, BlendMode.srcIn)
-                  : null,
-              placeholderBuilder: (context) =>
-                  loadingWidget ?? const SizedBox(),
-            )
-          : SvgPicture.asset(
-              assetPath,
-              width: width,
-              height: height,
-              fit: fit ?? BoxFit.contain,
-              colorFilter: svgColor != null
-                  ? ColorFilter.mode(svgColor!, BlendMode.srcIn)
-                  : null,
-              placeholderBuilder: (context) =>
-                  loadingWidget ?? const SizedBox(),
-            );
-    } else {
-      return isNetwork
-          ? Image.network(
-              assetPath,
-              width: width,
-              height: height,
-              fit: fit ?? BoxFit.contain,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return loadingWidget ?? const SizedBox();
-              },
-              errorBuilder: (context, error, stackTrace) =>
-                  errorWidget ??
-                  Icon(Icons.error,
-                      size: r.size(40), color: AppColors.light.errorColor),
-            )
-          : Image.asset(
-              assetPath,
-              width: width,
-              height: height,
-              fit: fit ?? BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) =>
-                  errorWidget ??
-                  Icon(Icons.error,
-                      size: r.size(40), color: AppColors.light.errorColor),
-            );
-    }
   }
 }

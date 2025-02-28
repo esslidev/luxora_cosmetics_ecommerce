@@ -76,9 +76,8 @@ class _BreadCrumbsState extends State<BreadCrumbs> {
                     isSvg: true,
                     width: r.size(8),
                     height: r.size(8),
-                    cursor: SystemMouseCursors.click,
                     svgColor: widget.theme.accent.withValues(alpha: 0.7),
-                    onTap: () {
+                    onPressed: () {
                       Beamer.of(context)
                           .beamToNamed(AppPaths.routes.homePageScreen);
                     },

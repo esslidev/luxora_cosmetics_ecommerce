@@ -6,8 +6,8 @@ class AppTheme {
   // Add more text styles as needed...
   static ThemeData themeData = ThemeData(
       brightness: Brightness.light,
-      fontFamily: 'recoleta',
-      scaffoldBackgroundColor: AppColors.light.primaryBackgroundColor,
+      fontFamily: 'inter',
+      scaffoldBackgroundColor: AppColors.light.backgroundPrimary,
       textSelectionTheme: TextSelectionThemeData(
         selectionColor: AppColors.light.primary.withValues(alpha: 0.4),
       ),
@@ -17,6 +17,7 @@ class AppTheme {
       ));
 
   static TextStyle headline = TextStyle(
+    fontFamily: 'recoleta',
     fontWeight: FontWeight.w500,
     color: AppColors.light.accent,
   );

@@ -7,6 +7,7 @@ import 'package:luxora_cosmetics_frontend/features/presentation/widgets/common/c
 
 import '../../../../../../core/util/app_events_util.dart';
 import '../../../../../core/constants/app_paths.dart';
+import '../../../../../core/util/responsive_screen_adapter.dart';
 import '../../../../../core/util/responsive_size_adapter.dart';
 import '../../../../domain/entities/product.dart';
 import '../../../widgets/common/custom_display.dart';
@@ -33,34 +34,37 @@ class _HomePageScreenState extends State<HomePageScreen> {
   void initState() {
     super.initState();
     r = ResponsiveSizeAdapter(context);
-    AppEventsUtil.breadCrumbs.clearBreadCrumbs(
+    AppEventsUtil.breadCrumbs.clearBreadCrumbs(context);
+    AppEventsUtil.routeEvents.changePath(
       context,
+      AppPaths.routes.homePageScreen,
     );
-    AppEventsUtil.routeEvents
-        .changePath(context, AppPaths.routes.homePageScreen);
   }
 
   Widget _buildBranchDecoration({bool isReversed = false}) {
     return Transform.flip(
       flipX: isReversed,
       child: CustomDisplay(
-        assetPath: AppPaths.vectors.branchDecoration1,
-        width: r.size(160),
-        isSvg: true,
-        svgColor: AppColors.colors.jetGrey.withValues(alpha: .1),
-      ).animate(onPlay: (controller) {
-        controller.repeat(reverse: true);
-      }).moveY(
-        duration: 1.seconds,
-        curve: Curves.fastOutSlowIn,
-        begin: 0,
-        end: 16,
-      ),
+            assetPath: AppPaths.vectors.branchDecoration1,
+            width: r.size(160),
+            isSvg: true,
+            svgColor: AppColors.colors.jetGrey.withValues(alpha: .1),
+          )
+          .animate(
+            onPlay: (controller) {
+              controller.repeat(reverse: true);
+            },
+          )
+          .moveY(
+            duration: 1.seconds,
+            curve: Curves.fastOutSlowIn,
+            begin: 0,
+            end: 16,
+          ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildHomePage(BuildContext context) {
     return Stack(
       children: [
         Positioned(top: r.size(200), child: _buildBranchDecoration()),
@@ -76,29 +80,34 @@ class _HomePageScreenState extends State<HomePageScreen> {
             const PromoVideos(),
             const EssentialProducts(),
             const Milestones(),
-            TestimonialsSlider(testimonials: [
-              Testimonial(
+            TestimonialsSlider(
+              testimonials: [
+                Testimonial(
                   customerName: 'Sanaa L.',
                   customerImageUrl: AppPaths.images.testimonialCustomerImage,
                   city: 'Rabat',
                   country: 'Maroc',
                   testimonial:
-                      'Ayant la peau sensible, je suis toujours prudent(e) lorsque j’essaie de nouveaux produits, mais le sérum au figuier de Barbarie de Luxora a dépassé mes attentes. Il est doux, apaisant et a aidé à réduire les rougeurs sur mon visage. Les ingrédients naturels me rassurent, et j’ai remarqué une nette amélioration de la texture de ma peau après seulement deux semaines. Un indispensable !'),
-              Testimonial(
+                      'Ayant la peau sensible, je suis toujours prudent(e) lorsque j’essaie de nouveaux produits, mais le sérum au figuier de Barbarie de Luxora a dépassé mes attentes. Il est doux, apaisant et a aidé à réduire les rougeurs sur mon visage. Les ingrédients naturels me rassurent, et j’ai remarqué une nette amélioration de la texture de ma peau après seulement deux semaines. Un indispensable !',
+                ),
+                Testimonial(
                   customerName: 'Sanaa L.',
                   customerImageUrl: AppPaths.images.testimonialCustomerImage,
                   city: 'Tangier',
                   country: 'Maroc',
                   testimonial:
-                      'En tant que personne à la peau sensible, je suis toujours prudent(e) avec les nouveaux produits, mais le sérum au figuier de Barbarie de Luxora a dépassé mes attentes. Il est doux, apaisant et a aidé à réduire les rougeurs de mon visage. Ses ingrédients naturels me rassurent, et j’ai constaté une amélioration visible de la texture de ma peau en seulement deux semaines. Un incontournable !'),
-              Testimonial(
+                      'En tant que personne à la peau sensible, je suis toujours prudent(e) avec les nouveaux produits, mais le sérum au figuier de Barbarie de Luxora a dépassé mes attentes. Il est doux, apaisant et a aidé à réduire les rougeurs de mon visage. Ses ingrédients naturels me rassurent, et j’ai constaté une amélioration visible de la texture de ma peau en seulement deux semaines. Un incontournable !',
+                ),
+                Testimonial(
                   customerName: 'Sanaa L.',
                   customerImageUrl: AppPaths.images.testimonialCustomerImage,
                   city: 'Casablanca',
                   country: 'Maroc',
                   testimonial:
-                      'Ce sérum fait des merveilles ! Ma peau est incroyablement hydratée et repulpée, surtout pendant les mois froids où elle a tendance à se dessécher. La seule raison pour laquelle je lui ai donné 4 étoiles au lieu de 5, c’est que j’aurais aimé que le flacon soit plus grand—je n’en ai jamais assez ! Il vaut chaque centime pour les résultats qu’il offre.'),
-            ]),
+                      'Ce sérum fait des merveilles ! Ma peau est incroyablement hydratée et repulpée, surtout pendant les mois froids où elle a tendance à se dessécher. La seule raison pour laquelle je lui ai donné 4 étoiles au lieu de 5, c’est que j’aurais aimé que le flacon soit plus grand—je n’en ai jamais assez ! Il vaut chaque centime pour les résultats qu’il offre.',
+                ),
+              ],
+            ),
             BrandsSlider(
               brandsPaths: [
                 AppPaths.images.calvinKleinBrandImage,
@@ -112,5 +121,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
         ),
       ],
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveScreenAdapter(fallbackScreen: _buildHomePage(context));
   }
 }

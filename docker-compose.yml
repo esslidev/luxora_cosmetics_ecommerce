@@ -64,7 +64,7 @@ services:
     ports:
       - '3003:80'
     #  depends_on:
-    #    - librairie-alfia-backend
+    #    - luxora-cosmetics-backend
     networks:
       - pma_networks
 

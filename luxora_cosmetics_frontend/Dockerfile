@@ -33,8 +33,7 @@ RUN flutter pub run build_runner build --delete-conflicting-outputs
 
 # Step 10: Force rebuild by removing the build folder before rebuilding
 RUN rm -rf /app/build && flutter build web
-# RUN rm -rf /app/build && flutter build web --release --web-renderer html
-
+# RUN rm -rf /app/build && flutter build web --wasm
 
 # Step 11: Remove default NGINX content and add the built app
 RUN rm -rf /var/www/html/* && cp -r /app/build/web/* /usr/share/nginx/html/

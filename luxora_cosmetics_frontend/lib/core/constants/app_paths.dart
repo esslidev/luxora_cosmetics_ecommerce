@@ -37,14 +37,14 @@ class ImagesPaths {
   final String joinUsImage2 = 'assets/images/join-us-image2.webp';
   final String joinUsImage3 = 'assets/images/join-us-image3.jpg';
   final String rediscoverBannerImage =
-      'assets/images/rediscover-banner-image.webp';
+      'assets/images/rediscover-banner-image.png';
   final String rediscoverBannerTitleImage =
-      'assets/images/rediscover-banner-title-image.webp';
+      'assets/images/rediscover-banner-title-image.png';
   final String missionVisionBannerImage =
-      'assets/images/mission-vision-banner-image.webp';
-  final String product1Image = 'assets/images/product1-image.webp';
-  final String product2Image = 'assets/images/product2-image.webp';
-  final String product3Image = 'assets/images/product3-image.webp';
+      'assets/images/mission-vision-banner-image.png';
+  final String product1Image = 'assets/images/product1-image.png';
+  final String product2Image = 'assets/images/product2-image.png';
+  final String product3Image = 'assets/images/product3-image.png';
   final String product4Image = 'assets/images/product4-image.webp';
   final String product5Image = 'assets/images/product5-image.webp';
   final String calvinKleinBrandImage =
@@ -55,7 +55,7 @@ class ImagesPaths {
   final String vaoodaBrandImage = 'assets/images/vaooda-brand-image.png';
   final String testimonialCustomerImage =
       'assets/images/testimonial-customer-image.png';
-  final String milestonesImage = 'assets/images/milestones-image.webp';
+  final String milestonesImage = 'assets/images/milestones-image.png';
 }
 
 class AnimatedImagesPaths {
@@ -72,6 +72,7 @@ class VectorsPaths {
   final String instagramIcon = 'assets/vectors/instagram-icon.svg';
   final String twitterIcon = 'assets/vectors/twitter-icon.svg';
   final String linkdinIcon = 'assets/vectors/linkdin-icon.svg';
+  final String sidebarIcon = 'assets/vectors/sidebar-icon.svg';
   final String arrowToRightIcon = 'assets/vectors/arrow-to-right-icon.svg';
   final String arrowToBottomIconStyle2 =
       'assets/vectors/arrow-to-bottom-icon-style2.svg';

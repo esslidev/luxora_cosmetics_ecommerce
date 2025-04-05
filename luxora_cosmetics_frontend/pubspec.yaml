@@ -5,61 +5,33 @@ version: 1.0.0
 license: All Rights Reserved
 
 environment:
-  sdk: ^3.5.3
+  sdk: ^3.7.0
 
 dependencies:
   flutter:
     sdk: flutter
-  # collections
-  collection: ^1.18.0
-  # Navigation and routing management
-  beamer: ^1.6.2
-  # Checks network connectivity status
-  connectivity_plus: ^6.0.5
-  # Networking client for HTTP requests
-  dio: ^5.7.0
-  # Simplifies equality comparisons
-  equatable: ^2.0.5
-  # Enables complex animations
-  flutter_animate: ^4.5.0
-  # State management using the Bloc pattern
-  flutter_bloc: ^8.1.6
-  # React hooks-style functions for Flutter
-  flutter_hooks: ^0.20.5
-  # Localization support for Flutter
-  flutter_localization: ^0.2.2
-  # Automatically generates native splash screens
-  flutter_native_splash: ^2.4.1
-  # Supports SVG rendering
-  flutter_svg: ^2.0.10+1
-  # Dependency injection service locator
-  get_it: ^8.0.0
-  # Date and number formatting
-  intl: ^0.19.0
-  # JSON serialization support
+  collection: ^1.19.1
+  beamer: ^1.7.0
+  connectivity_plus: ^6.1.3
+  dio: ^5.8.0+1
+  equatable: ^2.0.7
+  flutter_animate: ^4.5.2
+  flutter_bloc: ^9.1.0
+  flutter_native_splash: ^2.4.5
+  flutter_svg: ^2.0.17
+  get_it: ^8.0.3
   json_annotation: ^4.9.0
-  # Logging utility for debugging
-  logger: ^2.4.0
-  # HTTP API client generator using annotations
-  retrofit: ^4.4.1
-  # Local storage for simple key-value pairs
-  shared_preferences: ^2.3.2
-  # Opens URLs in external applications
-  url_launcher: ^6.3.0
-  # Data visualization library for charts
-  fl_chart: ^0.69.0
-  # Circular percentage indicators
-  percent_indicator: ^4.2.3
-  # Lottie animations for Flutter
-  lottie: ^3.1.2
-  # Carousel slider for images or widgets
+  logger: ^2.5.0
+  retrofit: ^4.4.2
+  shared_preferences: ^2.5.2
+  url_launcher: ^6.3.1
+  percent_indicator: ^4.2.4
+  lottie: ^3.3.1
   carousel_slider: ^5.0.0
-  # Integrates Google Maps
   uuid: ^4.5.1
-  #syncFusion calendar
-  syncfusion_flutter_datepicker: ^28.2.4
+  syncfusion_flutter_datepicker: ^28.2.11
   webview_flutter: ^4.10.0
-
+  intl: ^0.19.0
   flutter_localizations:
     sdk: flutter
   flutter_web_plugins:
@@ -68,17 +40,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # Linting rules and recommendations
-  flutter_lints: ^3.0.0
-  # Generates code from annotations (e.g., for JSON serialization)
-  build_runner: ^2.4.9
-  # Generates app launcher icons
-  flutter_launcher_icons: ^0.13.1
-  # Code generator for JSON serialization
-  json_serializable: ^6.7.1
-  # Code generator for Retrofit
-  retrofit_generator: '>=7.0.0 <8.0.0'
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.15
+  json_serializable: ^6.9.4
+  retrofit_generator: ^9.1.9
 
 flutter:
   assets:

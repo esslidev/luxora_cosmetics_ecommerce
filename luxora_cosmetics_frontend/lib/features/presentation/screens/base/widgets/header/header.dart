@@ -8,6 +8,7 @@ import '../../../../../../core/constants/app_paths.dart';
 import '../../../../../../core/enums/widgets.dart';
 import '../../../../../../core/resources/global_contexts.dart';
 import '../../../../../../core/util/app_events_util.dart';
+import '../../../../../../core/util/remote_events_util.dart';
 import '../../../../../../core/util/responsive_screen_adapter.dart';
 import '../../../../../../core/util/responsive_size_adapter.dart';
 import '../../../../../../locator.dart';
@@ -15,20 +16,25 @@ import '../../../../../data/models/cart_item.dart';
 import '../../../../../data/models/wishlist_item.dart';
 import '../../../../overlays/create_account/create_account.dart';
 import '../../../../overlays/dropdown/dropdown.dart';
+import '../../../../overlays/sidebar/sidebar.dart';
 import '../../../../overlays/sign_in/sign_in.dart';
 import '../../../../widgets/common/custom_button.dart';
 import '../../../../widgets/common/custom_display.dart';
 import '../../../../widgets/common/custom_text.dart';
+import 'widgets/cart_dropdown.dart';
+import 'widgets/profile_dropdown.dart';
+import 'widgets/wishlist_dropdown.dart';
 
 class HeaderWidget extends StatefulWidget {
   final List<WishlistItemModel> wishlistItems;
   final bool isUserSignedIn;
   final List<CartItemModel> cartItems;
-  const HeaderWidget(
-      {super.key,
-      required this.wishlistItems,
-      this.isUserSignedIn = false,
-      required this.cartItems});
+  const HeaderWidget({
+    super.key,
+    required this.wishlistItems,
+    this.isUserSignedIn = false,
+    required this.cartItems,
+  });
 
   @override
   State<HeaderWidget> createState() => _HeaderWidgetState();
@@ -44,30 +50,22 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
   late SignInOverlay _signInOverlay;
   late CreateAccountOverlay _createAccountOverlay;
+  late SidebarOverlay _sidebarOverlay;
 
   late DropdownOverlay _wishlistDropdown;
   late DropdownOverlay _profileDropdown;
   late DropdownOverlay _cartDropdown;
-
   @override
   void initState() {
     super.initState();
     r = ResponsiveSizeAdapter(context);
     homeContext = locator<GlobalContexts>().homeContext;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      AppEventsUtil.breadCrumbs.clearBreadCrumbs(
-        context,
-      );
+      AppEventsUtil.breadCrumbs.clearBreadCrumbs(context);
 
-      _signInOverlay = SignInOverlay(
-        context: homeContext!,
-        r: r,
-      );
-
-      _createAccountOverlay = CreateAccountOverlay(
-        context: homeContext!,
-        r: r,
-      );
+      _signInOverlay = SignInOverlay(context: homeContext!, r: r);
+      _createAccountOverlay = CreateAccountOverlay(context: homeContext!, r: r);
+      _sidebarOverlay = SidebarOverlay(context: homeContext!);
 
       _wishlistDropdown = _buildActionButtonsDropdown();
       _profileDropdown = _buildActionButtonsDropdown();
@@ -80,8 +78,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   DropdownOverlay _buildActionButtonsDropdown() {
     return DropdownOverlay(
       context: context,
-      borderRadius: Radius.circular(r.size(3)),
-      borderWidth: r.size(1),
+      borderRadius: Radius.circular(r.size(1)),
       margin: EdgeInsets.only(top: r.size(8)),
       shadowOffset: Offset(r.size(2), r.size(2)),
       shadowBlurRadius: 4,
@@ -95,9 +92,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       assetPath: AppPaths.images.logo,
       height: height ?? r.size(32),
       onPressed: () {
-        Beamer.of(context).beamToNamed(
-          AppPaths.routes.homePageScreen,
-        );
+        Beamer.of(context).beamToNamed(AppPaths.routes.homePageScreen);
       },
     );
   }
@@ -111,13 +106,9 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       animationDuration: 200.ms,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      onHoverStyle: CustomButtonStyle(
-        textColor: AppColors.light.primary,
-      ),
+      onHoverStyle: CustomButtonStyle(textColor: AppColors.light.primary),
       onPressed: (position, size) {
-        Beamer.of(context).beamToNamed(
-          path,
-        );
+        Beamer.of(context).beamToNamed(path);
       },
     );
   }
@@ -135,11 +126,12 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     );
   }
 
-  Widget _buildActionButton(
-      {required String svgIconPath,
-      int? itemsLength,
-      bool? isActive,
-      required Function(Offset position, Size size)? onPressed}) {
+  Widget _buildActionButton({
+    required String svgIconPath,
+    int? itemsLength,
+    bool? isActive,
+    required Function(Offset position, Size size)? onPressed,
+  }) {
     return Stack(
       children: [
         CustomButton(
@@ -160,42 +152,45 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         ),
         if (itemsLength != null)
           Positioned(
-              right: 0,
-              top: 0,
-              child: IgnorePointer(
-                ignoring: true,
-                child: CustomField(
-                    backgroundColor: AppColors.colors.hotPepperGreen,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    borderWidth: r.size(0.6),
-                    borderColor: AppColors.light.backgroundPrimary,
-                    borderRadius: r.size(6),
-                    padding: r.all(3),
-                    children: [
-                      CustomText(
-                        text: itemsLength.toString(),
-                        color: AppColors.colors.white,
-                        fontSize: r.size(6),
-                        lineHeight: 0.5,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ]),
-              ))
+            right: 0,
+            top: 0,
+            child: IgnorePointer(
+              ignoring: true,
+              child: CustomField(
+                backgroundColor: AppColors.colors.hotPepperGreen,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                borderWidth: r.size(0.6),
+                borderColor: AppColors.light.backgroundPrimary,
+                borderRadius: r.size(6),
+                padding: r.all(3),
+                children: [
+                  CustomText(
+                    text: itemsLength.toString(),
+                    color: AppColors.colors.white,
+                    fontSize: r.size(6),
+                    lineHeight: 0.5,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ],
+              ),
+            ),
+          )
         else if (isActive == true)
           Positioned(
-              right: 0,
-              top: 0,
-              child: IgnorePointer(
-                ignoring: true,
-                child: CustomField(
-                  width: r.size(6),
-                  height: r.size(6),
-                  borderRadius: r.size(3),
-                  backgroundColor: AppColors.colors.hotPepperGreen,
-                  children: const [],
-                ),
-              ))
+            right: 0,
+            top: 0,
+            child: IgnorePointer(
+              ignoring: true,
+              child: CustomField(
+                width: r.size(6),
+                height: r.size(6),
+                borderRadius: r.size(3),
+                backgroundColor: AppColors.colors.hotPepperGreen,
+                children: const [],
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -206,39 +201,100 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     required LayerLink cartLink,
   }) {
     return CustomField(
-        arrangement: FieldArrangement.row,
-        gap: r.size(10),
-        children: [
-          CompositedTransformTarget(
-            link: wishlistLink,
-            child: _buildActionButton(
-              itemsLength: widget.wishlistItems.length,
-              svgIconPath: AppPaths.vectors.wishlistIcon,
-              onPressed: (Offset position, Size size) {},
-            ),
+      arrangement: FieldArrangement.row,
+      gap: r.size(10),
+      children: [
+        CompositedTransformTarget(
+          link: wishlistLink,
+          child: _buildActionButton(
+            itemsLength: widget.wishlistItems.length,
+            svgIconPath: AppPaths.vectors.wishlistIcon,
+            onPressed: (Offset position, Size size) {
+              _wishlistDropdown.show(
+                layerLink: wishlistLink,
+                targetWidgetSize: size,
+                width: r.size(204),
+                dropdownAlignment: DropdownAlignment.center,
+                child: WishlistDropdown(),
+              );
+            },
           ),
-          CompositedTransformTarget(
-            link: profileLink,
-            child: _buildActionButton(
-              svgIconPath: AppPaths.vectors.profileIcon,
-              isActive: widget.isUserSignedIn,
-              onPressed: (Offset position, Size size) {},
-            ),
+        ),
+        CompositedTransformTarget(
+          link: profileLink,
+          child: _buildActionButton(
+            svgIconPath: AppPaths.vectors.profileIcon,
+            isActive: widget.isUserSignedIn,
+            onPressed: (Offset position, Size size) {
+              _profileDropdown.show(
+                layerLink: profileLink,
+                targetWidgetSize: size,
+                shadowColor: AppColors.light.accent.withValues(alpha: .2),
+                width: r.size(170),
+                dropdownAlignment: DropdownAlignment.end,
+                child: ProfileDropdown(
+                  onSignInPressed: () {
+                    _signInOverlay.show();
+                  },
+                  onSignUpPressed: () {
+                    _createAccountOverlay.show();
+                  },
+                  onSignOutPressed: () {
+                    RemoteEventsUtil.authEvents.signOut(context);
+                  },
+                ),
+              );
+            },
           ),
-          CompositedTransformTarget(
-            link: cartLink,
-            child: _buildActionButton(
-              itemsLength: widget.cartItems.length,
-              svgIconPath: AppPaths.vectors.cartIcon,
-              onPressed: (Offset position, Size size) {},
-            ),
+        ),
+        CompositedTransformTarget(
+          link: cartLink,
+          child: _buildActionButton(
+            itemsLength: widget.cartItems.length,
+            svgIconPath: AppPaths.vectors.cartIcon,
+            onPressed: (Offset position, Size size) {
+              _cartDropdown.show(
+                layerLink: wishlistLink,
+                targetWidgetSize: size,
+                width: r.size(204),
+                dropdownAlignment: DropdownAlignment.center,
+                child: CartDropdown(),
+              );
+            },
           ),
-        ]);
+        ),
+      ],
+    );
   }
 
-  Widget _buildHeader(BuildContext context, {bool? isCompact}) {
+  Widget _buildSideBarButton() {
+    return CustomButton(
+      backgroundColor: Colors.white,
+      padding: r.all(8),
+      svgIconPath: AppPaths.vectors.sidebarIcon,
+      iconHeight: r.size(9),
+      iconWidth: r.size(9),
+      onPressed: (position, size) {
+        _sidebarOverlay.show(r: r);
+      },
+    );
+  }
+
+  Widget _buildHeader(
+    BuildContext context, {
+    bool? isDesktopScreen,
+    bool? isTabletMobileScreen,
+  }) {
     return CustomField(
-      padding: r.symmetric(vertical: 12, horizontal: 140),
+      padding: r.symmetric(
+        vertical: 12,
+        horizontal:
+            isTabletMobileScreen == true
+                ? 10
+                : isDesktopScreen == true
+                ? 30
+                : 140,
+      ),
       margin: r.only(bottom: r.size(12)),
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -250,12 +306,14 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           crossAxisAlignment: CrossAxisAlignment.center,
           arrangement: FieldArrangement.row,
           children: [
-            _buildNavButtons(),
-            _buildActionButtons(
-              wishlistLink: _wishlistDropdownLayerLink,
-              profileLink: _profileDropdownLayerLink,
-              cartLink: _cartDropdownLayerLink,
-            )
+            if (isTabletMobileScreen != true) _buildNavButtons(),
+            if (isTabletMobileScreen != true)
+              _buildActionButtons(
+                wishlistLink: _wishlistDropdownLayerLink,
+                profileLink: _profileDropdownLayerLink,
+                cartLink: _cartDropdownLayerLink,
+              ),
+            if (isTabletMobileScreen == true) _buildSideBarButton(),
           ],
         ),
       ],
@@ -268,6 +326,9 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   Widget build(BuildContext context) {
     return ResponsiveScreenAdapter(
       fallbackScreen: _buildHeader(context),
+      screenDesktop: _buildHeader(context, isDesktopScreen: true),
+      screenTablet: _buildHeader(context, isTabletMobileScreen: true),
+      screenMobile: _buildHeader(context, isTabletMobileScreen: true),
     );
   }
 }

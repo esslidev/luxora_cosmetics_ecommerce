@@ -27,13 +27,13 @@ class _MilestonesState extends State<Milestones> {
 
   //----------------------------------------------------------------------------------------------------//
 
-  Widget _buildImage() {
+  Widget _buildImage({double? width, double? height}) {
     return CustomDisplay(
       backgroundColor: AppColors.colors.peachOfMind,
       assetPath: AppPaths.images.milestonesImage,
-      width: r.size(200),
-      height: r.size(280),
-      borderRadius: BorderRadius.circular(r.size(200)),
+      width: width ?? r.size(400),
+
+      borderRadius: BorderRadius.circular(width ?? r.size(200)),
     );
   }
 
@@ -51,24 +51,21 @@ class _MilestonesState extends State<Milestones> {
                 color: Colors.black, // Default color for the text
               ),
               children: [
-                const TextSpan(
-                  text: "Nous sublimons ",
-                ),
+                const TextSpan(text: "Nous sublimons "),
                 TextSpan(
                   text: "la beauté",
                   style: TextStyle(
                     color: AppColors.light.primary, // Custom color for "Luxora"
                   ),
                 ),
-                const TextSpan(
-                  text: " au naturel.",
-                ),
+                const TextSpan(text: " au naturel."),
               ],
             ),
           ),
         ),
         CustomText(
           width: r.size(340),
+          textAlign: TextAlign.justify,
           text:
               "Rejoignez la famille Luxora et embrassez l'essence de la beauté marocaine. Découvrez notre collection de soins biologiques et laissez la nature prendre soin de votre peau.",
           fontSize: r.size(9),
@@ -77,10 +74,11 @@ class _MilestonesState extends State<Milestones> {
     );
   }
 
-  Widget _buildSectionMilestoneCard(
-      {required String title,
-      required String count,
-      bool reverseGradient = false}) {
+  Widget _buildSectionMilestoneCard({
+    required String title,
+    required String count,
+    bool reverseGradient = false,
+  }) {
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -93,12 +91,14 @@ class _MilestonesState extends State<Milestones> {
               borderRadius: BorderRadius.circular(90),
               gradient: LinearGradient(
                 colors: [AppColors.colors.white, AppColors.colors.snowGreen],
-                begin: reverseGradient
-                    ? Alignment.bottomCenter
-                    : Alignment.topCenter,
-                end: reverseGradient
-                    ? Alignment.topCenter
-                    : Alignment.bottomCenter,
+                begin:
+                    reverseGradient
+                        ? Alignment.bottomCenter
+                        : Alignment.topCenter,
+                end:
+                    reverseGradient
+                        ? Alignment.topCenter
+                        : Alignment.bottomCenter,
               ),
             ),
           ),
@@ -120,21 +120,21 @@ class _MilestonesState extends State<Milestones> {
               fontFamily: 'recoleta',
               fontSize: r.size(24),
               color: AppColors.light.primary,
-            )
+            ),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildSection() {
+  Widget _buildSection({bool? isDesktopScreen}) {
     return CustomField(
-      minWidth: r.size(800),
       gap: r.size(18),
       backgroundColor: AppColors.light.backgroundSecondary,
-      margin: r.only(right: r.size(70)),
+      margin: r.only(right: isDesktopScreen == true ? 140 : 140),
       padding: r.symmetric(
-        vertical: 80,
+        vertical: 40,
+        horizontal: isDesktopScreen == true ? 60 : 160,
       ),
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -145,26 +145,51 @@ class _MilestonesState extends State<Milestones> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           arrangement: FieldArrangement.row,
           children: [
-            _buildSectionMilestoneCard(
-              title: 'Product Users',
-              count: "10K+",
-            ),
+            _buildSectionMilestoneCard(title: 'Product Users', count: "10K+"),
             _buildSectionMilestoneCard(
               title: 'Brand Product',
               count: "10+",
               reverseGradient: true,
             ),
-            _buildSectionMilestoneCard(
-              title: 'Product Reviews',
-              count: "5K",
-            ),
+            _buildSectionMilestoneCard(title: 'Product Reviews', count: "5K"),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildMilestones(BuildContext context) {
+  Widget _buildSectionOnSmallScreens({bool? isMobileScreen}) {
+    return CustomField(
+      width: double.infinity,
+      gap: r.size(18),
+      backgroundColor: AppColors.light.backgroundSecondary,
+      margin: r.only(top: 120),
+      padding: r.only(top: 80, bottom: 20, left: 20, right: 20),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _buildSectionText(),
+        CustomField(
+          gap: r.size(20),
+          mainAxisSize: MainAxisSize.min,
+          arrangement:
+              isMobileScreen == true
+                  ? FieldArrangement.column
+                  : FieldArrangement.row,
+          children: [
+            _buildSectionMilestoneCard(title: 'Product Users', count: "10K+"),
+            _buildSectionMilestoneCard(
+              title: 'Brand Product',
+              count: "10+",
+              reverseGradient: true,
+            ),
+            _buildSectionMilestoneCard(title: 'Product Reviews', count: "5K"),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMilestones(BuildContext context, {bool? isDesktopScreen}) {
     return CustomField(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -174,10 +199,33 @@ class _MilestonesState extends State<Milestones> {
         Stack(
           alignment: Alignment.center,
           children: [
-            _buildSection(),
-            Positioned(right: 0, child: _buildImage()),
+            _buildSection(isDesktopScreen: isDesktopScreen),
+            Positioned(
+              right: 0,
+              child: _buildImage(width: r.size(180), height: r.size(240)),
+            ),
           ],
-        )
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMilestonesOnSmallScreens(
+    BuildContext context, {
+    bool? isMobileScreen,
+  }) {
+    return CustomField(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      padding: r.symmetric(vertical: 40),
+      children: [
+        Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            _buildSectionOnSmallScreens(isMobileScreen: isMobileScreen),
+            _buildImage(width: r.size(120), height: r.size(180)),
+          ],
+        ),
       ],
     );
   }
@@ -188,6 +236,12 @@ class _MilestonesState extends State<Milestones> {
   Widget build(BuildContext context) {
     return ResponsiveScreenAdapter(
       fallbackScreen: _buildMilestones(context),
+      screenDesktop: _buildMilestones(context, isDesktopScreen: true),
+      screenTablet: _buildMilestonesOnSmallScreens(context),
+      screenMobile: _buildMilestonesOnSmallScreens(
+        context,
+        isMobileScreen: true,
+      ),
     );
   }
 }

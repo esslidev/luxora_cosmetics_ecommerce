@@ -28,29 +28,41 @@ class _BrandsSliderState extends State<BrandsSlider> {
   Widget _buildBrandImage({required String assetPath}) {
     ValueNotifier<bool> isHoveredNotifier = ValueNotifier(false);
     return ValueListenableBuilder(
-        valueListenable: isHoveredNotifier,
-        builder: (BuildContext context, bool isHovered, Widget? child) {
-          return CustomDisplay(
-            assetPath: assetPath,
-            height: r.size(20),
-            onHoverEnter: () {
-              isHoveredNotifier.value = true;
-            },
-            onHoverExit: () {
-              isHoveredNotifier.value = false;
-            },
-          ).animate(target: isHovered == true ? 1 : 0).fadeIn(
-                duration: 350.ms,
-                curve: Curves.easeOut,
-                begin: .5,
-              );
-        });
+      valueListenable: isHoveredNotifier,
+      builder: (BuildContext context, bool isHovered, Widget? child) {
+        return CustomDisplay(
+              assetPath: assetPath,
+              height: r.size(20),
+              onHoverEnter: () {
+                isHoveredNotifier.value = true;
+              },
+              onHoverExit: () {
+                isHoveredNotifier.value = false;
+              },
+            )
+            .animate(target: isHovered == true ? 1 : 0)
+            .fadeIn(duration: 350.ms, curve: Curves.easeOut, begin: .5);
+      },
+    );
   }
 
-  Widget _buildBrandsSlider(BuildContext context) {
+  Widget _buildBrandsSlider(
+    BuildContext context, {
+    bool? isDesktopScreen,
+    bool? isTabletScreen,
+    bool? isMobileScreen,
+  }) {
     return CustomField(
       width: double.infinity,
-      padding: r.symmetric(vertical: 60, horizontal: 160),
+      padding: r.symmetric(
+        vertical: 60,
+        horizontal:
+            isDesktopScreen == true
+                ? 60
+                : isTabletScreen == true || isMobileScreen == true
+                ? 20
+                : 160,
+      ),
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       isWrap: true,
@@ -65,13 +77,19 @@ class _BrandsSliderState extends State<BrandsSlider> {
             autoPlayAnimationDuration: 10.seconds,
             autoPlayCurve: Curves.linear,
             enlargeCenterPage: false,
-            viewportFraction: 1 / 5,
+            viewportFraction:
+                isTabletScreen == true
+                    ? 1 / 4
+                    : isMobileScreen == true
+                    ? 1 / 2
+                    : 1 / 5,
             enableInfiniteScroll: true,
           ),
-          items: widget.brandsPaths.map((imagePath) {
-            return _buildBrandImage(assetPath: imagePath);
-          }).toList(),
-        )
+          items:
+              widget.brandsPaths.map((imagePath) {
+                return _buildBrandImage(assetPath: imagePath);
+              }).toList(),
+        ),
       ],
     );
   }
@@ -82,6 +100,9 @@ class _BrandsSliderState extends State<BrandsSlider> {
   Widget build(BuildContext context) {
     return ResponsiveScreenAdapter(
       fallbackScreen: _buildBrandsSlider(context),
+      screenDesktop: _buildBrandsSlider(context, isDesktopScreen: true),
+      screenTablet: _buildBrandsSlider(context, isTabletScreen: true),
+      screenMobile: _buildBrandsSlider(context, isMobileScreen: true),
     );
   }
 }

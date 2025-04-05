@@ -57,50 +57,49 @@ class _JoinUsGridState extends State<JoinUsGrid> {
             builder: (BuildContext context, bool isHovered, Widget? child) {
               return ClipRect(
                 child: CustomField(
-                  backgroundColor: AppColors.light.primary,
-                  width: r.size(140),
-                  height: r.size(140),
-                  padding: r.all(4),
-                  gap: r.size(8),
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CustomDisplay(
-                      assetPath: AppPaths.vectors.instagramIcon,
-                      svgColor: AppColors.colors.white,
-                      isSvg: true,
-                      width: r.size(20),
-                      height: r.size(20),
-                    ),
-                    CustomText(
-                      text:
-                          'Rejoignez-nous et bénéficiez de tous les services que nous proposons.',
-                      fontSize: r.size(8),
-                      color: AppColors.colors.white,
-                      textAlign: TextAlign.center,
-                    ),
-                    CustomButton(
-                      width: r.size(24),
-                      height: r.size(24),
-                      svgIconPath: AppPaths.vectors.arrowToRightIcon,
-                      iconWidth: r.size(12),
-                      borderRadius: BorderRadius.circular(r.size(15)),
-                      animationDuration: 200.ms,
-                      onHoverStyle: CustomButtonStyle(
-                          backgroundColor: AppColors.colors.lostInSadness),
-                      onPressed: (position, size) {
-                        AppUtil.launchURL(item.instagramUrl);
-                      },
-                    ),
-                  ],
-                ).animate(target: isHovered == true ? 1 : 0).slideY(
-                      duration: 350.ms,
-                      curve: Curves.easeOut,
-                      begin: -1,
-                    ),
+                      backgroundColor: AppColors.light.primary,
+                      width: r.size(140),
+                      height: r.size(140),
+                      padding: r.all(4),
+                      gap: r.size(8),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomDisplay(
+                          assetPath: AppPaths.vectors.instagramIcon,
+                          svgColor: AppColors.colors.white,
+                          isSvg: true,
+                          width: r.size(20),
+                          height: r.size(20),
+                        ),
+                        CustomText(
+                          text:
+                              'Rejoignez-nous et bénéficiez de tous les services que nous proposons.',
+                          fontSize: r.size(8),
+                          color: AppColors.colors.white,
+                          textAlign: TextAlign.center,
+                        ),
+                        CustomButton(
+                          width: r.size(24),
+                          height: r.size(24),
+                          svgIconPath: AppPaths.vectors.arrowToRightIcon,
+                          iconWidth: r.size(12),
+                          borderRadius: BorderRadius.circular(r.size(15)),
+                          animationDuration: 200.ms,
+                          onHoverStyle: CustomButtonStyle(
+                            backgroundColor: AppColors.colors.lostInSadness,
+                          ),
+                          onPressed: (position, size) {
+                            AppUtil.launchURL(item.instagramUrl);
+                          },
+                        ),
+                      ],
+                    )
+                    .animate(target: isHovered == true ? 1 : 0)
+                    .slideY(duration: 350.ms, curve: Curves.easeOut, begin: -1),
               );
             },
-          )
+          ),
         ],
       ),
     );
@@ -115,7 +114,7 @@ class _JoinUsGridState extends State<JoinUsGrid> {
       children: [
         ...widget.items.map((item) {
           return _buildJoinUs(item: item);
-        })
+        }),
       ],
     );
   }

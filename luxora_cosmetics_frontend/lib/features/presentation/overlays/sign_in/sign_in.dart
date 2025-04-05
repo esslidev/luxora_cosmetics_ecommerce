@@ -27,11 +27,7 @@ class SignInOverlay {
   ResponsiveSizeAdapter r;
   final VoidCallback? onDismiss;
 
-  SignInOverlay({
-    required this.context,
-    required this.r,
-    this.onDismiss,
-  });
+  SignInOverlay({required this.context, required this.r, this.onDismiss});
 
   OverlayEntry? _overlayEntry;
   bool toggle = false;
@@ -47,10 +43,7 @@ class SignInOverlay {
   );
 
   late final RequestResetPasswordOverlay _requestResetPasswordOverlay =
-      RequestResetPasswordOverlay(
-    context: context,
-    r: r,
-  );
+      RequestResetPasswordOverlay(context: context, r: r);
 
   late final TextEditingController _emailController = TextEditingController();
   late final TextEditingController _passwordController =
@@ -66,57 +59,55 @@ class SignInOverlay {
       return; // Prevents adding multiple overlays.
     }
     _overlayEntry = OverlayEntry(
-      builder: (context) => Stack(
-        children: [
-          ModalBarrier(
-            dismissible: true,
-            color: Colors.black.withValues(alpha: 0.6),
-            onDismiss: dismiss,
-          ).animate(target: toggle ? 1 : 0).fade(
-                duration: 300.ms,
-                curve: Curves.decelerate,
+      builder:
+          (context) => Stack(
+            children: [
+              ModalBarrier(
+                    dismissible: true,
+                    color: Colors.black.withValues(alpha: 0.6),
+                    onDismiss: dismiss,
+                  )
+                  .animate(target: toggle ? 1 : 0)
+                  .fade(duration: 300.ms, curve: Curves.decelerate),
+              Center(
+                child: Material(
+                  color: Colors.transparent,
+                  child: BlocListener<RemoteAuthBloc, RemoteAuthState>(
+                    listener: (context, state) {
+                      if (state is RemoteAuthSigningIn) {
+                        _loadingOverlay.show();
+                      }
+                      if (state is RemoteAuthSignedIn) {
+                        _loadingOverlay.dismiss();
+                        RemoteEventsUtil.userEvents.getLoggedInUser(context);
+                        RemoteEventsUtil.wishlistEvents.syncWishlist(context);
+                        RemoteEventsUtil.cartEvents.syncCart(context);
+                        dismiss();
+                        AppEventsUtil.liteNotifications.addLiteNotification(
+                          context,
+                          notification: LiteNotificationModel(
+                            notificationTitle: "Connexion Réussie",
+                            notificationMessage:
+                                "Vous êtes connecté(e) avec succès à votre compte !",
+                            notificationType: NotificationType.success,
+                          ),
+                        );
+                      }
+                      if (state is RemoteAuthError) {
+                        _loadingOverlay.dismiss();
+                        _successMessage.value = null;
+                        _errorMessage.value =
+                            state.error?.response?.data["message"];
+                      }
+                    },
+                    child: _buildOverlay()
+                        .animate(target: toggle ? 1 : 0)
+                        .fade(duration: 250.ms),
+                  ),
+                ),
               ),
-          Center(
-            child: Material(
-              color: Colors.transparent,
-              child: BlocListener<RemoteAuthBloc, RemoteAuthState>(
-                listener: (context, state) {
-                  if (state is RemoteAuthSigningIn) {
-                    _loadingOverlay.show();
-                  }
-                  if (state is RemoteAuthSignedIn) {
-                    _loadingOverlay.dismiss();
-                    RemoteEventsUtil.userEvents.getLoggedInUser(context);
-                    RemoteEventsUtil.wishlistEvents.syncWishlist(
-                      context,
-                    );
-                    RemoteEventsUtil.cartEvents.syncCart(
-                      context,
-                    );
-                    dismiss();
-                    AppEventsUtil.liteNotifications.addLiteNotification(context,
-                        notification: LiteNotificationModel(
-                          notificationTitle: "Connexion Réussie",
-                          notificationMessage:
-                              "Vous êtes connecté(e) avec succès à votre compte !",
-                          notificationType: NotificationType.success,
-                        ));
-                  }
-                  if (state is RemoteAuthError) {
-                    _loadingOverlay.dismiss();
-                    _successMessage.value = null;
-                    _errorMessage.value =
-                        state.error?.response?.data["message"];
-                  }
-                },
-                child: _buildOverlay().animate(target: toggle ? 1 : 0).fade(
-                      duration: 250.ms,
-                    ),
-              ),
-            ),
+            ],
           ),
-        ],
-      ),
     );
     toggle = true;
     Overlay.of(context).insert(_overlayEntry!);
@@ -158,114 +149,131 @@ class SignInOverlay {
     String? errorMessage,
   }) {
     return CustomField(
-        width: double.infinity,
-        borderRadius: r.size(1),
-        padding: r.all(4),
-        backgroundColor: successMessage != null
-            ? AppColors.light.primary.withValues(alpha: 0.4)
-            : AppColors.light.error.withValues(alpha: 0.4),
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CustomText(
-            text: successMessage ?? errorMessage ?? '',
-            fontSize: r.size(8),
-            textAlign: TextAlign.center,
-          ),
-        ]);
+      width: double.infinity,
+      borderRadius: r.size(1),
+      padding: r.all(4),
+      backgroundColor:
+          successMessage != null
+              ? AppColors.light.primary.withValues(alpha: 0.4)
+              : AppColors.light.error.withValues(alpha: 0.4),
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CustomText(
+          text: successMessage ?? errorMessage ?? '',
+          fontSize: r.size(8),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
   }
 
-  Widget _buildTextInput(
-      {required String name,
-      required String hint,
-      required TextEditingController controller,
-      TextInputType? keyboardType,
-      bool obscureText = false,
-      Color? Function(String)? borderColorCallback,
-      void Function(String value, Offset position, Size size)? onChanged}) {
+  Widget _buildTextInput({
+    required String name,
+    required String hint,
+    required TextEditingController controller,
+    TextInputType? keyboardType,
+    bool obscureText = false,
+    Color? Function(String)? borderColorCallback,
+    void Function(String value, Offset position, Size size)? onChanged,
+  }) {
     return ValueListenableBuilder<TextEditingValue>(
-        valueListenable: controller,
-        builder: (BuildContext context, TextEditingValue value, Widget? child) {
-          return CustomField(gap: r.size(2), children: [
+      valueListenable: controller,
+      builder: (BuildContext context, TextEditingValue value, Widget? child) {
+        return CustomField(
+          gap: r.size(2),
+          children: [
             CustomText(
               text: name,
-              fontSize: r.size(10),
+              fontSize: r.size(9),
               fontWeight: FontWeight.normal,
             ),
             CustomTextField(
               controller: controller,
-              fontSize: r.size(10),
+              fontSize: r.size(9),
               fontWeight: FontWeight.normal,
-              borderRadius: BorderRadius.all(Radius.circular(r.size(2))),
+
               backgroundColor: AppColors.light.backgroundSecondary,
               hintText: hint,
               obscureText: obscureText,
               padding: r.symmetric(horizontal: 8, vertical: 4),
               keyboardType: keyboardType,
-              borderColor: borderColorCallback != null
-                  ? borderColorCallback(value.text)
-                  : null,
+              borderColor:
+                  borderColorCallback != null
+                      ? borderColorCallback(value.text)
+                      : AppColors.light.primary,
               onChanged: onChanged,
             ),
-          ]);
-        });
+          ],
+        );
+      },
+    );
   }
 
   _buildForm() {
-    return CustomField(gap: r.size(12), children: [
-      _buildTextInput(
-        hint: 'John.doe@example.com',
-        keyboardType: TextInputType.emailAddress,
-        name: "Email",
-        controller: _emailController,
-        borderColorCallback: (value) {
-          return value != ''
-              ? !AppUtil.isEmailValid(value)
-                  ? AppColors.light.error
-                  : AppColors.light.primary
-              : null;
-        },
-      ).animate().fadeIn(delay: 200.ms),
-      _buildTextInput(
-        name: "Mot de passe",
-        hint: 'Password',
-        obscureText: true,
-        controller: _passwordController,
-        borderColorCallback: (value) {
-          return value != ''
-              ? !AppUtil.isPasswordValid(value)
-                  ? AppColors.light.error
-                  : AppColors.light.primary
-              : null;
-        },
-      ).animate().fadeIn(delay: 200.ms),
-    ]);
+    return CustomField(
+      gap: r.size(12),
+      children: [
+        _buildTextInput(
+          hint: 'John.doe@example.com',
+          keyboardType: TextInputType.emailAddress,
+          name: "Email",
+          controller: _emailController,
+          borderColorCallback: (value) {
+            return value != ''
+                ? !AppUtil.isEmailValid(value)
+                    ? AppColors.light.error
+                    : AppColors.light.success
+                : AppColors.light.primary.withValues(alpha: .8);
+          },
+        ).animate().fadeIn(delay: 200.ms),
+        _buildTextInput(
+          name: "Mot de passe",
+          hint: 'Password',
+          obscureText: true,
+          controller: _passwordController,
+          borderColorCallback: (value) {
+            return value != ''
+                ? !AppUtil.isPasswordValid(value)
+                    ? AppColors.light.error
+                    : AppColors.light.success
+                : AppColors.light.primary.withValues(alpha: .8);
+          },
+        ).animate().fadeIn(delay: 200.ms),
+      ],
+    );
   }
 
-  Widget _buildActionButton(
-      {required String title,
-      Color? backgroundColor,
-      Color? onHoverbackgroundColor,
-      Color? textColor,
-      Color? onHoverTextColor,
-      bool isEnabled = true,
-      required Function() onPressed}) {
+  Widget _buildActionButton({
+    required String title,
+    Color? backgroundColor,
+    Color? onHoverbackgroundColor,
+    Color? textColor,
+    Color? onHoverTextColor,
+    bool isEnabled = true,
+    required Function() onPressed,
+  }) {
     return CustomButton(
       text: title,
       fontWeight: FontWeight.bold,
-      fontSize: r.size(10),
+      fontSize: r.size(9),
       backgroundColor: backgroundColor ?? AppColors.light.primary,
       textColor: textColor ?? AppColors.colors.white,
       padding: r.symmetric(vertical: 4, horizontal: 16),
       enabled: isEnabled,
       borderRadius: BorderRadius.all(Radius.circular(r.size(1))),
-      animationDuration: 300.ms,
+      border: Border.all(color: Colors.transparent, width: r.size(1)),
+      animationDuration: 200.ms,
       onHoverStyle: CustomButtonStyle(
-          backgroundColor: onHoverbackgroundColor ?? AppColors.light.secondary,
-          textColor: onHoverTextColor),
+        border: Border.all(
+          color: AppColors.light.accent.withValues(alpha: .2),
+          width: r.size(1),
+        ),
+      ),
       onDisabledStyle: CustomButtonStyle(
-          backgroundColor: AppColors.light.backgroundSecondary,
-          textColor: AppColors.light.accent.withValues(alpha: 0.3)),
+        backgroundColor: AppColors.light.backgroundSecondary,
+        textColor: AppColors.light.accent.withValues(alpha: 0.3),
+      ),
       onPressed: (position, size) {
         onPressed();
       },
@@ -275,12 +283,18 @@ class SignInOverlay {
   Widget _buildActionButtons() {
     return ValueListenableBuilder<TextEditingValue>(
       valueListenable: _emailController,
-      builder:
-          (BuildContext context, TextEditingValue emailValue, Widget? child) {
+      builder: (
+        BuildContext context,
+        TextEditingValue emailValue,
+        Widget? child,
+      ) {
         return ValueListenableBuilder<TextEditingValue>(
           valueListenable: _passwordController,
-          builder: (BuildContext context, TextEditingValue passwordValue,
-              Widget? child) {
+          builder: (
+            BuildContext context,
+            TextEditingValue passwordValue,
+            Widget? child,
+          ) {
             return CustomField(
               gap: r.size(6),
               mainAxisAlignment: MainAxisAlignment.center,
@@ -296,18 +310,20 @@ class SignInOverlay {
                   onHoverTextColor: AppColors.colors.white,
                   onPressed: () {
                     RemoteEventsUtil.authEvents.signIn(
-                        context,
-                        UserModel(
-                          email: emailValue.text,
-                          password: passwordValue.text,
-                        ));
+                      context,
+                      UserModel(
+                        email: emailValue.text,
+                        password: passwordValue.text,
+                      ),
+                    );
                   },
                 ),
                 _buildActionButton(
                   title: "Annuler",
                   backgroundColor: AppColors.light.accent,
-                  onHoverbackgroundColor:
-                      AppColors.light.accent.withValues(alpha: 0.8),
+                  onHoverbackgroundColor: AppColors.light.accent.withValues(
+                    alpha: 0.8,
+                  ),
                   textColor: AppColors.light.subtle,
                   onPressed: () {
                     dismiss();
@@ -339,76 +355,78 @@ class SignInOverlay {
           Expanded(
             child: SingleChildScrollView(
               child: ValueListenableBuilder(
-                  valueListenable: _successMessage,
-                  builder: (BuildContext context, String? successMessage,
-                      Widget? child) {
-                    return ValueListenableBuilder(
-                        valueListenable: _errorMessage,
-                        builder: (BuildContext context, String? errorMessage,
-                            Widget? child) {
-                          return CustomField(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            gap: r.size(14),
-                            padding: r.symmetric(horizontal: 16, vertical: 22),
+                valueListenable: _successMessage,
+                builder: (
+                  BuildContext context,
+                  String? successMessage,
+                  Widget? child,
+                ) {
+                  return ValueListenableBuilder(
+                    valueListenable: _errorMessage,
+                    builder: (
+                      BuildContext context,
+                      String? errorMessage,
+                      Widget? child,
+                    ) {
+                      return CustomField(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        gap: r.size(14),
+                        padding: r.symmetric(horizontal: 16, vertical: 22),
+                        children: [
+                          CustomDisplay(
+                            assetPath: AppPaths.images.logo,
+                            width: r.size(120),
+                            height: r.size(40),
+                          ).animate().fadeIn(delay: 100.ms),
+                          if (errorMessage != null)
+                            _buildNotificationMessageField(
+                              successMessage: successMessage,
+                              errorMessage: errorMessage,
+                            ),
+                          _buildForm(),
+                          _buildActionButtons().animate().fadeIn(delay: 300.ms),
+                          CustomField(
+                            gap: r.size(3),
+                            arrangement: FieldArrangement.row,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              CustomDisplay(
-                                assetPath: AppPaths.vectors.logo,
-                                isSvg: true,
-                                width: r.size(100),
-                              ).animate().fadeIn(delay: 100.ms),
-                              if (errorMessage != null)
-                                _buildNotificationMessageField(
-                                    successMessage: successMessage,
-                                    errorMessage: errorMessage),
-                              _buildForm(),
-                              _buildActionButtons()
-                                  .animate()
-                                  .fadeIn(delay: 300.ms),
-                              CustomField(
-                                  gap: r.size(3),
-                                  arrangement: FieldArrangement.row,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    CustomText(
-                                      text: "Ou",
-                                      fontSize: r.size(8),
-                                    ),
-                                    CustomButton(
-                                      text: "Créer un nouveau compte",
-                                      textColor: AppColors.light.primary,
-                                      onHoverStyle: CustomButtonStyle(
-                                        textColor: AppColors.light.secondary,
-                                      ),
-                                      fontSize: r.size(8),
-                                      onPressed: (position, size) {
-                                        dismiss();
-                                        _createAccountOverlay.show();
-                                      },
-                                    ),
-                                    CustomText(
-                                      text: '|',
-                                      fontSize: r.size(8),
-                                    ),
-                                    CustomButton(
-                                      text: "Mot de passe oublié ?",
-                                      textColor: AppColors.light.primary,
-                                      onHoverStyle: CustomButtonStyle(
-                                        textColor: AppColors.light.secondary,
-                                      ),
-                                      fontSize: r.size(8),
-                                      onPressed: (position, size) {
-                                        dismiss();
-                                        _requestResetPasswordOverlay.show(
-                                          emailInput: _emailController.text,
-                                        );
-                                      },
-                                    ),
-                                  ]).animate().fadeIn(delay: 300.ms),
+                              CustomText(text: "Ou", fontSize: r.size(8)),
+                              CustomButton(
+                                text: "Créer un nouveau compte",
+                                textColor: AppColors.light.primary,
+                                onHoverStyle: CustomButtonStyle(
+                                  textColor: AppColors.light.secondary,
+                                ),
+                                fontSize: r.size(8),
+                                onPressed: (position, size) {
+                                  dismiss();
+                                  _createAccountOverlay.show();
+                                },
+                              ),
+                              CustomText(text: '|', fontSize: r.size(8)),
+                              CustomButton(
+                                text: "Mot de passe oublié ?",
+                                textColor: AppColors.light.primary,
+                                onHoverStyle: CustomButtonStyle(
+                                  textColor: AppColors.light.secondary,
+                                ),
+                                fontSize: r.size(8),
+                                onPressed: (position, size) {
+                                  dismiss();
+                                  _requestResetPasswordOverlay.show(
+                                    emailInput: _emailController.text,
+                                  );
+                                },
+                              ),
                             ],
-                          );
-                        });
-                  }),
+                          ).animate().fadeIn(delay: 300.ms),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ],

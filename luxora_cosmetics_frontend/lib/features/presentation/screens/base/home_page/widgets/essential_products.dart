@@ -47,58 +47,56 @@ class _EssentialProductsState extends State<EssentialProducts> {
       ),
       animationDuration: 300.ms,
       onHoverStyle: CustomButtonStyle(
-          backgroundColor: AppColors.light.primary.withValues(alpha: .3)),
+        backgroundColor: AppColors.light.primary.withValues(alpha: .3),
+      ),
       onPressed: (position, size) {
-        Beamer.of(context).beamToNamed(
-          AppPaths.routes.boutiqueScreen,
-        );
+        Beamer.of(context).beamToNamed(AppPaths.routes.boutiqueScreen);
       },
     );
   }
 
   Widget _buildTitleSection() {
     return CustomField(
-        width: r.size(180),
-        minHeight: r.size(180),
-        gap: r.size(12),
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                fontFamily: 'recoleta',
-                fontSize: r.size(26),
-                color: Colors.black, // Default color for the text
-              ),
-              children: [
-                const TextSpan(
-                  text: "Nos ",
-                ),
-                TextSpan(
-                  text: "Produits Essentiels",
-                  style: TextStyle(
-                    color: AppColors.light.primary, // Custom color for "Luxora"
-                  ),
-                ),
-              ],
+      width: r.size(180),
+      minHeight: r.size(180),
+      gap: r.size(12),
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            style: TextStyle(
+              fontFamily: 'recoleta',
+              fontSize: r.size(26),
+              color: Colors.black, // Default color for the text
             ),
+            children: [
+              const TextSpan(text: "Nos "),
+              TextSpan(
+                text: "Produits Essentiels",
+                style: TextStyle(
+                  color: AppColors.light.primary, // Custom color for "Luxora"
+                ),
+              ),
+            ],
           ),
-          CustomText(
-            text:
-                "Découvrez les puissants bienfaits de l'extrait de figue de barbarie marocaine, un trésor naturel reconnu pour ses nutriments riches et ses propriétés réparatrices.",
-            fontSize: r.size(8),
-            color: AppColors.light.accent.withValues(alpha: .6),
-            textAlign: TextAlign.justify,
-          ),
-          _buildButton(),
-        ]);
+        ),
+        CustomText(
+          text:
+              "Découvrez les puissants bienfaits de l'extrait de figue de barbarie marocaine, un trésor naturel reconnu pour ses nutriments riches et ses propriétés réparatrices.",
+          fontSize: r.size(8),
+          color: AppColors.light.accent.withValues(alpha: .6),
+          textAlign: TextAlign.justify,
+        ),
+        _buildButton(),
+      ],
+    );
   }
 
-  Widget _buildEssentialProducts(BuildContext context) {
+  Widget _buildEssentialProducts(BuildContext context, {bool? isCompact}) {
     return CustomField(
       width: double.infinity,
-      padding: r.symmetric(horizontal: 160),
+      padding: r.symmetric(horizontal: isCompact == true ? 20 : 160),
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       isWrap: true,
@@ -140,7 +138,7 @@ class _EssentialProductsState extends State<EssentialProducts> {
           name: 'Savon figue de barbarie',
           price: 199.99,
           onPressed: () {},
-        )
+        ),
       ],
     );
   }
@@ -150,7 +148,8 @@ class _EssentialProductsState extends State<EssentialProducts> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveScreenAdapter(
-      fallbackScreen: _buildEssentialProducts(context),
+      fallbackScreen: _buildEssentialProducts(context, isCompact: true),
+      screenLargeDesktop: _buildEssentialProducts(context, isCompact: false),
     );
   }
 }

@@ -37,12 +37,13 @@ class _FooterWidgetState extends State<FooterWidget> {
     );
   }
 
-  Widget _buildQuoteText() {
+  Widget _buildQuoteText({double? fontSize, TextAlign? textAlign}) {
     return CustomText(
       maxWidth: r.size(240),
       text:
           "Rejoignez la famille Luxora et adoptez l'essence de la beauté marocaine.",
-      fontSize: r.size(11),
+      fontSize: fontSize ?? r.size(11),
+      textAlign: textAlign,
       fontFamily: 'recoleta',
       color: AppColors.colors.white,
     );
@@ -51,50 +52,60 @@ class _FooterWidgetState extends State<FooterWidget> {
   Widget _buildSocialButton({required String path, required String socialUrl}) {
     ValueNotifier<bool> isHoveredNotifier = ValueNotifier(false);
     return ValueListenableBuilder(
-        valueListenable: isHoveredNotifier,
-        builder: (BuildContext context, bool isHovered, Widget? child) {
-          return CustomButton(
-            svgIconPath: path,
-            height: r.size(9),
-            onHoverEnter: (position, size) {
-              isHoveredNotifier.value = true;
-            },
-            onHoverExit: () {
-              isHoveredNotifier.value = false;
-            },
-            onPressed: (position, size) {
-              AppUtil.launchURL(socialUrl);
-            },
-          ).animate(target: isHovered == true ? 1 : 0).scaleXY(
-                duration: 250.ms,
-                curve: Curves.easeOut,
-                begin: 1,
-                end: 1.4,
-              );
-        });
+      valueListenable: isHoveredNotifier,
+      builder: (BuildContext context, bool isHovered, Widget? child) {
+        return CustomButton(
+              svgIconPath: path,
+              width: r.size(9),
+              height: r.size(9),
+              onHoverEnter: (position, size) {
+                isHoveredNotifier.value = true;
+              },
+              onHoverExit: () {
+                isHoveredNotifier.value = false;
+              },
+              onPressed: (position, size) {
+                AppUtil.launchURL(socialUrl);
+              },
+            )
+            .animate(target: isHovered == true ? 1 : 0)
+            .scaleXY(
+              duration: 250.ms,
+              curve: Curves.easeOut,
+              begin: 1,
+              end: 1.4,
+            );
+      },
+    );
   }
 
   Widget _buildSocialButtons() {
     return CustomField(
       gap: r.size(12),
+      mainAxisSize: MainAxisSize.min,
       arrangement: FieldArrangement.row,
       children: [
         _buildSocialButton(
-            path: AppPaths.vectors.facebookIcon,
-            socialUrl: 'https://facebook.com'),
+          path: AppPaths.vectors.facebookIcon,
+          socialUrl: 'https://facebook.com',
+        ),
         _buildSocialButton(
-            path: AppPaths.vectors.instagramIcon,
-            socialUrl: 'https://instagram.com'),
+          path: AppPaths.vectors.instagramIcon,
+          socialUrl: 'https://instagram.com',
+        ),
         _buildSocialButton(
-            path: AppPaths.vectors.twitterIcon, socialUrl: 'https://x.com'),
+          path: AppPaths.vectors.twitterIcon,
+          socialUrl: 'https://x.com',
+        ),
         _buildSocialButton(
-            path: AppPaths.vectors.linkdinIcon,
-            socialUrl: 'https://linkedin.com'),
+          path: AppPaths.vectors.linkdinIcon,
+          socialUrl: 'https://linkedin.com',
+        ),
       ],
     );
   }
 
-  Widget _buildFooter(BuildContext context) {
+  Widget _buildFooter(BuildContext context, {bool? isTabletScreen}) {
     return Stack(
       children: [
         CustomField(
@@ -102,6 +113,7 @@ class _FooterWidgetState extends State<FooterWidget> {
           height: r.size(240),
           backgroundColor: AppColors.colors.lostInSadness,
           margin: r.only(top: r.size(50)),
+          padding: r.symmetric(horizontal: 20),
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -113,8 +125,13 @@ class _FooterWidgetState extends State<FooterWidget> {
                 mainAxisSize: MainAxisSize.min,
                 arrangement: FieldArrangement.row,
                 children: [
-                  _buildLogoButton(),
-                  _buildQuoteText(),
+                  _buildLogoButton(
+                    height: isTabletScreen == true ? r.size(34) : null,
+                  ),
+                  if (isTabletScreen == true)
+                    Expanded(child: _buildQuoteText(fontSize: r.size(9)))
+                  else
+                    _buildQuoteText(),
                   _buildSocialButtons(),
                 ],
               ),
@@ -131,35 +148,115 @@ class _FooterWidgetState extends State<FooterWidget> {
                   padding: r.symmetric(vertical: 16),
                   text: 'Copyright © 2025 Devwave  | All rights reserved.',
                   color: AppColors.colors.white.withValues(alpha: .6),
-                )
+                ),
               ],
             ),
           ],
         ),
         Align(
           alignment: Alignment.center,
-          child: JoinUsGrid(items: [
-            JoinUsGridItem(
+          child: JoinUsGrid(
+            items: [
+              JoinUsGridItem(
                 imagePath: AppPaths.images.joinUsImage1,
-                instagramUrl: 'https://instagram.com'),
-            JoinUsGridItem(
+                instagramUrl: 'https://instagram.com',
+              ),
+              JoinUsGridItem(
                 imagePath: AppPaths.images.joinUsImage2,
-                instagramUrl: 'https://instagram.com'),
-            JoinUsGridItem(
-                imagePath: AppPaths.images.joinUsImage3,
-                instagramUrl: 'https://instagram.com'),
-            JoinUsGridItem(
-                imagePath: AppPaths.images.joinUsImage2,
-                instagramUrl: 'https://instagram.com'),
-          ]),
+                instagramUrl: 'https://instagram.com',
+              ),
+              if (isTabletScreen != true)
+                JoinUsGridItem(
+                  imagePath: AppPaths.images.joinUsImage3,
+                  instagramUrl: 'https://instagram.com',
+                ),
+              if (isTabletScreen != true)
+                JoinUsGridItem(
+                  imagePath: AppPaths.images.joinUsImage2,
+                  instagramUrl: 'https://instagram.com',
+                ),
+            ],
+          ),
         ),
         Positioned(
-            bottom: 0,
-            child: CustomDisplay(
-              assetPath: AppPaths.vectors.branchDecoration2,
-              width: r.size(120),
-              isSvg: true,
-            )),
+          bottom: 0,
+          child: CustomDisplay(
+            assetPath: AppPaths.vectors.branchDecoration2,
+            width: r.size(120),
+            isSvg: true,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFooterOnMobile(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned(
+          bottom: 0,
+          child: CustomDisplay(
+            assetPath: AppPaths.vectors.branchDecoration2,
+            width: r.size(120),
+            isSvg: true,
+          ),
+        ),
+        CustomField(
+          width: double.infinity,
+          height: r.size(240),
+          backgroundColor: AppColors.colors.lostInSadness,
+          margin: r.only(top: r.size(50)),
+          padding: r.symmetric(horizontal: 20),
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: CustomField(
+                gap: r.size(12),
+                margin: r.only(top: 60),
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                arrangement: FieldArrangement.column,
+                children: [
+                  _buildLogoButton(height: r.size(34)),
+                  _buildQuoteText(
+                    fontSize: r.size(9),
+                    textAlign: TextAlign.center,
+                  ),
+                  _buildSocialButtons(),
+                ],
+              ),
+            ),
+            CustomField(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomLine(
+                  size: r.size(200),
+                  thickness: r.size(.4),
+                  color: AppColors.colors.white.withValues(alpha: .3),
+                ),
+                CustomText(
+                  textAlign: TextAlign.center,
+                  padding: r.symmetric(vertical: 16),
+                  text: 'Copyright © 2025 Devwave  | All rights reserved.',
+                  color: AppColors.colors.white.withValues(alpha: .6),
+                ),
+              ],
+            ),
+          ],
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: JoinUsGrid(
+            items: [
+              JoinUsGridItem(
+                imagePath: AppPaths.images.joinUsImage1,
+                instagramUrl: 'https://instagram.com',
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -168,6 +265,8 @@ class _FooterWidgetState extends State<FooterWidget> {
   Widget build(BuildContext context) {
     return ResponsiveScreenAdapter(
       fallbackScreen: _buildFooter(context),
+      screenTablet: _buildFooter(context, isTabletScreen: true),
+      screenMobile: _buildFooterOnMobile(context),
     );
   }
 }

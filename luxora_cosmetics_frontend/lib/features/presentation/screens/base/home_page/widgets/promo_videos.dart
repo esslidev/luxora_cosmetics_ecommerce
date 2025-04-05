@@ -28,10 +28,13 @@ class _PromoVideosState extends State<PromoVideos> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        CustomDisplay(
-          assetPath: AppPaths.animatedImages.promoVideosShortVideo,
-          height: r.size(340),
-          onPressed: () {},
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: r.size(600)),
+          child: CustomDisplay(
+            assetPath: AppPaths.animatedImages.promoVideosShortVideo,
+            width: double.infinity,
+            onPressed: () {},
+          ),
         ),
         Align(
           alignment: Alignment.center,
@@ -49,13 +52,10 @@ class _PromoVideosState extends State<PromoVideos> {
 
   Widget _buildPromoVideos(BuildContext context) {
     return CustomField(
-      width: double.infinity,
       padding: r.symmetric(vertical: 60, horizontal: 20),
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        _buildLoopingGifButton(),
-      ],
+      children: [_buildLoopingGifButton()],
     );
   }
 
@@ -63,8 +63,6 @@ class _PromoVideosState extends State<PromoVideos> {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveScreenAdapter(
-      fallbackScreen: _buildPromoVideos(context),
-    );
+    return ResponsiveScreenAdapter(fallbackScreen: _buildPromoVideos(context));
   }
 }

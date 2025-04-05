@@ -66,53 +66,66 @@ class _CustomDisplayState extends State<CustomDisplay> {
     return widget.isSvg
         ? widget.isNetwork
             ? SvgPicture.network(
-                widget.assetPath,
-                width: widget.width,
-                height: widget.height,
-                fit: widget.fit ?? BoxFit.contain,
-                colorFilter: widget.svgColor != null
-                    ? ColorFilter.mode(widget.svgColor!, BlendMode.srcIn)
-                    : null,
-                placeholderBuilder: widget.loadingWidget != null
-                    ? (context) => widget.loadingWidget!
-                    : null,
-              )
+              widget.assetPath,
+              width: widget.width,
+              height: widget.height,
+              fit: widget.fit ?? BoxFit.contain,
+              colorFilter:
+                  widget.svgColor != null
+                      ? ColorFilter.mode(widget.svgColor!, BlendMode.srcIn)
+                      : null,
+              placeholderBuilder:
+                  widget.loadingWidget != null
+                      ? (context) => widget.loadingWidget!
+                      : null,
+            )
             : SvgPicture.asset(
-                widget.assetPath,
-                width: widget.width,
-                height: widget.height,
-                fit: widget.fit ?? BoxFit.contain,
-                colorFilter: widget.svgColor != null
-                    ? ColorFilter.mode(widget.svgColor!, BlendMode.srcIn)
-                    : null,
-                placeholderBuilder: widget.placeholderWidget != null
-                    ? (context) => widget.placeholderWidget!
-                    : null,
-              )
+              widget.assetPath,
+              width: widget.width,
+              height: widget.height,
+              fit: widget.fit ?? BoxFit.contain,
+              colorFilter:
+                  widget.svgColor != null
+                      ? ColorFilter.mode(widget.svgColor!, BlendMode.srcIn)
+                      : null,
+              placeholderBuilder:
+                  widget.placeholderWidget != null
+                      ? (context) => widget.placeholderWidget!
+                      : null,
+            )
         : widget.isNetwork
-            ? Image.network(
-                widget.assetPath,
-                width: widget.width,
-                height: widget.height,
-                fit: widget.fit ?? BoxFit.contain,
-                loadingBuilder: widget.loadingWidget != null
-                    ? (context, child, loadingProgress) => widget.loadingWidget!
-                    : null,
-                errorBuilder: (context, error, stackTrace) =>
-                    widget.errorWidget ??
-                    Icon(Icons.error,
-                        size: r.size(40), color: AppColors.light.error),
-              )
-            : Image.asset(
-                widget.assetPath,
-                width: widget.width,
-                height: widget.height,
-                fit: widget.fit ?? BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) =>
-                    widget.errorWidget ??
-                    Icon(Icons.error,
-                        size: r.size(40), color: AppColors.light.error),
-              );
+        ? Image.network(
+          widget.assetPath,
+          width: widget.width,
+          height: widget.height,
+          fit: widget.fit ?? BoxFit.contain,
+          loadingBuilder:
+              widget.loadingWidget != null
+                  ? (context, child, loadingProgress) => widget.loadingWidget!
+                  : null,
+          errorBuilder:
+              (context, error, stackTrace) =>
+                  widget.errorWidget ??
+                  Icon(
+                    Icons.error,
+                    size: r.size(40),
+                    color: AppColors.light.error,
+                  ),
+        )
+        : Image.asset(
+          widget.assetPath,
+          width: widget.width,
+          height: widget.height,
+          fit: widget.fit ?? BoxFit.contain,
+          errorBuilder:
+              (context, error, stackTrace) =>
+                  widget.errorWidget ??
+                  Icon(
+                    Icons.error,
+                    size: r.size(40),
+                    color: AppColors.light.error,
+                  ),
+        );
   }
 
   //----------------------------------------------------------------------------------------------------//
@@ -120,9 +133,10 @@ class _CustomDisplayState extends State<CustomDisplay> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      cursor: widget.onPressed != null
-          ? SystemMouseCursors.click
-          : SystemMouseCursors.basic,
+      cursor:
+          widget.onPressed != null
+              ? SystemMouseCursors.click
+              : SystemMouseCursors.basic,
       onEnter: (event) {
         if (widget.onHoverEnter != null) {
           widget.onHoverEnter!();
@@ -148,9 +162,7 @@ class _CustomDisplayState extends State<CustomDisplay> {
             margin: widget.margin,
             borderColor: widget.borderColor,
             borderWidth: widget.borderWidth,
-            children: [
-              _buildCustomDisplay(),
-            ],
+            children: [_buildCustomDisplay()],
           ),
         ),
       ),

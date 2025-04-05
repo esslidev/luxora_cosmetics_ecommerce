@@ -17,12 +17,13 @@ class Testimonial {
   final String country;
   final String testimonial;
 
-  const Testimonial(
-      {required this.customerName,
-      required this.customerImageUrl,
-      required this.city,
-      required this.country,
-      required this.testimonial});
+  const Testimonial({
+    required this.customerName,
+    required this.customerImageUrl,
+    required this.city,
+    required this.country,
+    required this.testimonial,
+  });
 }
 
 class TestimonialsSlider extends StatefulWidget {
@@ -48,10 +49,11 @@ class _TestimonialsSliderState extends State<TestimonialsSlider> {
 
   //----------------------------------------------------------------------------------------------------//
 
-  Widget _buildSliderIndicator(
-      {required int index,
-      required int length,
-      required Function(int index) onPressed}) {
+  Widget _buildSliderIndicator({
+    required int index,
+    required int length,
+    required Function(int index) onPressed,
+  }) {
     return CustomField(
       gap: r.size(3),
       arrangement: FieldArrangement.row,
@@ -72,10 +74,13 @@ class _TestimonialsSliderState extends State<TestimonialsSlider> {
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 border: Border.all(
-                    width: r.size(0.6), color: AppColors.light.secondary),
-                color: i == index
-                    ? AppColors.light.secondary
-                    : Colors.transparent, // Highlight active dot
+                  width: r.size(0.6),
+                  color: AppColors.light.secondary,
+                ),
+                color:
+                    i == index
+                        ? AppColors.light.secondary
+                        : Colors.transparent, // Highlight active dot
               ),
             ),
           ),
@@ -84,12 +89,26 @@ class _TestimonialsSliderState extends State<TestimonialsSlider> {
     );
   }
 
-  Widget _buildCustomerImage({required String imageUrl}) {
+  Widget _buildCustomerImage({
+    required String imageUrl,
+    bool? isTabletScreen,
+    bool? isMobileScreen,
+  }) {
     return CustomField(
       backgroundColor: AppColors.colors.jetGrey.withValues(alpha: .1),
       borderRadius: r.size(100),
-      width: r.size(180),
-      height: r.size(180),
+      width:
+          isMobileScreen == true
+              ? r.size(60)
+              : isTabletScreen == true
+              ? r.size(120)
+              : r.size(180),
+      height:
+          isMobileScreen == true
+              ? r.size(60)
+              : isTabletScreen == true
+              ? r.size(120)
+              : r.size(180),
       padding: r.all(6),
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -103,7 +122,11 @@ class _TestimonialsSliderState extends State<TestimonialsSlider> {
     );
   }
 
-  Widget _buildTestimonialCard({required Testimonial testimonial}) {
+  Widget _buildTestimonialCard({
+    required Testimonial testimonial,
+    bool? isTabletScreen,
+    bool? isMobileScreen,
+  }) {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
@@ -113,7 +136,7 @@ class _TestimonialsSliderState extends State<TestimonialsSlider> {
           width: r.size(500),
           gap: r.size(12),
           backgroundColor: AppColors.colors.white,
-          margin: r.only(right: 90),
+          margin: r.only(right: isMobileScreen == true ? 0 : 90),
           padding: r.symmetric(vertical: 20, horizontal: 30),
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -131,36 +154,55 @@ class _TestimonialsSliderState extends State<TestimonialsSlider> {
               maxLines: 8,
               overflow: TextOverflow.ellipsis,
             ),
-            CustomField(gap: r.size(2), children: [
-              CustomText(
-                maxWidth: r.size(300),
-                text: testimonial.customerName,
-                fontSize: r.size(11),
-                fontWeight: FontWeight.w600,
-              ),
-              CustomText(
-                maxWidth: r.size(300),
-                text:
-                    '${testimonial.city}, ${testimonial.country.toUpperCase()}',
-                fontSize: r.size(7),
-              ),
-            ]),
+            CustomField(
+              gap: r.size(2),
+              children: [
+                CustomText(
+                  maxWidth: r.size(300),
+                  text: testimonial.customerName,
+                  fontSize: r.size(11),
+                  fontWeight: FontWeight.w600,
+                ),
+                CustomText(
+                  maxWidth: r.size(300),
+                  text:
+                      '${testimonial.city}, ${testimonial.country.toUpperCase()}',
+                  fontSize: r.size(7),
+                ),
+              ],
+            ),
           ],
         ),
         Positioned(
+          top: isMobileScreen == true ? 0 : null,
           right: 0,
           child: _buildCustomerImage(
             imageUrl: testimonial.customerImageUrl,
+            isTabletScreen: isTabletScreen,
+            isMobileScreen: isMobileScreen,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildTestimonialsSlider(BuildContext context) {
+  Widget _buildTestimonialsSlider(
+    BuildContext context, {
+    bool? isDesktopScreen,
+    bool? isTabletScreen,
+    bool? isMobileScreen,
+  }) {
     return CustomField(
       width: double.infinity,
-      padding: r.symmetric(vertical: 20, horizontal: 160),
+      padding: r.symmetric(
+        vertical: 20,
+        horizontal:
+            isDesktopScreen == true ||
+                    isTabletScreen == true ||
+                    isMobileScreen == true
+                ? 20
+                : 160,
+      ),
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       isWrap: true,
@@ -186,9 +228,14 @@ class _TestimonialsSliderState extends State<TestimonialsSlider> {
                   });
                 },
               ),
-              items: widget.testimonials.map((testimonial) {
-                return _buildTestimonialCard(testimonial: testimonial);
-              }).toList(),
+              items:
+                  widget.testimonials.map((testimonial) {
+                    return _buildTestimonialCard(
+                      testimonial: testimonial,
+                      isTabletScreen: isTabletScreen,
+                      isMobileScreen: isMobileScreen,
+                    );
+                  }).toList(),
             ),
             Positioned(
               bottom: r.size(20),
@@ -203,7 +250,7 @@ class _TestimonialsSliderState extends State<TestimonialsSlider> {
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -214,6 +261,9 @@ class _TestimonialsSliderState extends State<TestimonialsSlider> {
   Widget build(BuildContext context) {
     return ResponsiveScreenAdapter(
       fallbackScreen: _buildTestimonialsSlider(context),
+      screenDesktop: _buildTestimonialsSlider(context, isDesktopScreen: true),
+      screenTablet: _buildTestimonialsSlider(context, isTabletScreen: true),
+      screenMobile: _buildTestimonialsSlider(context, isMobileScreen: true),
     );
   }
 }

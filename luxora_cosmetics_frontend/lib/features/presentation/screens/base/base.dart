@@ -35,13 +35,8 @@ class _BaseScreenState extends State<BaseScreen> {
     r = ResponsiveSizeAdapter(context);
     locator<GlobalContexts>().setHomeContext(context);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _loadingOverlay = LoadingOverlay(
-        context: context,
-        r: r,
-      );
-      AppEventsUtil.breadCrumbs.clearBreadCrumbs(
-        context,
-      );
+      _loadingOverlay = LoadingOverlay(context: context, r: r);
+      AppEventsUtil.breadCrumbs.clearBreadCrumbs(context);
     });
   }
 
@@ -55,30 +50,28 @@ class _BaseScreenState extends State<BaseScreen> {
 
   Widget _buildHome(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        Expanded(
-            child: SingleChildScrollView(
-          child: CustomField(
-              minHeight: screenSize.height,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomField(children: [
-                  HeaderWidget(
-                    wishlistItems: _wishlistItemsResponse,
-                    cartItems: _cartItemsResponse,
-                  ),
-                  Beamer(
-                    routerDelegate: BaseRoutes.baseBeamerDelegate,
-                    backButtonDispatcher: BeamerBackButtonDispatcher(
-                      delegate: BaseRoutes.baseBeamerDelegate,
-                    ),
-                  ),
-                ]),
-                FooterWidget(),
-              ]),
-        ))
-      ],
+    return SingleChildScrollView(
+      child: CustomField(
+        minHeight: screenSize.height,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CustomField(
+            children: [
+              HeaderWidget(
+                wishlistItems: _wishlistItemsResponse,
+                cartItems: _cartItemsResponse,
+              ),
+              Beamer(
+                routerDelegate: BaseRoutes.baseBeamerDelegate,
+                backButtonDispatcher: BeamerBackButtonDispatcher(
+                  delegate: BaseRoutes.baseBeamerDelegate,
+                ),
+              ),
+            ],
+          ),
+          FooterWidget(),
+        ],
+      ),
     );
   }
 }

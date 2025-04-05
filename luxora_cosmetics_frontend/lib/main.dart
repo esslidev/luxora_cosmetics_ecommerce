@@ -22,11 +22,7 @@ import 'locator.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Perform setup and initialization
   await setupLocator();
-  /* await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );*/
 
   usePathUrlStrategy();
 
@@ -39,12 +35,11 @@ Future<void> main() async {
     ]);
   }
 
-  // Run the app after setup is complete
-  runApp(const MyApp());
+  runApp(const MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,21 +47,28 @@ class MyApp extends StatelessWidget {
       providers: [
         // Local Blocs
         BlocProvider<AppRouteBloc>(
-            create: (context) => locator<AppRouteBloc>()),
+          create: (context) => locator<AppRouteBloc>(),
+        ),
         BlocProvider<AppLiteNotificationsBloc>(
-            create: (context) => locator<AppLiteNotificationsBloc>()),
+          create: (context) => locator<AppLiteNotificationsBloc>(),
+        ),
         BlocProvider<AppBreadCrumbsBloc>(
-            create: (context) => locator<AppBreadCrumbsBloc>()),
+          create: (context) => locator<AppBreadCrumbsBloc>(),
+        ),
 
         // Remote Blocs
         BlocProvider<RemoteAuthBloc>(
-            create: (context) => locator<RemoteAuthBloc>()),
+          create: (context) => locator<RemoteAuthBloc>(),
+        ),
         BlocProvider<RemoteUserBloc>(
-            create: (context) => locator<RemoteUserBloc>()),
+          create: (context) => locator<RemoteUserBloc>(),
+        ),
         BlocProvider<RemoteProductBloc>(
-            create: (context) => locator<RemoteProductBloc>()),
+          create: (context) => locator<RemoteProductBloc>(),
+        ),
         BlocProvider<RemoteCategoryBloc>(
-            create: (context) => locator<RemoteCategoryBloc>()),
+          create: (context) => locator<RemoteCategoryBloc>(),
+        ),
         /* BlocProvider<RemoteWishlistBloc>(
             create: (context) => locator<RemoteWishlistBloc>()),
         BlocProvider<RemoteCartBloc>(
@@ -89,8 +91,10 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
           // ...
         ],
-        localeResolutionCallback:
-            (Locale? locale, Iterable<Locale> supportedLocales) {
+        localeResolutionCallback: (
+          Locale? locale,
+          Iterable<Locale> supportedLocales,
+        ) {
           if (locale != null) {
             for (Locale supportedLocale in supportedLocales) {
               if (supportedLocale.languageCode == locale.languageCode) {

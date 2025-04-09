@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:luxora_cosmetics_frontend/core/constants/app_colors.dart';
 
 import '../../../../config/theme/app_theme.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 
 enum TextPosition { start, center, end }
@@ -77,47 +77,51 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveTextStyle = textStyle?.copyWith(
-            color: color ?? AppColors.light.accent,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            letterSpacing: letterSpacing,
-            height: lineHeight,
-            fontFamily: fontFamily,
-            decoration: textDecoration,
-            decorationColor: textDecorationColor,
-            decorationThickness: textDecorationThickness,
-            decorationStyle: textDecorationStyle,
-            overflow: overflow) ??
+    final effectiveTextStyle =
+        textStyle?.copyWith(
+          color: color ?? AppColors.light.accent,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          letterSpacing: letterSpacing,
+          height: lineHeight,
+          fontFamily: fontFamily,
+          decoration: textDecoration,
+          decorationColor: textDecorationColor,
+          decorationThickness: textDecorationThickness,
+          decorationStyle: textDecorationStyle,
+          overflow: overflow,
+        ) ??
         AppTheme.bodyText.copyWith(
-            color: color ?? AppColors.light.accent,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            letterSpacing: letterSpacing,
-            height: lineHeight,
-            fontFamily: fontFamily,
-            decoration: textDecoration,
-            decorationColor: textDecorationColor,
-            decorationThickness: textDecorationThickness,
-            decorationStyle: textDecorationStyle,
-            overflow: overflow);
+          color: color ?? AppColors.light.accent,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          letterSpacing: letterSpacing,
+          height: lineHeight,
+          fontFamily: fontFamily,
+          decoration: textDecoration,
+          decorationColor: textDecorationColor,
+          decorationThickness: textDecorationThickness,
+          decorationStyle: textDecorationStyle,
+          overflow: overflow,
+        );
 
-    final textWidget = selectable
-        ? SelectableText(
-            text,
-            style: effectiveTextStyle,
-            textAlign: textAlign,
-            maxLines: maxLines,
-            textDirection: textDirection,
-          )
-        : Text(
-            text,
-            style: effectiveTextStyle,
-            textAlign: textAlign,
-            maxLines: maxLines,
-            softWrap: true,
-            textDirection: textDirection,
-          );
+    final textWidget =
+        selectable
+            ? SelectableText(
+              text,
+              style: effectiveTextStyle,
+              textAlign: textAlign,
+              maxLines: maxLines,
+              textDirection: textDirection,
+            )
+            : Text(
+              text,
+              style: effectiveTextStyle,
+              textAlign: textAlign,
+              maxLines: maxLines,
+              softWrap: true,
+              textDirection: textDirection,
+            );
 
     MainAxisAlignment rowAlignment;
     switch (textPosition) {
@@ -154,9 +158,10 @@ class CustomText extends StatelessWidget {
             if (svgIconPath != null && svgIconPath!.isNotEmpty)
               SvgPicture.asset(
                 svgIconPath!,
-                colorFilter: iconColor != null
-                    ? ColorFilter.mode(iconColor!, BlendMode.srcIn)
-                    : null,
+                colorFilter:
+                    iconColor != null
+                        ? ColorFilter.mode(iconColor!, BlendMode.srcIn)
+                        : null,
                 width: iconWidth,
                 height: iconHeight,
               ),
@@ -165,9 +170,7 @@ class CustomText extends StatelessWidget {
                 width:
                     iconTextPadding ?? ResponsiveSizeAdapter(context).size(8),
               ),
-            Flexible(
-              child: textWidget,
-            ),
+            Flexible(child: textWidget),
           ],
         ),
       ),

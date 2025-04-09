@@ -11,44 +11,37 @@ class LoadingOverlay {
   ResponsiveSizeAdapter r;
   final BuildContext context;
 
-  LoadingOverlay({
-    required this.context,
-    required this.r,
-  });
+  LoadingOverlay({required this.context, required this.r});
 
   OverlayEntry? _overlayEntry;
   bool toggle = false;
 
-  Future<void> show({
-    String? loadingTitle,
-  }) async {
+  Future<void> show({String? loadingTitle}) async {
     if (isShown()) {
       toggle = false;
       await Future.delayed(300.ms);
       return; // Prevents adding multiple overlays.
     }
     _overlayEntry = OverlayEntry(
-      builder: (context) => Stack(
-        children: [
-          ModalBarrier(
-            dismissible: false,
-            color: Colors.black.withValues(alpha: 0.4),
-          ).animate(target: toggle ? 1 : 0).fade(
-                duration: 300.ms,
-                curve: Curves.decelerate,
-              ),
-          Center(
-            child: Material(
-              color: Colors.transparent,
-              child: _buildOverlay(loadingTitle: loadingTitle)
+      builder:
+          (context) => Stack(
+            children: [
+              ModalBarrier(
+                    dismissible: false,
+                    color: Colors.black.withValues(alpha: 0.4),
+                  )
                   .animate(target: toggle ? 1 : 0)
-                  .fade(
-                    duration: 250.ms,
-                  ),
-            ),
+                  .fade(duration: 300.ms, curve: Curves.decelerate),
+              Center(
+                child: Material(
+                  color: Colors.transparent,
+                  child: _buildOverlay(
+                    loadingTitle: loadingTitle,
+                  ).animate(target: toggle ? 1 : 0).fade(duration: 250.ms),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
     toggle = true;
     Overlay.of(context).insert(_overlayEntry!);
@@ -76,7 +69,10 @@ class LoadingOverlay {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
-      borderColor: AppColors.light.accent.withValues(alpha: 0.3),
+      border: Border.all(
+        color: AppColors.light.accent.withValues(alpha: 0.3),
+        width: r.size(0.6),
+      ),
       borderRadius: r.size(5),
       clipBehavior: Clip.hardEdge,
       gap: r.size(2),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../../../core/enums/widgets.dart';
+
+enum FieldArrangement { row, column }
 
 class CustomField extends StatefulWidget {
   final Color? backgroundColor;
   final EdgeInsets? padding;
   final EdgeInsets? margin;
   final double? borderRadius;
-  final double? borderWidth;
-  final Color? borderColor;
+  final Border? border;
   final FieldArrangement arrangement;
   final List<Widget> children;
   final MainAxisAlignment mainAxisAlignment;
@@ -40,8 +40,7 @@ class CustomField extends StatefulWidget {
     this.padding,
     this.margin,
     this.borderRadius,
-    this.borderWidth,
-    this.borderColor,
+    this.border,
     this.arrangement = FieldArrangement.column,
     required this.children,
     this.mainAxisAlignment = MainAxisAlignment.start,
@@ -76,9 +75,10 @@ class CustomField extends StatefulWidget {
 class _CustomFieldState extends State<CustomField> {
   @override
   Widget build(BuildContext context) {
-    Widget content = widget.loading && widget.loadingChild != null
-        ? widget.loadingChild!
-        : _buildChildren();
+    Widget content =
+        widget.loading && widget.loadingChild != null
+            ? widget.loadingChild!
+            : _buildChildren();
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -96,19 +96,17 @@ class _CustomFieldState extends State<CustomField> {
         decoration: BoxDecoration(
           color: widget.backgroundColor,
           borderRadius: BorderRadius.circular(widget.borderRadius ?? 0.0),
-          border: Border.all(
-            color: widget.borderColor ?? Colors.transparent,
-            width: widget.borderWidth ?? 0.0,
-          ),
-          boxShadow: widget.shadowColor != null && widget.shadowBlurRadius > 0
-              ? [
-                  BoxShadow(
-                    color: widget.shadowColor!,
-                    offset: widget.shadowOffset ?? Offset.zero,
-                    blurRadius: widget.shadowBlurRadius,
-                  ),
-                ]
-              : null,
+          border: widget.border,
+          boxShadow:
+              widget.shadowColor != null && widget.shadowBlurRadius > 0
+                  ? [
+                    BoxShadow(
+                      color: widget.shadowColor!,
+                      offset: widget.shadowOffset ?? Offset.zero,
+                      blurRadius: widget.shadowBlurRadius,
+                    ),
+                  ]
+                  : null,
         ),
         clipBehavior: widget.clipBehavior ?? Clip.none,
         child: widget.expanded ? Expanded(child: content) : content,
@@ -124,51 +122,48 @@ class _CustomFieldState extends State<CustomField> {
       if (i < widget.children.length - 1) {
         // Determine if horizontal spacing should be applied
         if (widget.arrangement == FieldArrangement.row && !widget.isWrap) {
-          spacedChildren.add(SizedBox(
-            width: widget.gap,
-            height: 0,
-          ));
+          spacedChildren.add(SizedBox(width: widget.gap, height: 0));
         } else if (widget.arrangement == FieldArrangement.column &&
             !widget.isWrap) {
-          spacedChildren.add(SizedBox(
-            width: 0,
-            height: widget.gap,
-          ));
+          spacedChildren.add(SizedBox(width: 0, height: widget.gap));
         }
       }
     }
 
-    final mainAxis = widget.arrangement == FieldArrangement.row
-        ? Axis.horizontal
-        : Axis.vertical;
+    final mainAxis =
+        widget.arrangement == FieldArrangement.row
+            ? Axis.horizontal
+            : Axis.vertical;
 
     return widget.isWrap && widget.arrangement == FieldArrangement.row
         ? Wrap(
-            spacing: widget.wrapHorizontalSpacing,
-            runSpacing: widget.wrapVerticalSpacing,
-            alignment: widget.mainAxisAlignment.wrapAlignment,
-            crossAxisAlignment: widget.crossAxisAlignment.wrapCrossAlignment,
-            children: spacedChildren.map((child) {
-              return Directionality(
-                textDirection:
-                    widget.isRtl ? TextDirection.rtl : TextDirection.ltr,
-                child: child,
-              );
-            }).toList(),
-          )
+          spacing: widget.wrapHorizontalSpacing,
+          runSpacing: widget.wrapVerticalSpacing,
+          alignment: widget.mainAxisAlignment.wrapAlignment,
+          crossAxisAlignment: widget.crossAxisAlignment.wrapCrossAlignment,
+          children:
+              spacedChildren.map((child) {
+                return Directionality(
+                  textDirection:
+                      widget.isRtl ? TextDirection.rtl : TextDirection.ltr,
+                  child: child,
+                );
+              }).toList(),
+        )
         : Flex(
-            direction: mainAxis,
-            mainAxisSize: widget.mainAxisSize,
-            mainAxisAlignment: widget.mainAxisAlignment,
-            crossAxisAlignment: widget.crossAxisAlignment,
-            children: spacedChildren.map((child) {
-              return Directionality(
-                textDirection:
-                    widget.isRtl ? TextDirection.rtl : TextDirection.ltr,
-                child: child,
-              );
-            }).toList(),
-          );
+          direction: mainAxis,
+          mainAxisSize: widget.mainAxisSize,
+          mainAxisAlignment: widget.mainAxisAlignment,
+          crossAxisAlignment: widget.crossAxisAlignment,
+          children:
+              spacedChildren.map((child) {
+                return Directionality(
+                  textDirection:
+                      widget.isRtl ? TextDirection.rtl : TextDirection.ltr,
+                  child: child,
+                );
+              }).toList(),
+        );
   }
 }
 

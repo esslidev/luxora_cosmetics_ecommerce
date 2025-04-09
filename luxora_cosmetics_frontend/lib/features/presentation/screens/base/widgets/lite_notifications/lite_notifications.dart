@@ -48,10 +48,9 @@ class _LiteNotificationsWidgetState extends State<LiteNotificationsWidget> {
         return liteNotificationsState.liteNotifications != null &&
                 liteNotificationsState.liteNotifications!.isNotEmpty
             ? _buildLiteNotifications(
-                context: context,
-                liteNotifications:
-                    liteNotificationsState.liteNotifications ?? [],
-              )
+              context: context,
+              liteNotifications: liteNotificationsState.liteNotifications ?? [],
+            )
             : const SizedBox();
       },
     );
@@ -100,8 +99,10 @@ class _LiteNotificationsWidgetState extends State<LiteNotificationsWidget> {
       gap: r.size(4),
       padding: r.all(4),
       borderRadius: r.size(3),
-      borderWidth: r.size(1),
-      borderColor: AppColors.light.accent.withValues(alpha: .4),
+      border: Border.all(
+        color: AppColors.light.accent.withValues(alpha: .4),
+        width: r.size(1),
+      ),
       shadowOffset: Offset(r.size(2), r.size(2)),
       shadowBlurRadius: 4,
       shadowColor: AppColors.light.accent.withValues(alpha: .2),

@@ -83,7 +83,6 @@ Before you begin, ensure you have the following software installed on your syste
 
 # Most used commands
 
-docker container exec -it flutter-ecommerce-librairie-alfia-backend bash
 flutter pub run build_runner build
 flutter build web --release
 npx prisma migrate dev

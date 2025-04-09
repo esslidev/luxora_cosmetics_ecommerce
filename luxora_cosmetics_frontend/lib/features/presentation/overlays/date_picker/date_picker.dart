@@ -12,54 +12,50 @@ class DatePickerOverlay {
   final BuildContext context;
   ResponsiveSizeAdapter r;
 
-  DatePickerOverlay({
-    required this.context,
-    required this.r,
-  });
+  DatePickerOverlay({required this.context, required this.r});
 
   OverlayEntry? _overlayEntry;
   bool toggle = false;
 
-  Future<void> show(
-      {required BaseTheme theme,
-      required TranslationService ts,
-      required bool isRtl,
-      DateTime? initialDate,
-      Function()? onDateCleared,
-      Function(DateTime newDate)? onDateChanged}) async {
+  Future<void> show({
+    required BaseTheme theme,
+    required TranslationService ts,
+    required bool isRtl,
+    DateTime? initialDate,
+    Function()? onDateCleared,
+    Function(DateTime newDate)? onDateChanged,
+  }) async {
     if (isShown()) {
       toggle = false;
       await Future.delayed(300.ms);
       return; // Prevents adding multiple overlays.
     }
     _overlayEntry = OverlayEntry(
-      builder: (context) => Stack(
-        children: [
-          ModalBarrier(
-            dismissible: true,
-            color: Colors.black.withValues(alpha: 0.6),
-            onDismiss: dismiss,
-          ).animate(target: toggle ? 1 : 0).fade(
-                duration: 300.ms,
-                curve: Curves.decelerate,
+      builder:
+          (context) => Stack(
+            children: [
+              ModalBarrier(
+                    dismissible: true,
+                    color: Colors.black.withValues(alpha: 0.6),
+                    onDismiss: dismiss,
+                  )
+                  .animate(target: toggle ? 1 : 0)
+                  .fade(duration: 300.ms, curve: Curves.decelerate),
+              Center(
+                child: Material(
+                  color: Colors.transparent,
+                  child: _buildOverlay(
+                    theme: theme,
+                    ts: ts,
+                    isRtl: isRtl,
+                    initialDate: initialDate,
+                    onDateCleared: onDateCleared,
+                    onDateChanged: onDateChanged,
+                  ).animate(target: toggle ? 1 : 0).fade(duration: 250.ms),
+                ),
               ),
-          Center(
-            child: Material(
-              color: Colors.transparent,
-              child: _buildOverlay(
-                theme: theme,
-                ts: ts,
-                isRtl: isRtl,
-                initialDate: initialDate,
-                onDateCleared: onDateCleared,
-                onDateChanged: onDateChanged,
-              ).animate(target: toggle ? 1 : 0).fade(
-                    duration: 250.ms,
-                  ),
-            ),
+            ],
           ),
-        ],
-      ),
     );
     toggle = true;
     Overlay.of(context).insert(_overlayEntry!);
@@ -98,7 +94,10 @@ class DatePickerOverlay {
       margin: r.symmetric(horizontal: 6, vertical: 10),
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      borderColor: theme.accent.withValues(alpha: 0.3),
+      border: Border.all(
+        color: AppColors.light.accent.withValues(alpha: 0.3),
+        width: r.size(0.6),
+      ),
       borderRadius: r.size(3),
       clipBehavior: Clip.hardEdge,
       gap: r.size(4),
@@ -126,73 +125,73 @@ class DatePickerOverlay {
           monthViewSettings: DateRangePickerMonthViewSettings(
             viewHeaderStyle: DateRangePickerViewHeaderStyle(
               textStyle: TextStyle(
-                  fontSize: r.size(8),
-                  fontWeight: FontWeight.bold,
-                  color: theme.accent.withValues(alpha: .5)),
+                fontSize: r.size(8),
+                fontWeight: FontWeight.bold,
+                color: theme.accent.withValues(alpha: .5),
+              ),
             ),
             firstDayOfWeek: isRtl ? 7 : 1, // Customizing for RTL if needed
             weekendDays: const [DateTime.saturday, DateTime.sunday],
             dayFormat: 'EEE', // Use three-letter abbreviation for days
           ),
           monthCellStyle: DateRangePickerMonthCellStyle(
-            textStyle: TextStyle(
-              fontSize: r.size(9),
-            ),
+            textStyle: TextStyle(fontSize: r.size(9)),
           ),
           onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
             selectedDate = args.value;
           },
         ),
         CustomField(
-            gap: r.size(8),
-            mainAxisAlignment: MainAxisAlignment.end,
-            arrangement: FieldArrangement.row,
-            children: [
-              CustomButton(
-                text: ts.translate('Annuler'),
-                fontSize: r.size(8),
-                fontWeight: FontWeight.bold,
-                textColor: theme.primary,
-                border: Border.all(color: theme.primary, width: r.size(1)),
-                borderRadius: BorderRadius.circular(r.size(1)),
-                padding: r.symmetric(vertical: 2, horizontal: 8),
-                onPressed: (position, size) {
+          gap: r.size(8),
+          mainAxisAlignment: MainAxisAlignment.end,
+          arrangement: FieldArrangement.row,
+          children: [
+            CustomButton(
+              text: ts.translate('Annuler'),
+              fontSize: r.size(8),
+              fontWeight: FontWeight.bold,
+              textColor: theme.primary,
+              border: Border.all(color: theme.primary, width: r.size(1)),
+              borderRadius: BorderRadius.circular(r.size(1)),
+              padding: r.symmetric(vertical: 2, horizontal: 8),
+              onPressed: (position, size) {
+                dismiss();
+              },
+            ),
+            CustomButton(
+              text: ts.translate('Effacer'),
+              fontSize: r.size(8),
+              fontWeight: FontWeight.bold,
+              textColor: theme.primary,
+              border: Border.all(color: theme.primary, width: r.size(1)),
+              borderRadius: BorderRadius.circular(r.size(1)),
+              padding: r.symmetric(vertical: 2, horizontal: 8),
+              onPressed: (position, size) {
+                if (onDateCleared != null) {
+                  onDateCleared();
                   dismiss();
-                },
-              ),
-              CustomButton(
-                text: ts.translate('Effacer'),
-                fontSize: r.size(8),
-                fontWeight: FontWeight.bold,
-                textColor: theme.primary,
-                border: Border.all(color: theme.primary, width: r.size(1)),
-                borderRadius: BorderRadius.circular(r.size(1)),
-                padding: r.symmetric(vertical: 2, horizontal: 8),
-                onPressed: (position, size) {
-                  if (onDateCleared != null) {
-                    onDateCleared();
-                    dismiss();
-                  }
+                }
+                dismiss();
+              },
+            ),
+            CustomButton(
+              text: ts.translate('Confirmer'),
+              fontSize: r.size(8),
+              fontWeight: FontWeight.bold,
+              backgroundColor: theme.primary,
+              textColor: Colors.white,
+              border: Border.all(color: theme.primary, width: r.size(1)),
+              borderRadius: BorderRadius.circular(r.size(1)),
+              padding: r.symmetric(vertical: 2, horizontal: 8),
+              onPressed: (position, size) {
+                if (onDateChanged != null) {
+                  onDateChanged(selectedDate);
                   dismiss();
-                },
-              ),
-              CustomButton(
-                text: ts.translate('Confirmer'),
-                fontSize: r.size(8),
-                fontWeight: FontWeight.bold,
-                backgroundColor: theme.primary,
-                textColor: Colors.white,
-                border: Border.all(color: theme.primary, width: r.size(1)),
-                borderRadius: BorderRadius.circular(r.size(1)),
-                padding: r.symmetric(vertical: 2, horizontal: 8),
-                onPressed: (position, size) {
-                  if (onDateChanged != null) {
-                    onDateChanged(selectedDate);
-                    dismiss();
-                  }
-                },
-              ),
-            ])
+                }
+              },
+            ),
+          ],
+        ),
       ],
     );
   }

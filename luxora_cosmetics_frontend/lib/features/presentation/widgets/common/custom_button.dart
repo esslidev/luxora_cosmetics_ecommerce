@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:luxora_cosmetics_frontend/core/constants/app_colors.dart';
 import '../../../../config/theme/app_theme.dart';
-import '../../../../core/enums/widgets.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
+
+enum CustomButtonIconPosition { left, right, top, bottom }
 
 class CustomButtonStyle {
   final double? width;
@@ -148,35 +149,40 @@ class _CustomButtonState extends State<CustomButton> {
     final isEnabled = widget.enabled;
 
     // If the button is disabled, apply the `onDisabledStyle` and skip hover styles.
-    final backgroundColor = !isEnabled
-        ? widget.onDisabledStyle?.backgroundColor ?? widget.backgroundColor
-        : (_isHovered
-            ? widget.onHoverStyle?.backgroundColor ?? widget.backgroundColor
-            : widget.backgroundColor);
+    final backgroundColor =
+        !isEnabled
+            ? widget.onDisabledStyle?.backgroundColor ?? widget.backgroundColor
+            : (_isHovered
+                ? widget.onHoverStyle?.backgroundColor ?? widget.backgroundColor
+                : widget.backgroundColor);
 
-    final iconColor = !isEnabled
-        ? widget.onDisabledStyle?.iconColor ?? widget.iconColor
-        : (_isHovered
-            ? widget.onHoverStyle?.iconColor ?? widget.iconColor
-            : widget.iconColor);
+    final iconColor =
+        !isEnabled
+            ? widget.onDisabledStyle?.iconColor ?? widget.iconColor
+            : (_isHovered
+                ? widget.onHoverStyle?.iconColor ?? widget.iconColor
+                : widget.iconColor);
 
-    final textColor = !isEnabled
-        ? widget.onDisabledStyle?.textColor ?? widget.textColor
-        : (_isHovered
-            ? widget.onHoverStyle?.textColor ?? widget.textColor
-            : widget.textColor);
+    final textColor =
+        !isEnabled
+            ? widget.onDisabledStyle?.textColor ?? widget.textColor
+            : (_isHovered
+                ? widget.onHoverStyle?.textColor ?? widget.textColor
+                : widget.textColor);
 
-    final boxShadow = !isEnabled
-        ? widget.onDisabledStyle?.boxShadow ?? widget.boxShadow
-        : (_isHovered
-            ? widget.onHoverStyle?.boxShadow ?? widget.boxShadow
-            : widget.boxShadow);
+    final boxShadow =
+        !isEnabled
+            ? widget.onDisabledStyle?.boxShadow ?? widget.boxShadow
+            : (_isHovered
+                ? widget.onHoverStyle?.boxShadow ?? widget.boxShadow
+                : widget.boxShadow);
 
-    final border = !isEnabled
-        ? widget.onDisabledStyle?.border ?? widget.border
-        : (_isHovered
-            ? widget.onHoverStyle?.border ?? widget.border
-            : widget.border);
+    final border =
+        !isEnabled
+            ? widget.onDisabledStyle?.border ?? widget.border
+            : (_isHovered
+                ? widget.onHoverStyle?.border ?? widget.border
+                : widget.border);
 
     Widget buttonContent = AnimatedContainer(
       key: _buttonKey,
@@ -196,7 +202,8 @@ class _CustomButtonState extends State<CustomButton> {
     );
 
     return MouseRegion(
-      cursor: widget.cursor ??
+      cursor:
+          widget.cursor ??
           (widget.enabled
               ? SystemMouseCursors.click
               : SystemMouseCursors.basic),
@@ -204,9 +211,10 @@ class _CustomButtonState extends State<CustomButton> {
       onExit: (_) => _onHover(false),
       child: GestureDetector(
         onTap: _onPressed,
-        child: widget.useIntrinsicWidth
-            ? IntrinsicWidth(child: buttonContent)
-            : buttonContent,
+        child:
+            widget.useIntrinsicWidth
+                ? IntrinsicWidth(child: buttonContent)
+                : buttonContent,
       ),
     );
   }
@@ -267,9 +275,10 @@ class _CustomButtonState extends State<CustomButton> {
   Widget _buildIcon(Color? iconColor) {
     return SvgPicture.asset(
       widget.svgIconPath!,
-      colorFilter: iconColor != null
-          ? ColorFilter.mode(iconColor, BlendMode.srcIn)
-          : null,
+      colorFilter:
+          iconColor != null
+              ? ColorFilter.mode(iconColor, BlendMode.srcIn)
+              : null,
       width: widget.iconWidth,
       height: widget.iconHeight,
     );
@@ -277,8 +286,9 @@ class _CustomButtonState extends State<CustomButton> {
 
   Widget _buildText(Color? textColor) {
     return Flexible(
-      child: Text(
-        widget.text!,
+      child: AnimatedDefaultTextStyle(
+        duration: widget.animationDuration,
+        curve: widget.animationCurve,
         style: AppTheme.bodyText.copyWith(
           color: textColor ?? AppColors.light.accent,
           fontSize: widget.fontSize,
@@ -288,6 +298,7 @@ class _CustomButtonState extends State<CustomButton> {
           overflow: TextOverflow.ellipsis,
           fontFamily: widget.fontFamily,
         ),
+        child: Text(widget.text!),
       ),
     );
   }

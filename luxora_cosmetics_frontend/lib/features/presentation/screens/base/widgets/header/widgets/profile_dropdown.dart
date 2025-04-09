@@ -37,7 +37,7 @@ class _UserDropdownState extends State<ProfileDropdown> {
       width: double.infinity,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      gap: r.size(6),
+      gap: r.size(2),
       padding: r.all(4),
       children: [
         CustomButton(

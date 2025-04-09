@@ -172,7 +172,7 @@ class _FooterWidgetState extends State<FooterWidget> {
                 ),
               if (isTabletScreen != true)
                 JoinUsGridItem(
-                  imagePath: AppPaths.images.joinUsImage2,
+                  imagePath: AppPaths.images.joinUsImage4,
                   instagramUrl: 'https://instagram.com',
                 ),
             ],

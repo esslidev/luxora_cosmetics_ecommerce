@@ -2,7 +2,6 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:luxora_cosmetics_frontend/core/constants/app_colors.dart';
-import 'package:luxora_cosmetics_frontend/features/presentation/widgets/common/custom_field.dart';
 
 import '../../../../../../core/constants/app_paths.dart';
 import '../../../../../../core/enums/widgets.dart';
@@ -20,6 +19,7 @@ import '../../../../overlays/sidebar/sidebar.dart';
 import '../../../../overlays/sign_in/sign_in.dart';
 import '../../../../widgets/common/custom_button.dart';
 import '../../../../widgets/common/custom_display.dart';
+import '../../../../widgets/common/custom_field.dart';
 import '../../../../widgets/common/custom_text.dart';
 import 'widgets/cart_dropdown.dart';
 import 'widgets/profile_dropdown.dart';
@@ -118,10 +118,13 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       gap: r.size(24),
       arrangement: FieldArrangement.row,
       children: [
+        _buildNavButton(name: 'Accueil', path: AppPaths.routes.homePageScreen),
         _buildNavButton(name: 'Produits', path: AppPaths.routes.boutiqueScreen),
-        _buildNavButton(name: 'À propos', path: AppPaths.routes.boutiqueScreen),
-        _buildNavButton(name: 'Blog', path: AppPaths.routes.boutiqueScreen),
-        _buildNavButton(name: 'Avis', path: AppPaths.routes.boutiqueScreen),
+        _buildNavButton(name: 'Contact', path: AppPaths.routes.contactScreen),
+        _buildNavButton(
+          name: 'Nos politiques',
+          path: AppPaths.routes.policiesScreen,
+        ),
       ],
     );
   }
@@ -160,8 +163,11 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                 backgroundColor: AppColors.colors.hotPepperGreen,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                borderWidth: r.size(0.6),
-                borderColor: AppColors.light.backgroundPrimary,
+                border: Border.all(
+                  color: AppColors.light.backgroundPrimary,
+                  width: r.size(0.6),
+                ),
+
                 borderRadius: r.size(6),
                 padding: r.all(3),
                 children: [

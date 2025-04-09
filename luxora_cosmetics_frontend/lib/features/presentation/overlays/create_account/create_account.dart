@@ -300,8 +300,8 @@ class CreateAccountOverlay {
               controller: controller,
               fontSize: r.size(9),
               fontWeight: FontWeight.normal,
-
-              backgroundColor: AppColors.light.backgroundSecondary,
+              borderWidth: r.size(0.6),
+              backgroundColor: AppColors.light.backgroundPrimary,
               hintText: hint,
               obscureText: obscureText,
               padding: r.symmetric(horizontal: 8, vertical: 4),
@@ -720,11 +720,14 @@ class CreateAccountOverlay {
         margin: r.symmetric(horizontal: 6, vertical: 20),
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        borderColor: AppColors.light.accent.withValues(alpha: 0.3),
+        border: Border.all(
+          color: AppColors.light.accent.withValues(alpha: 0.3),
+          width: r.size(0.6),
+        ),
         borderRadius: r.size(3),
         clipBehavior: Clip.hardEdge,
         gap: r.size(2),
-        backgroundColor: AppColors.light.backgroundSecondary,
+        backgroundColor: AppColors.light.backgroundPrimary,
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(

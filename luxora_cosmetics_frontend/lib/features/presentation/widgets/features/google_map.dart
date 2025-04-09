@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
 import '../common/custom_text.dart';
 
@@ -8,12 +9,7 @@ class GoogleMap extends StatelessWidget {
   final double? width;
   final double? height;
 
-  const GoogleMap({
-    super.key,
-    required this.mapUrl,
-    this.width,
-    this.height,
-  });
+  const GoogleMap({super.key, required this.mapUrl, this.width, this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +19,7 @@ class GoogleMap extends StatelessWidget {
       return SizedBox(
         height: height ?? r.size(100),
         width: width ?? double.infinity,
-        child: SizedBox(),
+        child: InAppWebView(initialUrlRequest: URLRequest(url: WebUri(mapUrl))),
       );
     } else {
       return Container(
@@ -31,7 +27,7 @@ class GoogleMap extends StatelessWidget {
         height: r.size(100),
         width: double.infinity,
         child: const CustomText(
-          text: 'Google maps only available for web',
+          text: 'Google Maps est uniquement disponible sur le web.',
           color: Colors.white,
         ),
       );

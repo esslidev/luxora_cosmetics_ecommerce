@@ -158,14 +158,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
     final TextStyle defaultTextStyle = TextStyle(
       fontSize: widget.fontSize ?? r.size(12),
       fontWeight: widget.fontWeight ?? FontWeight.normal,
-      color: widget.enabled
-          ? (_getEffectiveStyle().textColor ?? AppColors.light.accent)
-          : AppColors.light.accent.withValues(alpha: 0.5),
+      color:
+          widget.enabled
+              ? (_getEffectiveStyle().textColor ?? AppColors.light.accent)
+              : AppColors.light.accent.withValues(alpha: 0.5),
     );
     final TextStyle hintTextStyle = TextStyle(
       fontSize: widget.fontSize ?? r.size(12),
       fontWeight: widget.hintFontWeight ?? FontWeight.normal,
-      color: _getEffectiveStyle().hintColor ??
+      color:
+          _getEffectiveStyle().hintColor ??
           AppColors.light.accent.withValues(alpha: 0.6),
     );
 
@@ -178,47 +180,50 @@ class _CustomTextFieldState extends State<CustomTextField> {
       decoration: BoxDecoration(
         color: effectiveStyle.backgroundColor ?? Colors.transparent,
         borderRadius: effectiveStyle.borderRadius ?? BorderRadius.zero,
-        border: widget.border ??
+        border:
+            widget.border ??
             Border.all(
-              color: _focusNode.hasFocus
-                  ? (widget.focusedBorderColor ??
-                      effectiveStyle.borderColor ??
-                      Colors.transparent)
-                  : (effectiveStyle.borderColor ?? Colors.transparent),
+              color:
+                  _focusNode.hasFocus
+                      ? (widget.focusedBorderColor ??
+                          effectiveStyle.borderColor ??
+                          Colors.transparent)
+                      : (effectiveStyle.borderColor ?? Colors.transparent),
               width: widget.borderWidth ?? 1.5,
             ),
-        boxShadow: widget.shadowColor != null && widget.shadowBlurRadius > 0
-            ? [
-                BoxShadow(
-                  color: widget.shadowColor!,
-                  offset: widget.shadowOffset ?? Offset.zero,
-                  blurRadius: widget.shadowBlurRadius,
-                ),
-              ]
-            : null,
+        boxShadow:
+            widget.shadowColor != null && widget.shadowBlurRadius > 0
+                ? [
+                  BoxShadow(
+                    color: widget.shadowColor!,
+                    offset: widget.shadowOffset ?? Offset.zero,
+                    blurRadius: widget.shadowBlurRadius,
+                  ),
+                ]
+                : null,
       ),
-      child: Center(
-        child: TextField(
-          controller: _controller,
-          focusNode: _focusNode,
-          obscureText: widget.obscureText,
-          keyboardType: widget.keyboardType,
-          textAlign: widget.textAlign,
-          style: defaultTextStyle,
-          inputFormatters: widget.inputFormatters,
-          enabled: widget.enabled, // Applied enabled parameter
-          decoration: InputDecoration(
-            hintText: widget.hintText,
-            hintStyle: hintTextStyle,
-            border: InputBorder.none,
-            isDense: true,
-            contentPadding: EdgeInsets.zero,
-          ),
-          minLines: widget.minLines, // Set minLines
-          maxLines: widget.maxLines, // Set maxLines
-          onTap: widget.onTap,
-          onChanged: widget.enabled
-              ? (text) {
+      child: TextField(
+        controller: _controller,
+        focusNode: _focusNode,
+        obscureText: widget.obscureText,
+        keyboardType: widget.keyboardType,
+        textAlign: widget.textAlign,
+        style: defaultTextStyle,
+        inputFormatters: widget.inputFormatters,
+        enabled: widget.enabled, // Applied enabled parameter
+        decoration: InputDecoration(
+          hintText: widget.hintText,
+          hintStyle: hintTextStyle,
+          border: InputBorder.none,
+          isDense: true,
+          contentPadding: EdgeInsets.zero,
+        ),
+        minLines: widget.minLines, // Set minLines
+        maxLines: widget.maxLines, // Set maxLines
+        onTap: widget.onTap,
+        onChanged:
+            widget.enabled
+                ? (text) {
                   final RenderBox renderBox =
                       context.findRenderObject() as RenderBox;
                   final size = renderBox.size;
@@ -226,8 +231,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
                   widget.onChanged?.call(text, offset, size);
                 }
-              : null, // Prevent onChanged if disabled
-        ),
+                : null, // Prevent onChanged if disabled
       ),
     );
   }

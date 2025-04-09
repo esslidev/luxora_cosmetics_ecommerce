@@ -35,7 +35,8 @@ class ImagesPaths {
   final String logoDark = 'assets/images/logo-dark.png';
   final String joinUsImage1 = 'assets/images/join-us-image1.webp';
   final String joinUsImage2 = 'assets/images/join-us-image2.webp';
-  final String joinUsImage3 = 'assets/images/join-us-image3.jpg';
+  final String joinUsImage3 = 'assets/images/join-us-image3.webp';
+  final String joinUsImage4 = 'assets/images/join-us-image4.webp';
   final String rediscoverBannerImage =
       'assets/images/rediscover-banner-image.png';
   final String rediscoverBannerTitleImage =
@@ -45,8 +46,8 @@ class ImagesPaths {
   final String product1Image = 'assets/images/product1-image.png';
   final String product2Image = 'assets/images/product2-image.png';
   final String product3Image = 'assets/images/product3-image.png';
-  final String product4Image = 'assets/images/product4-image.webp';
-  final String product5Image = 'assets/images/product5-image.webp';
+  final String product4Image = 'assets/images/product4-image.png';
+  final String product5Image = 'assets/images/product5-image.png';
   final String calvinKleinBrandImage =
       'assets/images/calvin-klein-brand-image.png';
   final String aloeVeraBrandImage = 'assets/images/aloe-vera-brand-image.png';
@@ -85,6 +86,16 @@ class VectorsPaths {
   final String quoteIcon = 'assets/vectors/quote-icon.svg';
   final String informationIcon = 'assets/vectors/information-icon.svg';
   final String closeIcon = 'assets/vectors/close-icon.svg';
+  final String previousSkipIcon = 'assets/vectors/previous-skip-icon.svg';
+  final String nextSkipIcon = 'assets/vectors/next-skip-icon.svg';
+  final String previousIcon = 'assets/vectors/previous-icon.svg';
+  final String nextIcon = 'assets/vectors/next-icon.svg';
+  final String skinCareIcon = 'assets/vectors/skin-care-icon.svg';
+  final String makeupIcon = 'assets/vectors/makeup-icon.svg';
+  final String bathBodyIcon = 'assets/vectors/bath-body-icon.svg';
+  final String searchIcon = 'assets/vectors/search-icon.svg';
+  final String phoneIcon = 'assets/vectors/phone-icon.svg';
+  final String emailIcon = 'assets/vectors/email-icon.svg';
 }
 
 class RoutesPaths {
@@ -92,12 +103,13 @@ class RoutesPaths {
   final String baseScreen = '/';
   final String homePageScreen = '/page-accueil';
   final String boutiqueScreen = '/boutique';
+  final String contactScreen = '/contact';
   final String productOverviewScreen = '/aperçu-produit';
   final String editProfileScreen = '/modifier-profil';
   final String resetPasswordScreen = '/reinitialiser-mot-de-passe';
   final String checkoutScreen = '/paiement';
   final String orderHistoryScreen = '/historique-commandes';
-  final String termsAndConditionsScreen = '/conditions-generales';
+  final String policiesScreen = '/politiques';
   final String maintenanceScreen = '/maintenance';
   final String badRoutingScreen = '/mauvaise-route';
 
@@ -106,13 +118,14 @@ class RoutesPaths {
     '/': '',
     '/page-accueil': 'Page d\'Accueil',
     '/boutique': 'Boutique',
+    '/contact': 'Contact',
     '/aperçu-produit': 'Détail du Produit',
     '/modifier-profil': 'Modifier le Profil',
     '/reinitialiser-mot-de-passe': 'Réinitialiser le Mot de Passe',
     '/paiement': 'Paiement',
     '/historique-commandes': 'Historique des Commandes',
     '/aperçu-commande': 'Détail de la Commande',
-    '/conditions-generales': 'Conditions Générales',
+    '/politiques': 'Politiques',
     '/maintenance': 'Maintenance',
     '/mauvaise-route': 'Page Introuvable',
   };

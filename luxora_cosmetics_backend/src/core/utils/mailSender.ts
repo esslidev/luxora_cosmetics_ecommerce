@@ -54,7 +54,7 @@ export const mailSender = (
       })
       // send mail with defined transport object
       let info = await transporter.sendMail({
-        from: `"LIBRAIRIE ALFIA" <${process.env.MAIL_USERNAME}>`, // sender address
+        from: `"LUXORA COSMETICS" <${process.env.MAIL_USERNAME}>`, // sender address
         to: mailTo, // list of receivers
         subject: subject, // Subject line
         text,

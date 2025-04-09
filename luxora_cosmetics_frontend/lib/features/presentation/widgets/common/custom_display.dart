@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:luxora_cosmetics_frontend/features/presentation/widgets/common/custom_field.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
+import 'custom_field.dart';
 
 class CustomDisplay extends StatefulWidget {
   final String assetPath;
@@ -14,8 +14,7 @@ class CustomDisplay extends StatefulWidget {
   final double? height;
   final Color? backgroundColor;
   final BoxFit? fit;
-  final double? borderWidth;
-  final Color? borderColor;
+  final Border? border;
   final BorderRadius borderRadius;
   final EdgeInsets padding;
   final EdgeInsets margin;
@@ -36,8 +35,7 @@ class CustomDisplay extends StatefulWidget {
     this.height,
     this.backgroundColor,
     this.fit,
-    this.borderWidth,
-    this.borderColor,
+    this.border,
     this.borderRadius = BorderRadius.zero,
     this.padding = EdgeInsets.zero,
     this.margin = EdgeInsets.zero,
@@ -160,8 +158,7 @@ class _CustomDisplayState extends State<CustomDisplay> {
             backgroundColor: widget.backgroundColor,
             padding: widget.padding,
             margin: widget.margin,
-            borderColor: widget.borderColor,
-            borderWidth: widget.borderWidth,
+            border: widget.border,
             children: [_buildCustomDisplay()],
           ),
         ),

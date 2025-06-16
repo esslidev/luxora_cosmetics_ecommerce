@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/util/app_events_util.dart';
+import '../../../../../core/util/responsive_size_adapter.dart';
 
 class ProductOverviewScreen extends StatefulWidget {
-  const ProductOverviewScreen({super.key});
+  final String? productId;
+
+  const ProductOverviewScreen({super.key, this.productId});
 
   @override
   State<ProductOverviewScreen> createState() => _ProductOverviewScreenState();
 }
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
+  late ResponsiveSizeAdapter r;
+
   @override
   void initState() {
     super.initState();
-    AppEventsUtil.breadCrumbs.clearBreadCrumbs(
-      context,
-    );
+    r = ResponsiveSizeAdapter(context);
   }
 
   @override

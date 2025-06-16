@@ -23,9 +23,9 @@ const syncWishlist = async (req: Request, res: Response) => {
 
     // Ensure the wishlist exists
     const wishlist = await prisma.wishlist.upsert({
-      where: { userId: Number(userId) },
+      where: { userId: userId },
       update: {},
-      create: { userId: Number(userId) },
+      create: { userId: userId },
     })
 
     // Add the items to the wishlist using upsert
@@ -35,7 +35,7 @@ const syncWishlist = async (req: Request, res: Response) => {
           where: {
             wishlistId_productId: {
               wishlistId: wishlist.id,
-              productId: Number(item.productId),
+              productId: item.productId,
             },
           },
           update: {},
@@ -75,10 +75,10 @@ const getWishlistByUserId = async (req: Request, res: Response) => {
 
   try {
     const wishlist = await prisma.wishlist.upsert({
-      where: { userId: Number(userId) },
+      where: { userId: userId },
       update: {},
       create: {
-        userId: Number(userId),
+        userId: userId,
       },
       include: {
         items: true,
@@ -128,7 +128,7 @@ const addItemToWishlist = async (req: Request, res: Response) => {
       where: {
         wishlistId_productId: {
           wishlistId: wishlist.id,
-          productId: Number(productId),
+          productId: productId,
         },
       },
       update: {
@@ -136,7 +136,7 @@ const addItemToWishlist = async (req: Request, res: Response) => {
       },
       create: {
         wishlistId: wishlist.id,
-        productId: Number(productId),
+        productId: productId,
         quantity: 1,
       },
     })
@@ -265,7 +265,7 @@ const removeItemFromWishlist = async (req: Request, res: Response) => {
     // Send a success response
     new CustomResponse(res).send({
       data: responseDeletedItem,
-      message: `Wishlist item has been removed successfully.`,
+      message: `L'article de la liste de souhaits a été supprimé avec succès.`,
     })
   } catch (error) {
     handleError(error, res, language)
@@ -277,7 +277,7 @@ const clearWishlist = async (req: Request, res: Response) => {
   const { language, userId } = req.body
 
   try {
-    const wishlist = await prisma.wishlist.findUnique({ where: { userId: Number(userId) }, include: { items: true } })
+    const wishlist = await prisma.wishlist.findUnique({ where: { userId: userId }, include: { items: true } })
 
     if (!wishlist) {
       throw new HttpError(
@@ -289,7 +289,7 @@ const clearWishlist = async (req: Request, res: Response) => {
 
     await prisma.wishlistItem.deleteMany({ where: { wishlistId: wishlist.id } })
 
-    new CustomResponse(res).send({ message: 'The Wishlist is cleared successfully' })
+    new CustomResponse(res).send({ message: 'La liste de souhaits a été vidée avec succès.' })
   } catch (error) {
     handleError(error, res, language)
   }

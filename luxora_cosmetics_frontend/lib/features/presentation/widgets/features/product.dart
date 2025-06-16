@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:luxora_cosmetics_frontend/core/constants/app_paths.dart';
-import 'package:luxora_cosmetics_frontend/core/enums/widgets.dart';
-
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/util/app_util.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
@@ -128,7 +126,7 @@ class _ProductWidgetState extends State<ProductWidget> {
               widget.onWishlistPressed!();
             }
           },
-        )
+        ),
       ],
     );
   }
@@ -136,23 +134,25 @@ class _ProductWidgetState extends State<ProductWidget> {
   Widget _buildOfferTag() {
     return widget.isNewArrival == true || widget.isBestSellers == true
         ? IgnorePointer(
-            ignoring: true,
-            child: CustomText(
-              backgroundColor: widget.isBestSellers == true
-                  ? AppColors.colors.peachOfMind.withValues(alpha: .2)
-                  : AppColors.light.backgroundSecondary,
-              text: widget.isBestSellers == true
-                  ? 'Meilleure Vente'
-                  : widget.isNewArrival == true
-                      ? 'Nouvelle Arrivée'
-                      : '',
-              fontSize: r.size(8),
-              borderRadius: r.size(1),
-              fontWeight: FontWeight.w600,
-              color: AppColors.light.accent.withValues(alpha: .6),
-              padding: r.symmetric(horizontal: 6, vertical: 2),
-            ),
-          )
+          ignoring: true,
+          child: CustomText(
+            backgroundColor:
+                widget.isBestSellers == true
+                    ? AppColors.colors.peachOfMind.withValues(alpha: .2)
+                    : AppColors.light.backgroundSecondary,
+            text:
+                widget.isBestSellers == true
+                    ? 'Meilleure Vente'
+                    : widget.isNewArrival == true
+                    ? 'Nouvelle Arrivée'
+                    : '',
+            fontSize: r.size(8),
+            borderRadius: r.size(1),
+            fontWeight: FontWeight.w600,
+            color: AppColors.light.accent.withValues(alpha: .6),
+            padding: r.symmetric(horizontal: 6, vertical: 2),
+          ),
+        )
         : const SizedBox();
   }
 
@@ -211,83 +211,87 @@ class _ProductWidgetState extends State<ProductWidget> {
       gap: r.size(8),
       children: [
         ValueListenableBuilder(
-            valueListenable: isHoveredNotifier,
-            builder: (BuildContext context, bool isHovered, Widget? child) {
-              return ClipRect(
-                child: Stack(
-                  children: [
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      onEnter: (event) {
-                        isHoveredNotifier.value = true;
+          valueListenable: isHoveredNotifier,
+          builder: (BuildContext context, bool isHovered, Widget? child) {
+            return ClipRect(
+              child: Stack(
+                children: [
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    onEnter: (event) {
+                      isHoveredNotifier.value = true;
+                    },
+                    onExit: (event) {
+                      isHoveredNotifier.value = false;
+                    },
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.onPressed();
                       },
-                      onExit: (event) {
-                        isHoveredNotifier.value = false;
-                      },
-                      child: GestureDetector(
-                        onTap: () {
-                          widget.onPressed();
-                        },
-                        child: CustomField(
-                            width: r.size(180),
-                            height: r.size(180),
-                            backgroundColor: AppColors.colors.white,
-                            children: [
-                              IgnorePointer(
-                                child: CustomDisplay(
+                      child: CustomField(
+                        width: r.size(180),
+                        height: r.size(180),
+                        backgroundColor: AppColors.colors.white,
+                        children: [
+                          IgnorePointer(
+                            child: CustomDisplay(
                                   assetPath: widget.imageUrl,
                                   width: r.size(180),
                                   height: r.size(180),
                                 )
-                                    .animate(target: isHovered == true ? 1 : 0)
-                                    .scaleXY(
-                                      duration: 250.ms,
-                                      curve: Curves.easeOut,
-                                      begin: 1,
-                                      end: 1.1,
-                                    )
-                                    .rotate(
-                                      duration: 250.ms,
-                                      curve: Curves.easeOut,
-                                      begin: 1,
-                                      end: 1.02,
-                                    ),
-                              )
-                            ]),
+                                .animate(target: isHovered == true ? 1 : 0)
+                                .scaleXY(
+                                  duration: 250.ms,
+                                  curve: Curves.easeOut,
+                                  begin: 1,
+                                  end: 1.1,
+                                )
+                                .rotate(
+                                  duration: 250.ms,
+                                  curve: Curves.easeOut,
+                                  begin: 1,
+                                  end: 1.02,
+                                ),
+                          ),
+                        ],
                       ),
                     ),
-                    Positioned(
-                      top: r.size(4),
-                      left: r.size(4),
-                      child: _buildOfferTag()
-                          .animate(target: isHovered == true ? 1 : 0)
-                          .fadeIn(
-                            duration: 250.ms,
-                            curve: Curves.easeOut,
-                            begin: 0,
-                          ),
-                    ),
-                    Positioned(
-                      bottom: r.size(8),
-                      right: r.size(8),
-                      child: _buildActionButtons(
-                        onHoverEnter: () {
-                          isHoveredNotifier.value = true;
-                        },
-                        onHoverExit: () {
-                          isHoveredNotifier.value = false;
-                        },
-                      ).animate(target: isHovered == true ? 1 : 0).slideY(
-                            duration: 400.ms,
-                            curve: Curves.easeOut,
-                            begin: 1.5,
-                            end: 0,
-                          ),
-                    )
-                  ],
-                ),
-              );
-            }),
+                  ),
+                  Positioned(
+                    top: r.size(4),
+                    left: r.size(4),
+                    child: _buildOfferTag()
+                        .animate(target: isHovered == true ? 1 : 0)
+                        .fadeIn(
+                          duration: 250.ms,
+                          curve: Curves.easeOut,
+                          begin: 0,
+                        ),
+                  ),
+                  Positioned(
+                    bottom: r.size(8),
+                    right: r.size(8),
+                    child: _buildActionButtons(
+                          onHoverEnter: () {
+                            isHoveredNotifier.value = true;
+                          },
+                          onHoverExit: () {
+                            isHoveredNotifier.value = false;
+                          },
+                        )
+                        .animate(target: isHovered == true ? 1 : 0)
+                        .slideY(
+                          duration: 400.ms,
+                          curve: Curves.easeOut,
+                          begin: 1.5,
+                          end: 0,
+                        ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
         CustomField(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -331,7 +335,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                     textDecorationThickness: r.size(0.8),
                   ),
               ],
-            )
+            ),
           ],
         ),
       ],
@@ -502,8 +506,6 @@ class _ProductWidgetState extends State<ProductWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildProduct(
-      context,
-    );
+    return _buildProduct(context);
   }
 }

@@ -18,9 +18,7 @@ model User {
   encryptedAddressMain   String?
   encryptedAddressSecond String?
   city                   String?
-  state                  String?
   zip                    String?
-  country                String?
   reviews                Review[]
   wishlist                   Wishlist[]
   cart                   Cart[]

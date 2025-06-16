@@ -102,7 +102,9 @@ class _BoutiqueScreenState extends State<BoutiqueScreen> {
 
   Widget _buildProductTypeSelector() {
     return CustomField(
-      gap: r.size(4),
+      wrapVerticalSpacing: r.size(4),
+      wrapHorizontalSpacing: r.size(4),
+      isWrap: true,
       arrangement: FieldArrangement.row,
       children: [
         _buildProductTypeButton(
@@ -140,10 +142,8 @@ class _BoutiqueScreenState extends State<BoutiqueScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       arrangement: FieldArrangement.row,
       children: [
-        CustomTextField(
-          width: r.size(160),
-          hintText: 'Recherche',
-          fontSize: r.size(8),
+        Expanded(
+          child: CustomTextField(hintText: 'Recherche', fontSize: r.size(8)),
         ),
         CustomDisplay(
           assetPath: AppPaths.vectors.searchIcon,
@@ -257,24 +257,51 @@ class _BoutiqueScreenState extends State<BoutiqueScreen> {
       gap: r.size(40),
       crossAxisAlignment: CrossAxisAlignment.center,
       padding: r.only(
-        left: isDesktopScreen == true ? 20 : 120,
-        right: isDesktopScreen == true ? 20 : 120,
+        left:
+            isDesktopScreen == true || isTabletScreen == true
+                ? 20
+                : isMobileScreen == true
+                ? 10
+                : 120,
+        right:
+            isDesktopScreen == true || isTabletScreen == true
+                ? 20
+                : isMobileScreen == true
+                ? 10
+                : 120,
         top: 30,
         bottom: 80,
       ),
       children: [
         _buildHeader(),
-        CustomField(
-          backgroundColor: AppColors.colors.white,
-          padding: r.all(6),
-          borderRadius: r.size(2),
-          arrangement: FieldArrangement.row,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [_buildProductTypeSelector(), _buildSearchBar()],
-        ),
+        if (isTabletScreen == true || isMobileScreen == true)
+          CustomField(
+            backgroundColor: AppColors.colors.white,
+            padding: r.all(6),
+            borderRadius: r.size(2),
+            gap: r.size(6),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [_buildSearchBar(), _buildProductTypeSelector()],
+          )
+        else
+          CustomField(
+            backgroundColor: AppColors.colors.white,
+            padding: r.all(6),
+            borderRadius: r.size(2),
+            arrangement: FieldArrangement.row,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildProductTypeSelector(),
+              SizedBox(width: r.size(240), child: _buildSearchBar()),
+            ],
+          ),
+
         _buildProductsList(),
-        Paginator(totalPages: 7, onPageChanged: (int value) {}),
+        Paginator(
+          totalPages: isMobileScreen == true ? 3 : 7,
+          onPageChanged: (int value) {},
+        ),
       ],
     );
   }

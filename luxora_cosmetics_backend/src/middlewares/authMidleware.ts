@@ -132,7 +132,7 @@ export const isVerifiedMiddleware = async (req: Request, res: Response, next: Ne
   const userId = req.body.userId
   try {
     // Fetch the user from the database
-    const user = await prisma.user.findUnique({ where: { id: userId, isVerified: true, deletedAt: null } })
+    const user = await prisma.user.findUnique({ where: { id: userId, deletedAt: null } })
 
     if (!user) {
       throw new HttpError(

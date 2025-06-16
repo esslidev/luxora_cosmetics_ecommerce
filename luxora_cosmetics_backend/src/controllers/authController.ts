@@ -99,11 +99,6 @@ const signUp = async (req: Request, res: Response) => {
         encryptedAddressSecond,
         city,
         zip,
-        userPreferences: {
-          create: {
-            emailNotifications: true,
-          },
-        },
       },
     })
 
@@ -122,7 +117,6 @@ const signUp = async (req: Request, res: Response) => {
     const tokenPayload = {
       userId: user.id,
       isAdmin: user.isAdmin,
-      isVerified: user.isVerified,
     }
 
     const accessToken = jwt.sign(tokenPayload, jwtSecretToken, {
@@ -144,7 +138,7 @@ const signUp = async (req: Request, res: Response) => {
 
     mailSender(
       email,
-      storeName + ' Account Created',
+      storeName + ' | Votre compte a bien été créé',
       undefined,
       accountCreatedTemplatePath,
       {
@@ -223,7 +217,6 @@ const signIn = async (req: Request, res: Response) => {
     const tokenPayload = {
       userId: user.id,
       isAdmin: user.isAdmin,
-      isVerified: user.isVerified,
     }
 
     const finalAccessToken = jwt.sign(tokenPayload, jwtSecretToken, {
@@ -260,7 +253,7 @@ const signOut = async (req: Request, res: Response) => {
   const { language, userId } = req.body
   try {
     const existingSession = await prisma.sessions.findUnique({
-      where: { userId: Number(userId) },
+      where: { userId: userId },
     })
 
     if (!existingSession) {
@@ -272,11 +265,11 @@ const signOut = async (req: Request, res: Response) => {
     }
 
     await prisma.sessions.delete({
-      where: { userId: Number(userId) },
+      where: { userId: userId },
     })
 
     // Send success response for deletion
-    new CustomResponse(res).send({ message: 'User is signed out successfully.' })
+    new CustomResponse(res).send({ message: 'L\'utilisateur s\'est déconnecté avec succès.' })
   } catch (error) {
     handleError(error, res, language)
   }
@@ -327,7 +320,7 @@ const requestPasswordReset = async (req: Request, res: Response) => {
     const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`
     mailSender(
       email,
-      storeName + ' Password Reset Request',
+      storeName + ' | Demande de réinitialisation du mot de passe',
       undefined,
       resetPasswordTemplatePath,
       {
@@ -346,7 +339,7 @@ const requestPasswordReset = async (req: Request, res: Response) => {
       ]
     )
 
-    new CustomResponse(res).send({ message: 'The request has been sent successfully, please check your E-mail.' })
+    new CustomResponse(res).send({ message: 'La demande a été envoyée avec succès, veuillez vérifier votre e-mail.' })
   } catch (error) {
     handleError(error, res, language)
   }
@@ -420,7 +413,7 @@ const resetPassword = async (req: Request, res: Response) => {
     // Send password changed email
     mailSender(
       decryptData(user.encryptedEmail),
-      storeName + ' Password Changed',
+      storeName + ' | Mot de passe modifié',
       undefined,
       passwordChangedTemplatePath,
       {
@@ -438,117 +431,7 @@ const resetPassword = async (req: Request, res: Response) => {
       ]
     )
 
-    new CustomResponse(res).send({ message: 'Your password has been successfully changed.' })
-  } catch (error) {
-    handleError(error, res, language)
-  }
-}
-
-const requestEmailVerification = async (req: Request, res: Response) => {
-  const { language, email } = req.body
-
-  try {
-    // Validate email
-    if (!email || !isEmailValid(email)) {
-      throw new HttpError(
-        HttpStatusCode.BAD_REQUEST,
-        errorResponse(language).errorTitle.INVALID_EMAIL,
-        errorResponse(language).errorMessage.INVALID_EMAIL
-      )
-    }
-
-    // Find user by email
-    const encryptedEmail = encryptData(email.toLowerCase())
-    const user = await prisma.user.findUnique({ where: { encryptedEmail } })
-
-    if (!user) {
-      throw new HttpError(
-        HttpStatusCode.NOT_FOUND,
-        errorResponse(language).errorTitle.USER_NOT_FOUND,
-        errorResponse(language).errorMessage.USER_NOT_FOUND
-      )
-    }
-
-    if (!jwtSecretEmailVerificationToken) {
-      console.error('JWT password reset token secret is not configured.')
-      throw new HttpError(
-        HttpStatusCode.INTERNAL_SERVER_ERROR,
-        errorResponse(language).errorTitle.INTERNAL_SERVER_ERROR,
-        errorResponse(language).errorMessage.INTERNAL_SERVER_ERROR
-      )
-    }
-
-    // Create email verification token
-    const tokenPayload = { userId: user.id }
-    const emailVerificationToken = jwt.sign(tokenPayload, jwtSecretEmailVerificationToken, {
-      expiresIn: getJwtExpiryTime(emailVerificationTokenLifeSpan),
-    })
-
-    // Send verification email
-    /*mailSender(email, 'Email Verification Request', undefined, `${publicPath}/views/emailVerificationTemplate.hbs`, {
-      verificationLink: `${process.env.FRONTEND_URL}/verify-email?token=${emailVerificationToken}`,
-    })*/
-
-    new CustomResponse(res).send({ message: 'Verification email sent successfully.' })
-  } catch (error) {
-    handleError(error, res, language)
-  }
-}
-
-// Email verification handler
-const verifyEmail = async (req: Request, res: Response) => {
-  const { language, token } = req.body
-
-  try {
-    if (!token) {
-      throw new HttpError(
-        HttpStatusCode.BAD_REQUEST,
-        errorResponse(language).errorTitle.INVALID_TOKEN,
-        errorResponse(language).errorMessage.INVALID_TOKEN
-      )
-    }
-
-    let payload: any
-    try {
-      payload = jwt.verify(token, jwtSecretEmailVerificationToken!)
-    } catch (error) {
-      throw new HttpError(
-        HttpStatusCode.UNAUTHORIZED,
-        errorResponse(language).errorTitle.INVALID_TOKEN,
-        errorResponse(language).errorMessage.INVALID_TOKEN
-      )
-    }
-
-    const { userId } = payload
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    })
-
-    if (!user) {
-      throw new HttpError(
-        HttpStatusCode.NOT_FOUND,
-        errorResponse(language).errorTitle.USER_NOT_FOUND,
-        errorResponse(language).errorMessage.USER_NOT_FOUND
-      )
-    }
-
-    if (user.isVerified) {
-      throw new HttpError(
-        HttpStatusCode.BAD_REQUEST,
-        errorResponse(language).errorTitle.ALREADY_VERIFIED,
-        errorResponse(language).errorMessage.ALREADY_VERIFIED
-      )
-    }
-
-    await prisma.user.update({
-      where: { id: userId },
-      data: { isVerified: true }, // Mark user as verified
-    })
-
-    new CustomResponse(res).send({
-      message: 'Email verified successfully',
-    })
+    new CustomResponse(res).send({ message: 'Votre mot de passe a été modifié avec succès.' })
   } catch (error) {
     handleError(error, res, language)
   }
@@ -623,8 +506,6 @@ module.exports = {
   signIn,
   requestPasswordReset,
   resetPassword,
-  requestEmailVerification,
-  verifyEmail,
   signOut,
   renewAccess,
 }

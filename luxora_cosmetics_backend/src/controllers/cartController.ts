@@ -23,9 +23,9 @@ const syncCart = async (req: Request, res: Response) => {
 
     // Ensure the cart exists
     const cart = await prisma.cart.upsert({
-      where: { userId: Number(userId) },
+      where: { userId: userId },
       update: {},
-      create: { userId: Number(userId) },
+      create: { userId: userId },
     })
 
     // Add the items to the cart using upsert
@@ -35,7 +35,7 @@ const syncCart = async (req: Request, res: Response) => {
           where: {
             cartId_productId: {
               cartId: cart.id,
-              productId: Number(item.productId),
+              productId: item.productId,
             },
           },
           update: {},
@@ -79,10 +79,10 @@ const getCartByUserId = async (req: Request, res: Response) => {
 
   try {
     const cart = await prisma.cart.upsert({
-      where: { userId: Number(userId) },
+      where: { userId: userId },
       update: {},
       create: {
-        userId: Number(userId),
+        userId: userId,
       },
       include: {
         items: {
@@ -122,7 +122,7 @@ const addItemToCart = async (req: Request, res: Response) => {
     }
 
     const cart = await prisma.cart.findUnique({
-      where: { userId: Number(userId) },
+      where: { userId: userId },
     })
 
     if (!cart) {
@@ -138,7 +138,7 @@ const addItemToCart = async (req: Request, res: Response) => {
       where: {
         cartId_productId: {
           cartId: cart.id,
-          productId: Number(productId),
+          productId: productId,
         },
       },
       update: {
@@ -146,7 +146,7 @@ const addItemToCart = async (req: Request, res: Response) => {
       },
       create: {
         cartId: cart.id,
-        productId: Number(productId),
+        productId: productId,
         quantity: 1,
       },
     })
@@ -177,7 +177,7 @@ const addManyItemsToCart = async (req: Request, res: Response) => {
     }
 
     const cart = await prisma.cart.findUnique({
-      where: { userId: Number(userId) },
+      where: { userId: userId },
     })
 
     if (!cart) {
@@ -194,7 +194,7 @@ const addManyItemsToCart = async (req: Request, res: Response) => {
           where: {
             cartId_productId: {
               cartId: cart.id,
-              productId: Number(productId),
+              productId: productId,
             },
           },
           update: {
@@ -202,7 +202,7 @@ const addManyItemsToCart = async (req: Request, res: Response) => {
           },
           create: {
             cartId: cart.id,
-            productId: Number(productId),
+            productId: productId,
             quantity: 1,
           },
         })
@@ -342,7 +342,7 @@ const clearCart = async (req: Request, res: Response) => {
   const { language, userId } = req.body
 
   try {
-    const cart = await prisma.cart.findUnique({ where: { userId: Number(userId) }, include: { items: true } })
+    const cart = await prisma.cart.findUnique({ where: { userId: userId }, include: { items: true } })
 
     if (!cart) {
       throw new HttpError(

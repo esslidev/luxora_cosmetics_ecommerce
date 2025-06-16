@@ -1,4 +1,4 @@
-import { PrismaClient, Review } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
 import { handleError } from '../core/utils/errorHandler'
 import { HttpError } from '../core/resources/response/httpError'
@@ -63,10 +63,8 @@ const createReview = async (req: Request, res: Response) => {
         product: {
           select: {
             id: true,
-            Art_Ean13: true,
-            Art_Titre: true,
-            Art_Image_Url: true,
-            author: true,
+            name: true,
+            imageUrl: true,          
           },
         },
       },
@@ -90,9 +88,8 @@ const createReview = async (req: Request, res: Response) => {
       product: newReview.product
         ? {
             id: newReview.product.id,
-            isbn: newReview.product.Art_Ean13,
-            title: newReview.product.Art_Titre,
-            imageUrl: newReview.product.Art_Image_Url,
+            name: newReview.product.name,
+            imageUrl: newReview.product.imageUrl,
             ////////// author
           }
         : undefined,
@@ -121,7 +118,7 @@ const updateReview = async (req: Request, res: Response) => {
 
     // Check if the review exists
     const existingReview = await prisma.review.findUnique({
-      where: { id: Number(id) },
+      where: { id: id },
     })
 
     if (!existingReview) {
@@ -137,7 +134,7 @@ const updateReview = async (req: Request, res: Response) => {
 
     // Perform review update
     const updatedReview = await prisma.review.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         ...(text !== undefined && { text }),
         ...(clampedRating !== undefined && { rating: clampedRating }),
@@ -155,10 +152,8 @@ const updateReview = async (req: Request, res: Response) => {
         product: {
           select: {
             id: true,
-            Art_Ean13: true,
-            Art_Titre: true,
-            Art_Image_Url: true,
-            author: true,
+            name: true,
+            imageUrl: true,
           },
         },
       },
@@ -185,9 +180,8 @@ const updateReview = async (req: Request, res: Response) => {
       product: updatedReview.product
         ? {
             id: updatedReview.product.id,
-            isbn: updatedReview.product.Art_Ean13,
-            title: updatedReview.product.Art_Titre,
-            imageUrl: updatedReview.product.Art_Image_Url,
+            name: updatedReview.product.name,         
+            imageUrl: updatedReview.product.imageUrl,
             ////////// author
           }
         : undefined,
@@ -216,7 +210,7 @@ const setReviewApproval = async (req: Request, res: Response) => {
 
     // Check if the review exists
     const existingReview = await prisma.review.findUnique({
-      where: { id: Number(id) },
+      where: { id: id },
     })
 
     if (!existingReview) {
@@ -229,7 +223,7 @@ const setReviewApproval = async (req: Request, res: Response) => {
 
     // Update the review to set the specified approval status
     const updatedReview = await prisma.review.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: { isApproved },
       include: {
         user: {
@@ -244,10 +238,8 @@ const setReviewApproval = async (req: Request, res: Response) => {
         product: {
           select: {
             id: true,
-            Art_Ean13: true,
-            Art_Titre: true,
-            Art_Image_Url: true,
-            author: true,
+            name: true,
+            imageUrl: true,        
           },
         },
       },
@@ -274,10 +266,8 @@ const setReviewApproval = async (req: Request, res: Response) => {
       product: updatedReview.product
         ? {
             id: updatedReview.product.id,
-            isbn: updatedReview.product.Art_Ean13,
-            title: updatedReview.product.Art_Titre,
-            imageUrl: updatedReview.product.Art_Image_Url,
-            author: updatedReview.product.author,
+            name: updatedReview.product.name,
+            imageUrl: updatedReview.product.imageUrl,
           }
         : undefined,
       createdAt: updatedReview.createdAt,
@@ -301,7 +291,7 @@ const deleteReview = async (req: Request, res: Response) => {
 
   try {
     const existingReview = await prisma.review.findUnique({
-      where: { id: Number(id) },
+      where: { id: id },
     })
 
     if (!existingReview) {
@@ -313,12 +303,98 @@ const deleteReview = async (req: Request, res: Response) => {
     }
 
     await prisma.review.delete({
-      where: { id: Number(id) },
+      where: { id: id },
     })
 
     new CustomResponse(res).send({
       message: 'Avis supprimé avec succès.',
     })
+  } catch (error) {
+    handleError(error, res, language)
+  }
+}
+
+const getApprovedReviews = async (req: Request, res: Response) => {
+  const { language } = req.body
+  const { productId, userId } = req.query
+
+  try {
+    // Validate that either `productId` or `userId` is provided
+    if (!productId && !userId) {
+      throw new HttpError(
+        HttpStatusCode.BAD_REQUEST,
+        errorResponse(language).errorTitle.INVALID_REQUEST,
+        errorResponse(language).errorMessage.INVALID_REQUEST
+      )
+    }
+    const reviews = await prisma.review.findMany({
+      where: {
+        isPublic: true,
+        OR: [
+          {
+            isApproved: true, // Approved reviews
+          },
+          {
+            user: {
+              isAdmin: true, // Admin reviews
+            },
+          },
+        ],
+        ...(productId ? { productId: productId.toString() } : {}),
+        ...(userId ? { userId: userId.toString() } : {}),
+      },
+      include: {
+        user: productId
+          ? {
+              select: {
+                id: true,
+                encryptedFirstName: true,
+                encryptedLastName: true,
+                encryptedEmail: true,
+                isAdmin: true,
+              },
+            }
+          : false,
+        product: userId
+          ? {
+              select: {
+                id: true,
+                name: true,
+                imageUrl: true,
+              },
+            }
+          : false,
+      },
+    })
+
+    const responseReviews = reviews.map((review) => ({
+      id: review.id,
+      text: review.text,
+      rating: review.rating,
+      isPublic: review.isPublic,
+      isApproved: review.isApproved,
+      createdAt: review.createdAt,
+      updatedAt: review.updatedAt,
+      user: review.user
+        ? {
+            id: review.user.id,
+            isAdmin: review.user.isAdmin,
+            firstName: review.user.encryptedFirstName ? decryptData(review.user.encryptedFirstName) : null,
+            lastName: review.user.encryptedLastName ? decryptData(review.user.encryptedLastName) : null,
+            email: review.user.encryptedEmail ? decryptData(review.user.encryptedEmail) : null,
+          }
+        : undefined,
+      product: review.product
+        ? {
+            id: review.product.id,
+            name: review.product.name,
+            imageUrl: review.product.imageUrl,
+            ////////// author
+          }
+        : undefined,
+    }))
+
+    new CustomResponse(res).send({ data: responseReviews })
   } catch (error) {
     handleError(error, res, language)
   }
@@ -365,10 +441,8 @@ const getReviews = async (req: Request, res: Response) => {
         product: {
           select: {
             id: true,
-            Art_Ean13: true,
-            Art_Titre: true,
-            Art_Image_Url: true,
-            author: true,
+            name: true,           
+            imageUrl: true,
           },
         },
       },
@@ -399,9 +473,8 @@ const getReviews = async (req: Request, res: Response) => {
       product: review.product
         ? {
             id: review.product.id,
-            isbn: review.product.Art_Ean13,
-            title: review.product.Art_Titre,
-            imageUrl: review.product.Art_Image_Url,
+            name: review.product.name,
+            imageUrl: review.product.imageUrl,
             ////////// author
           }
         : undefined,
@@ -421,93 +494,4 @@ const getReviews = async (req: Request, res: Response) => {
   }
 }
 
-const getApprovedReviews = async (req: Request, res: Response) => {
-  const { language } = req.body
-  const { productId, userId } = req.query
-
-  try {
-    // Validate that either `productId` or `userId` is provided
-    if (!productId && !userId) {
-      throw new HttpError(
-        HttpStatusCode.BAD_REQUEST,
-        errorResponse(language).errorTitle.INVALID_REQUEST,
-        errorResponse(language).errorMessage.INVALID_REQUEST
-      )
-    }
-    const reviews = await prisma.review.findMany({
-      where: {
-        isPublic: true,
-        OR: [
-          {
-            isApproved: true, // Approved reviews
-          },
-          {
-            user: {
-              isAdmin: true, // Admin reviews
-            },
-          },
-        ],
-        ...(productId ? { productId: Number(productId) } : {}),
-        ...(userId ? { userId: Number(userId) } : {}),
-      },
-      include: {
-        user: productId
-          ? {
-              select: {
-                id: true,
-                encryptedFirstName: true,
-                encryptedLastName: true,
-                encryptedEmail: true,
-                isAdmin: true,
-              },
-            }
-          : false,
-        product: userId
-          ? {
-              select: {
-                id: true,
-                Art_Ean13: true,
-                Art_Titre: true,
-                Art_Image_Url: true,
-                author: true,
-              },
-            }
-          : false,
-      },
-    })
-
-    const responseReviews = reviews.map((review) => ({
-      id: review.id,
-      text: review.text,
-      rating: review.rating,
-      isPublic: review.isPublic,
-      isApproved: review.isApproved,
-      createdAt: review.createdAt,
-      updatedAt: review.updatedAt,
-      user: review.user
-        ? {
-            id: review.user.id,
-            isAdmin: review.user.isAdmin,
-            firstName: review.user.encryptedFirstName ? decryptData(review.user.encryptedFirstName) : null,
-            lastName: review.user.encryptedLastName ? decryptData(review.user.encryptedLastName) : null,
-            email: review.user.encryptedEmail ? decryptData(review.user.encryptedEmail) : null,
-          }
-        : undefined,
-      product: review.product
-        ? {
-            id: review.product.id,
-            isbn: review.product.Art_Ean13,
-            title: review.product.Art_Titre,
-            imageUrl: review.product.Art_Image_Url,
-            ////////// author
-          }
-        : undefined,
-    }))
-
-    new CustomResponse(res).send({ data: responseReviews })
-  } catch (error) {
-    handleError(error, res, language)
-  }
-}
-
-export { createReview, updateReview, setReviewApproval, deleteReview, getReviews, getApprovedReviews }
+export { createReview, updateReview, setReviewApproval, deleteReview, getApprovedReviews,getReviews }

@@ -15,10 +15,11 @@ class ProductOverviewLocation extends BeamLocation<BeamState> {
     final String? productId = uri.queryParameters['productId'];
     final List<BeamPage> pages = [
       BeamPage(
-          key: ValueKey('${AppPaths.routes.productOverviewScreen}$productId'),
-          title:
-              '$appName | ${AppPaths.routes.getRouteName(AppPaths.routes.productOverviewScreen)}',
-          child: ProductOverviewScreen()),
+        key: ValueKey('${AppPaths.routes.productOverviewScreen}$productId'),
+        title:
+            '$appName | ${AppPaths.routes.getRouteName(AppPaths.routes.productOverviewScreen)}',
+        child: ProductOverviewScreen(productId: productId),
+      ),
     ];
     return pages;
   }

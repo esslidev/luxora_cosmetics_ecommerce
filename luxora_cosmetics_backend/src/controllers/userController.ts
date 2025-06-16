@@ -1,4 +1,4 @@
-import { PrismaClient, User } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
 import { HttpError } from '../core/resources/response/httpError'
 import { handleError } from '../core/utils/errorHandler'
@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 
 // Update user by ID
 const updateUser = async (req: Request, res: Response) => {
-  const { language, userId, firstName, lastName, addressMain, addressSecond, city, email, phone, state, zip, country } =
+  const { language, userId, firstName, lastName, addressMain, addressSecond, city, email, phone, zip } =
     req.body
 
   try {
@@ -37,9 +37,7 @@ const updateUser = async (req: Request, res: Response) => {
         ...(phone && { encryptedPhone: encryptData(phone) }),
         ...(email && { encryptedEmail: encryptData(email.toLowerCase()) }),
         ...(city && { city }),
-        ...(state && { state }),
         ...(zip && { zip }),
-        ...(country && { country }),
         ...(email != null && { isVerified: false }),
       },
     })
@@ -53,14 +51,12 @@ const updateUser = async (req: Request, res: Response) => {
       addressMain: updatedUser.encryptedAddressMain ? decryptData(updatedUser.encryptedAddressMain) : null,
       addressSecond: updatedUser.encryptedAddressSecond ? decryptData(updatedUser.encryptedAddressSecond) : null,
       city: updatedUser.city,
-      state: updatedUser.state,
       zip: updatedUser.zip,
-      country: updatedUser.country,
     }
 
     new CustomResponse(res).send({
       data: responseUser,
-      message: 'User data is successfully updated.' + email != null ? 'Email Verification is required.' : '',
+      message: 'Les données de l\'utilisateur ont été mises à jour avec succès.' + email != null ? ' Une vérification de l\'e-mail est requise.' : '',
     })
   } catch (error) {
     handleError(error, res, language)
@@ -118,15 +114,13 @@ const updateUserPassword = async (req: Request, res: Response) => {
       addressMain: updatedUser.encryptedAddressMain ? decryptData(updatedUser.encryptedAddressMain) : null,
       addressSecond: updatedUser.encryptedAddressSecond ? decryptData(updatedUser.encryptedAddressSecond) : null,
       city: updatedUser.city,
-      state: updatedUser.state,
       zip: updatedUser.zip,
-      country: updatedUser.country,
     }
 
     // Send a success response
     new CustomResponse(res).send({
       data: responseUser,
-      message: 'Password is updated successfully.',
+      message: 'Le mot de passe a été mis à jour avec succès.',
     })
   } catch (error) {
     handleError(error, res, language)
@@ -135,10 +129,10 @@ const updateUserPassword = async (req: Request, res: Response) => {
 
 // Soft delete user by ID
 const deleteUser = async (req: Request, res: Response) => {
-  const { language, id } = req.body
+  const { language, userId } = req.body
 
   try {
-    const user = await prisma.user.findUnique({ where: { id: id, deletedAt: null } })
+    const user = await prisma.user.findUnique({ where: { id: userId, deletedAt: null } })
 
     if (!user) {
       throw new HttpError(
@@ -149,11 +143,11 @@ const deleteUser = async (req: Request, res: Response) => {
     }
 
     await prisma.user.update({
-      where: { id: id },
+      where: { id: userId },
       data: { deletedAt: new Date() },
     })
 
-    new CustomResponse(res).send({ message: 'User deleted successfully.' })
+    new CustomResponse(res).send({ message: 'L\'utilisateur a été supprimé avec succès.' })
   } catch (error) {
     handleError(error, res, language)
   }
@@ -176,7 +170,7 @@ const getUser = async (req: Request, res: Response) => {
     // Fetch the user based on filters
     const user = await prisma.user.findFirst({
       where: {
-        id: Number(userId),
+        id: userId,
       },
     })
 
@@ -193,7 +187,6 @@ const getUser = async (req: Request, res: Response) => {
     const responseUser = {
       id: user.id,
       isAdmin: user.isAdmin,
-      isVerified: user.isVerified,
       email: decryptData(user.encryptedEmail),
       phone: user.encryptedPhone ? decryptData(user.encryptedPhone) : null,
       firstName: user.encryptedFirstName ? decryptData(user.encryptedFirstName) : null,
@@ -201,9 +194,7 @@ const getUser = async (req: Request, res: Response) => {
       addressMain: user.encryptedAddressMain ? decryptData(user.encryptedAddressMain) : null,
       addressSecond: user.encryptedAddressSecond ? decryptData(user.encryptedAddressSecond) : null,
       city: user.city,
-      state: user.state,
       zip: user.zip,
-      country: user.country,
     }
 
     // Send response with user data
@@ -262,7 +253,6 @@ const getAllUsers = async (req: Request, res: Response) => {
     const responseUsers = users.map((user) => ({
       id: user.id,
       isAdmin: user.isAdmin,
-      isVerified: user.isVerified,
       email: decryptData(user.encryptedEmail),
       phone: user.encryptedPhone ? decryptData(user.encryptedPhone) : null,
       firstName: user.encryptedFirstName ? decryptData(user.encryptedFirstName) : null,
@@ -270,9 +260,7 @@ const getAllUsers = async (req: Request, res: Response) => {
       addressMain: user.encryptedAddressMain ? decryptData(user.encryptedAddressMain) : null,
       addressSecond: user.encryptedAddressSecond ? decryptData(user.encryptedAddressSecond) : null,
       city: user.city,
-      state: user.state,
       zip: user.zip,
-      country: user.country,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
     }))

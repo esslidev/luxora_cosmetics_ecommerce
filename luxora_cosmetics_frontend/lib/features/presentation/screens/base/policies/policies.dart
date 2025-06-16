@@ -97,18 +97,13 @@ class _PoliciesScreenState extends State<PoliciesScreen> {
     );
   }
 
-  Widget _buildPolicies(
-    BuildContext context, {
-    bool? isDesktopScreen,
-    bool? isTabletScreen,
-    bool? isMobileScreen,
-  }) {
+  Widget _buildPolicies(BuildContext context, {bool? isCompact}) {
     return CustomField(
       gap: r.size(30),
       crossAxisAlignment: CrossAxisAlignment.start,
       padding: r.only(
-        left: isDesktopScreen == true ? 20 : 120,
-        right: isDesktopScreen == true ? 20 : 120,
+        left: isCompact == true ? 20 : 120,
+        right: isCompact == true ? 20 : 120,
         top: 30,
         bottom: 80,
       ),
@@ -160,9 +155,9 @@ class _PoliciesScreenState extends State<PoliciesScreen> {
   Widget build(BuildContext context) {
     return ResponsiveScreenAdapter(
       fallbackScreen: _buildPolicies(context),
-      screenDesktop: _buildPolicies(context, isDesktopScreen: true),
-      screenTablet: _buildPolicies(context, isTabletScreen: true),
-      screenMobile: _buildPolicies(context, isMobileScreen: true),
+      screenDesktop: _buildPolicies(context, isCompact: true),
+      screenTablet: _buildPolicies(context, isCompact: true),
+      screenMobile: _buildPolicies(context, isCompact: true),
     );
   }
 }

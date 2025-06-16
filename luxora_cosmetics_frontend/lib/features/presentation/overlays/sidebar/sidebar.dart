@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_paths.dart';
 import '../../../../core/util/responsive_screen_adapter.dart';
 import '../../../../core/util/responsive_size_adapter.dart';
+import '../../widgets/common/custom_button.dart';
 import '../../widgets/common/custom_field.dart';
-import '../../widgets/common/custom_text.dart';
+
+class SidebarOverlayRoutes {
+  final String name;
+  final Function() onPressed;
+  final bool isActive;
+  SidebarOverlayRoutes({
+    required this.name,
+    required this.onPressed,
+    this.isActive = false,
+  });
+}
 
 class SidebarOverlay {
   final BuildContext context;
-  final VoidCallback? onDismiss;
+  ResponsiveSizeAdapter r;
 
-  SidebarOverlay({required this.context, this.onDismiss});
+  SidebarOverlay({required this.context, required this.r});
 
   OverlayEntry? _overlayEntry;
   bool toggle = false;
 
-  Future<void> show({required ResponsiveSizeAdapter r}) async {
+  Future<void> show({required List<SidebarOverlayRoutes> routes}) async {
     if (isShown()) {
       toggle = false;
       await Future.delayed(300.ms);
@@ -37,8 +49,11 @@ class SidebarOverlay {
                 child: Material(
                       color: Colors.transparent,
                       child: ResponsiveScreenAdapter(
-                        screenTablet: _buildOverlay(r: r),
-                        screenMobile: _buildOverlay(r: r, width: r.size(220)),
+                        screenTablet: _buildOverlay(routes: routes),
+                        screenMobile: _buildOverlay(
+                          routes: routes,
+                          width: r.size(220),
+                        ),
                       ),
                     )
                     .animate(target: toggle ? 1 : 0)
@@ -71,17 +86,67 @@ class SidebarOverlay {
     return _overlayEntry != null;
   }
 
-  Widget _buildOverlay({required ResponsiveSizeAdapter r, double? width}) {
-    return CustomField(
-      width: width ?? r.size(300),
-      height: double.infinity,
-
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      gap: r.size(2),
-      backgroundColor: AppColors.light.backgroundPrimary,
-      mainAxisSize: MainAxisSize.min,
-      children: const [CustomText(text: 'side nav')],
+  Widget _buildOverlay({
+    required List<SidebarOverlayRoutes> routes,
+    double? width,
+  }) {
+    return Stack(
+      children: [
+        CustomField(
+          minWidth: width ?? r.size(300),
+          height: double.infinity,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          gap: r.size(6),
+          backgroundColor: AppColors.light.backgroundPrimary,
+          border: Border(
+            left: BorderSide(
+              color: AppColors.colors.white.withValues(alpha: .1),
+              width: r.size(.7),
+            ),
+          ),
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ...routes.map((route) {
+              return CustomButton(
+                text: route.name,
+                fontFamily: 'recoleta',
+                fontSize: r.size(22),
+                textColor:
+                    route.isActive == true ? AppColors.light.primary : null,
+                backgroundColor:
+                    route.isActive == true
+                        ? AppColors.colors.white.withValues(alpha: .06)
+                        : null,
+                animationDuration: 200.ms,
+                onHoverStyle: CustomButtonStyle(
+                  textColor: AppColors.light.primary,
+                  backgroundColor: AppColors.light.primary.withValues(
+                    alpha: .06,
+                  ),
+                ),
+                onPressed: (position, size) {
+                  dismiss();
+                  route.onPressed();
+                },
+              );
+            }),
+          ],
+        ),
+        Positioned(
+          top: r.size(6),
+          right: r.size(6),
+          child: CustomButton(
+            svgIconPath: AppPaths.vectors.closeIcon,
+            iconWidth: r.size(32),
+            iconHeight: r.size(32),
+            iconColor: AppColors.light.accent,
+            onPressed: (position, size) {
+              dismiss();
+            },
+          ),
+        ),
+      ],
     );
   }
 }

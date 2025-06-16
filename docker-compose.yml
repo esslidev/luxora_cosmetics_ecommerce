@@ -68,6 +68,7 @@ services:
     networks:
       - pma_networks
 
+
 volumes:
   frontend-data:
 networks:

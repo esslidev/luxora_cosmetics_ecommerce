@@ -1,7 +1,6 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:luxora_cosmetics_frontend/core/enums/widgets.dart';
 import 'package:luxora_cosmetics_frontend/features/presentation/widgets/common/custom_field.dart';
 import 'package:luxora_cosmetics_frontend/features/presentation/widgets/features/product.dart';
 

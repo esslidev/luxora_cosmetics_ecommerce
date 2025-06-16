@@ -65,7 +65,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
       _signInOverlay = SignInOverlay(context: homeContext!, r: r);
       _createAccountOverlay = CreateAccountOverlay(context: homeContext!, r: r);
-      _sidebarOverlay = SidebarOverlay(context: homeContext!);
+      _sidebarOverlay = SidebarOverlay(context: homeContext!, r: r);
 
       _wishlistDropdown = _buildActionButtonsDropdown();
       _profileDropdown = _buildActionButtonsDropdown();
@@ -281,7 +281,54 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       iconHeight: r.size(9),
       iconWidth: r.size(9),
       onPressed: (position, size) {
-        _sidebarOverlay.show(r: r);
+        _sidebarOverlay.show(
+          routes: [
+            SidebarOverlayRoutes(
+              name: 'Accueil',
+              onPressed: () {
+                Beamer.of(context).beamToNamed(AppPaths.routes.homePageScreen);
+              },
+              isActive:
+                  Beamer.of(
+                    context,
+                  ).currentBeamLocation.state.routeInformation.uri.toString() ==
+                  AppPaths.routes.homePageScreen,
+            ),
+            SidebarOverlayRoutes(
+              name: 'Produits',
+              onPressed: () {
+                Beamer.of(context).beamToNamed(AppPaths.routes.boutiqueScreen);
+              },
+              isActive:
+                  Beamer.of(
+                    context,
+                  ).currentBeamLocation.state.routeInformation.uri.toString() ==
+                  AppPaths.routes.boutiqueScreen,
+            ),
+            SidebarOverlayRoutes(
+              name: 'Contact',
+              onPressed: () {
+                Beamer.of(context).beamToNamed(AppPaths.routes.contactScreen);
+              },
+              isActive:
+                  Beamer.of(
+                    context,
+                  ).currentBeamLocation.state.routeInformation.uri.toString() ==
+                  AppPaths.routes.contactScreen,
+            ),
+            SidebarOverlayRoutes(
+              name: 'Nos politiques',
+              onPressed: () {
+                Beamer.of(context).beamToNamed(AppPaths.routes.policiesScreen);
+              },
+              isActive:
+                  Beamer.of(
+                    context,
+                  ).currentBeamLocation.state.routeInformation.uri.toString() ==
+                  AppPaths.routes.policiesScreen,
+            ),
+          ],
+        );
       },
     );
   }

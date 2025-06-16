@@ -57,6 +57,7 @@ class ImagesPaths {
   final String testimonialCustomerImage =
       'assets/images/testimonial-customer-image.png';
   final String milestonesImage = 'assets/images/milestones-image.png';
+  final String errorPageImage = 'assets/images/error-page-image.jpg';
 }
 
 class AnimatedImagesPaths {

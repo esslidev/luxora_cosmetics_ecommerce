@@ -9,18 +9,12 @@ import userRoutes from './routes/userRoutes'
 import logger from './core/resources/pinoLogger'
 import { performSoftDeletes } from './core/utils/softDelete'
 import cron from 'node-cron'
-import categoryRouter from './routes/categoryRoutes'
 import authRouter from './routes/authRoutes'
 import productRouter from './routes/productRoutes'
-import systemMessagesRouter from './routes/systemMessagesRoutes'
 import reviewRouter from './routes/reviewRoutes'
 import cartRouter from './routes/cartRoutes'
 import wishlistRouter from './routes/wishlistRoutes'
 import userRouter from './routes/userRoutes'
-import showcaseRouter from './routes/frontPageSlidersRoutes'
-import authorRouter from './routes/authorRoutes'
-import contentRouter from './routes/contentRoutes'
-import systemPreferencesRouter from './routes/systemPreferencesRoutes'
 import newsLetterSubscriptionRouter from './routes/newsLetterSubscriptionRoutes'
 import orderRouter from './routes/orderRoutes'
 
@@ -67,13 +61,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/api/auth', authRouter)
-app.use('/api/system_messages', systemMessagesRouter)
-app.use('/api/system-preferences', systemPreferencesRouter)
-app.use('/api/showcase', showcaseRouter)
-app.use('/api/categories', categoryRouter)
 app.use('/api/products', productRouter)
-app.use('/api/authors', authorRouter)
-app.use('/api/contents', contentRouter)
 app.use('/api/reviews', reviewRouter)
 app.use('/api/newsletter', newsLetterSubscriptionRouter)
 app.use('/api/orders', orderRouter)

@@ -135,14 +135,6 @@ class _ContactScreenState extends State<ContactScreen> {
     );
   }
 
-  bool _areInputsValid() {
-    return _nameController.text.trim().isNotEmpty &&
-        _emailController.text.trim().isNotEmpty &&
-        AppUtil.isEmailValid(_emailController.text) &&
-        _phoneController.text.trim().isNotEmpty &&
-        AppUtil.isPhoneNumberValid(_phoneController.text);
-  }
-
   Widget _buildForm() {
     return CustomField(
       gap: r.size(9),
@@ -185,7 +177,7 @@ class _ContactScreenState extends State<ContactScreen> {
           hint: 'Écrivez votre message',
           height: r.size(100),
           minLines: 1,
-          maxLines: null,
+          maxLines: 10,
           controller: _messageController,
           keyboardType: TextInputType.multiline,
           borderColorCallback: (value) {
@@ -206,6 +198,7 @@ class _ContactScreenState extends State<ContactScreen> {
   }) {
     return CustomField(
       gap: r.size(12),
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       arrangement: FieldArrangement.row,
       children: [
@@ -233,58 +226,93 @@ class _ContactScreenState extends State<ContactScreen> {
     );
   }
 
-  Widget _buildContact(
-    BuildContext context, {
-    bool? isDesktopScreen,
-    bool? isTabletScreen,
-    bool? isMobileScreen,
-  }) {
+  Widget _buildContact(BuildContext context, {bool? isDesktopScreen}) {
+    return IntrinsicHeight(
+      child: CustomField(
+        gap: r.size(40),
+        padding: r.only(
+          left: isDesktopScreen == true ? 20 : 120,
+          right: isDesktopScreen == true ? 20 : 120,
+          top: 30,
+          bottom: 80,
+        ),
+        arrangement: FieldArrangement.row,
+        children: [
+          Expanded(
+            flex: 3,
+            child: CustomField(
+              mainAxisAlignment: MainAxisAlignment.center,
+              gap: r.size(20),
+              children: [
+                _buildHeader(),
+                _buildForm(),
+                CustomField(
+                  arrangement: FieldArrangement.row,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: _buildContactCard(
+                        svgIconPath: AppPaths.vectors.phoneIcon,
+                        title: 'Numéro de téléphone',
+                        value: phoneNumber,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: _buildContactCard(
+                        svgIconPath: AppPaths.vectors.emailIcon,
+                        title: 'Adresse e-mail',
+                        value: addressEmail,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: GoogleMap(
+              mapUrl: mapLocationUrl,
+              width: r.size(240),
+              height: r.size(340),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactOnSmallScreens(BuildContext context) {
     return CustomField(
       gap: r.size(40),
-      padding: r.only(
-        left: isDesktopScreen == true ? 20 : 120,
-        right: isDesktopScreen == true ? 20 : 120,
-        top: 30,
-        bottom: 80,
-      ),
-      arrangement: FieldArrangement.row,
+      padding: r.only(left: 20, right: 20, top: 30, bottom: 80),
       children: [
-        Expanded(
-          flex: 3,
-          child: CustomField(
-            mainAxisAlignment: MainAxisAlignment.center,
-
-            gap: r.size(20),
-            children: [
-              _buildHeader(),
-              _buildForm(),
-              CustomField(
-                arrangement: FieldArrangement.row,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: _buildContactCard(
-                      svgIconPath: AppPaths.vectors.phoneIcon,
-                      title: 'Numéro de téléphone',
-                      value: phoneNumber,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: _buildContactCard(
-                      svgIconPath: AppPaths.vectors.emailIcon,
-                      title: 'Adresse e-mail',
-                      value: addressEmail,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: GoogleMap(mapUrl: mapLocationUrl, height: r.size(340)),
+        CustomField(
+          mainAxisAlignment: MainAxisAlignment.center,
+          gap: r.size(20),
+          children: [
+            _buildHeader(),
+            _buildForm(),
+            CustomField(
+              isWrap: true,
+              wrapHorizontalSpacing: r.size(20),
+              wrapVerticalSpacing: r.size(12),
+              arrangement: FieldArrangement.row,
+              children: [
+                _buildContactCard(
+                  svgIconPath: AppPaths.vectors.phoneIcon,
+                  title: 'Numéro de téléphone',
+                  value: phoneNumber,
+                ),
+                _buildContactCard(
+                  svgIconPath: AppPaths.vectors.emailIcon,
+                  title: 'Adresse e-mail',
+                  value: addressEmail,
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
@@ -295,8 +323,8 @@ class _ContactScreenState extends State<ContactScreen> {
     return ResponsiveScreenAdapter(
       fallbackScreen: _buildContact(context),
       screenDesktop: _buildContact(context, isDesktopScreen: true),
-      screenTablet: _buildContact(context, isTabletScreen: true),
-      screenMobile: _buildContact(context, isMobileScreen: true),
+      screenTablet: _buildContactOnSmallScreens(context),
+      screenMobile: _buildContactOnSmallScreens(context),
     );
   }
 }

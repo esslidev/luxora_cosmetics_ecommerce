@@ -1,17 +1,18 @@
-import { PaymentMethod, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
 import { handleError } from '../core/utils/errorHandler'
 import CustomResponse from '../core/resources/response/customResponse'
 import { errorResponse } from '../core/resources/response/localizedErrorResponse'
 import { HttpStatusCode } from '../core/enums/response/httpStatusCode'
 import { HttpError } from '../core/resources/response/httpError'
-import { decryptData, encryptData } from '../core/utils/utils'
+import { decryptData } from '../core/utils/utils'
+import { userInfo } from 'os'
 
 const prisma = new PrismaClient()
 
 // Create a new order along with its order items.
 const createOrder = async (req: Request, res: Response) => {
-  const { language, userId, magasinCode, paymentMethod, items } = req.body
+  const { language, userId, paymentMethod, items } = req.body
 
   try {
     // Validate required input
@@ -24,40 +25,14 @@ const createOrder = async (req: Request, res: Response) => {
     }
 
     // Fetch the user from the database
-    const user = await prisma.user.findUnique({ where: { id: Number(userId), deletedAt: null } })
-
-    let magasin: any = null
-    // If a magasinCode is provided, fetch the corresponding magasin.
-    if (magasinCode) {
-      magasin = await prisma.magasin.findUnique({ where: { magasinCode } })
-      if (!magasin) {
-        throw new HttpError(
-          HttpStatusCode.NOT_FOUND,
-          errorResponse(language).errorTitle.NOT_FOUND,
-          errorResponse(language).errorMessage.NOT_FOUND
-        )
-      }
-    }
+    const user = await prisma.user.findUnique({ where: { id: userId, deletedAt: null } })
 
     // Extract all product IDs from the items array
-    const productIds: number[] = items.map((item: any) => Number(item.productId))
+    const productIds: string[] = items.map((item: any) => String(item.productId))
 
     // Fetch product details for all these product IDs
     const products = await prisma.product.findMany({
       where: { id: { in: productIds }, isPublic: true },
-      include: {
-        stock: {
-          include: {
-            magasin: {
-              include: {
-                Delivery: true,
-              },
-            },
-          },
-        },
-        primaryCategory: true,
-        reviews: { where: { isPublic: true } },
-      },
     })
 
     // If the user is not found or no products exist, throw a 404 error
@@ -69,9 +44,6 @@ const createOrder = async (req: Request, res: Response) => {
       )
     }
 
-    // Calculate the subtotal (price before tax and delivery)
-    let subTotalPrice: number = 0
-    let totalPrice: number = 0
     const taxRate = 0.1 // 10%
 
     // Delivery is hardcoded for now
@@ -80,7 +52,7 @@ const createOrder = async (req: Request, res: Response) => {
 
     const orderItems = items.map((item: any) => {
       // Find product details matching the productId
-      const product = products.find((p) => p.id === Number(item.productId))
+      const product = products.find((p) => p.id === String(item.productId))
       if (!product) {
         throw new HttpError(
           HttpStatusCode.NOT_FOUND,
@@ -88,63 +60,32 @@ const createOrder = async (req: Request, res: Response) => {
           `Produit avec l'identifiant ${item.productId} non trouvé.`
         )
       }
-
-      // Determine effective price:
-      // - Use Art_Prix_Promo if available,
-      // - Otherwise, if primaryCategory promoPercent is available, calculate promo price,
-      // - Else use the regular Art_Prix.
-      let effectivePrice: number
-      if (product.Art_Prix_Promo !== null && product.Art_Prix_Promo !== undefined) {
-        effectivePrice = product.Art_Prix_Promo
-      } else if (
-        product.primaryCategory &&
-        product.primaryCategory.promoPercent !== null &&
-        product.primaryCategory.promoPercent !== undefined
-      ) {
-        effectivePrice = product.Art_Prix - (product.Art_Prix * product.primaryCategory.promoPercent) / 100
-      } else {
-        effectivePrice = product.Art_Prix
-      }
-      subTotalPrice += effectivePrice * item.quantity
-
+    
       return {
-        productIsbn: product.Art_Ean13, // Using the product's EAN13 as ISBN
-        productTitle: product.Art_Titre,
-        productImageUrl: product.Art_Image_Url,
-        productPrice: product.Art_Prix,
-        productPricePromo: product.Art_Prix_Promo,
-        productPrimaryCategoryPromoPercent: product.primaryCategory?.promoPercent || null,
-        productFormatType: product.formatType,
+        productName: product.name, // Using the product's EAN13 as ISBN
+        productImageUrl: product.imageUrl,
+        productPrice: product.price,
+        productPricePromo: product.pricePromo,
         quantity: item.quantity,
         Product: { connect: { id: product.id } },
       }
     })
 
-    // Calculate tax amount and final total price
-    const taxAmount = subTotalPrice * taxRate
-    deliveryCost = paymentMethod === PaymentMethod.cashOnDelivery ? 60.99 : 0
-    totalPrice = subTotalPrice + taxAmount + deliveryCost // Fixed total price calculation
-
     // Create new order with order items
     await prisma.order.create({
       data: {
         userId: user.id,
-        magasinCode: magasin?.magasinCode,
         userEncryptedEmail: user.encryptedEmail,
         userEncryptedPhone: user.encryptedPhone,
         userEncryptedFirstName: user.encryptedFirstName,
         userEncryptedLastName: user.encryptedLastName,
-        subTotalPrice: subTotalPrice,
-        totalPrice: totalPrice,
-        taxRate: taxRate,
-        deliveryCost: deliveryCost,
-        magasinName: magasin?.magasinName,
-        magasinAddress: magasin?.magasinAddress,
         userEncryptedAddressMain: user.encryptedAddressMain,
         userEncryptedAddressSecond: user.encryptedAddressSecond,
         deliveryMaxArrivalDate: deliveryMaxArrivalDate,
         deliveryCity: user.city,
         deliveryZip: user.zip,
+        taxRate: taxRate,
+        deliveryCost: deliveryCost,
         paymentMethod,
         items: {
           create: orderItems,
@@ -177,7 +118,7 @@ const getOrder = async (req: Request, res: Response) => {
     }
 
     const order = await prisma.order.findUnique({
-      where: { id: Number(id) },
+      where: { id:id.toString() },
       include: { items: true },
     })
 
@@ -191,29 +132,26 @@ const getOrder = async (req: Request, res: Response) => {
 
     const responseOrder = {
       id: order.id,
-      subTotalPrice: order.subTotalPrice,
-      totalPrice: order.totalPrice,
-      taxRate: order.taxRate,
-      deliveryCost: order.deliveryCost,
-      magasinCode: order.magasinCode,
-      magasinName: order.magasinName,
-      magasinAddress: order.magasinAddress,
+      userId: order.userId,
+      userEmail: order.userEncryptedEmail ? decryptData(order.userEncryptedEmail) : null,
+      userPhone: order.userEncryptedPhone ? decryptData(order.userEncryptedPhone) : null,
+      userFirstName: order.userEncryptedFirstName ? decryptData(order.userEncryptedFirstName) : null,
+      userLastName: order.userEncryptedLastName ? decryptData(order.userEncryptedLastName) : null,
       deliveryAddressMain: order.userEncryptedAddressMain ? decryptData(order.userEncryptedAddressMain) : null,
       deliveryAddressSecond: order.userEncryptedAddressSecond ? decryptData(order.userEncryptedAddressSecond) : null,
       deliveryMaxArrivalDate: order.deliveryMaxArrivalDate,
       deliveryCity: order.deliveryCity,
       deliveryZip: order.deliveryZip,
+      taxRate: order.taxRate,
+      deliveryCost: order.deliveryCost,
       status: order.status,
       paymentMethod: order.paymentMethod,
       items: order.items.map((item) => ({
         id: item.id,
-        productIsbn: item.productIsbn,
-        productTitle: item.productTitle,
+        productName: item.productName,
         productImageUrl: item.productImageUrl,
         productPrice: item.productPrice,
         productPricePromo: item.productPricePromo,
-        productPrimaryCategoryPromoPercent: item.productPrimaryCategoryPromoPercent,
-        productFormatType: item.productFormatType,
         quantity: item.quantity,
       })),
       createdAt: order.createdAt,
@@ -237,7 +175,7 @@ const getUserOrders = async (req: Request, res: Response) => {
 
   try {
     const orders = await prisma.order.findMany({
-      where: userId ? { userId: Number(userId) } : {},
+      where: userId ? { userId: userId.toString() } : {},
       skip,
       take,
       orderBy: {
@@ -248,34 +186,31 @@ const getUserOrders = async (req: Request, res: Response) => {
 
     // Fetch total count
     total = await prisma.order.count({
-      where: userId ? { userId: Number(userId) } : {},
+      where: userId ? { userId: userId.toString() } : {},
     })
 
     const responseOrders = orders.map((order) => ({
       id: order.id,
-      subTotalPrice: order.subTotalPrice,
-      totalPrice: order.totalPrice,
-      taxRate: order.taxRate,
-      deliveryCost: order.deliveryCost,
-      magasinCode: order.magasinCode,
-      magasinName: order.magasinName,
-      magasinAddress: order.magasinAddress,
+      userId: order.userId,
+      userEmail: order.userEncryptedEmail ? decryptData(order.userEncryptedEmail) : null,
+      userPhone: order.userEncryptedPhone ? decryptData(order.userEncryptedPhone) : null,
+      userFirstName: order.userEncryptedFirstName ? decryptData(order.userEncryptedFirstName) : null,
+      userLastName: order.userEncryptedLastName ? decryptData(order.userEncryptedLastName) : null,
       deliveryAddressMain: order.userEncryptedAddressMain ? decryptData(order.userEncryptedAddressMain) : null,
       deliveryAddressSecond: order.userEncryptedAddressSecond ? decryptData(order.userEncryptedAddressSecond) : null,
       deliveryMaxArrivalDate: order.deliveryMaxArrivalDate,
       deliveryCity: order.deliveryCity,
       deliveryZip: order.deliveryZip,
+      taxRate: order.taxRate,
+      deliveryCost: order.deliveryCost,
       status: order.status,
       paymentMethod: order.paymentMethod,
       items: order.items.map((item) => ({
         id: item.id,
-        productIsbn: item.productIsbn,
-        productTitle: item.productTitle,
+        productName: item.productName,
         productImageUrl: item.productImageUrl,
         productPrice: item.productPrice,
         productPricePromo: item.productPricePromo,
-        productPrimaryCategoryPromoPercent: item.productPrimaryCategoryPromoPercent,
-        productFormatType: item.productFormatType,
         quantity: item.quantity,
       })),
       createdAt: order.createdAt,
